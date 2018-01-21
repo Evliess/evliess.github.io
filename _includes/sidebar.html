@@ -16,7 +16,7 @@
 
         {% for page in site.categories[attr] %}
             {% if forloop.first %}
-                <li data-order="{{ page.order }}">{{ label }}</li>
+                <li data-order="{{ page.order }}" class="menu_level_1">{{ label }}</li>
             {% endif %}
             	<li class="nav-header sidebar-nav-item"><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
         {% endfor %}

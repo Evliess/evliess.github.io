@@ -1,4 +1,8 @@
-
+*{
+	padding: 0;
+	margin:0;
+	border:0;
+}
 a:link,a:visited{
  text-decoration: none;
 }
@@ -25,6 +29,10 @@ div#sidebar li:hover > a{
 
 ul.nav > li.nav-header:hover {
 	background-color: #BA8FF7;
+}
+
+li.menu_level_1 {
+	padding-left: 1.2em;
 }
 
 .sidebar-toggle:active, #sidebar-checkbox:focus ~ .sidebar-toggle, #sidebar-checkbox:checked ~ .sidebar-toggle {

@@ -1,0 +1,31 @@
+
+a:link,a:visited{
+ text-decoration: none;
+}
+
+a:hover{
+ text-decoration: none;
+}
+
+div#sidebar {
+	background-color: #323232;
+}
+
+ul.nav {
+	list-style: none;
+}
+
+div#sidebar li, div#sidebar li a {
+	color: #FBFCFC;
+}
+
+div#sidebar li:hover > a{
+	color: #9855D4;
+}
+
+ul.nav > li.nav-header:hover {
+	background-color: #121212;
+}
+
+
+

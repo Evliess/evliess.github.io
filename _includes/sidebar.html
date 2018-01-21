@@ -1,0 +1,35 @@
+<!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>{{ site.description }}</p>
+  </div>
+
+<ul class="nav nav-list">
+    <!-- <li><a href="{{ site.baseurl }}/">Home</a></li> -->
+    {% for section in site.sections %}
+        {% assign attr = section[0] %}
+        {% assign label = section[1] %}
+
+        {% for page in site.categories[attr] %}
+            {% if forloop.first %}
+                <li data-order="{{ page.order }}">{{ label }}</li>
+            {% endif %}
+            	<li class="nav-header sidebar-nav-item"><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+    {% endfor %}
+<!-- List additional links. It is recommended to add a divider
+    e.g. <li class="divider"></li> first to break up the content. -->
+</ul>
+
+
+
+  <div class="sidebar-item">
+    <p>
+      &copy; {{ site.time | date: '%Y' }}. All rights reserved.
+    </p>
+  </div>
+</div>

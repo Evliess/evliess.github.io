@@ -1,5 +1,5 @@
 # Site title and subtitle. This is used in _includes/header.html
-title: 'JackGui's Docs'
+title: 'Welcome to JackGui's World
 subtitle: 'Painless documentation for your projects'
 
 # if you wish to integrate disqus on pages set your shortname here
@@ -19,11 +19,11 @@ codeurl: 'https://github.com/bruth/jekyll-docs-template'
 
 # Default categories (in order) to appear in the navigation
 sections: [
-    ['profile', 'Profile'],
-    ['test', 'Tutorial'],
-    ['ref', 'Reference'],
-    ['dev', 'Developers'],
-    ['post', 'Posts']
+    ['java', 'Java'],
+    ['javascript', 'javascript'],
+    ['linux', 'Linux'],
+    ['cloud', 'Cloud'],
+    ['database', 'Database']
 ]
 
 # Keep as an empty string if served up at the root. If served up at a specific

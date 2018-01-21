@@ -8,7 +8,7 @@ a:hover{
 }
 
 div#sidebar {
-	background-color: #323232;
+	background-color: #9855D4;
 }
 
 ul.nav {
@@ -16,16 +16,22 @@ ul.nav {
 }
 
 div#sidebar li, div#sidebar li a {
-	color: #FBFCFC;
+	color: #FFF;
 }
 
 div#sidebar li:hover > a{
-	color: #9855D4;
+	color: #030103;
 }
 
 ul.nav > li.nav-header:hover {
-	background-color: #121212;
+	background-color: #BA8FF7;
 }
+
+.sidebar-toggle:active, #sidebar-checkbox:focus ~ .sidebar-toggle, #sidebar-checkbox:checked ~ .sidebar-toggle {
+    color: #fff;
+    background-color: #734098;
+}
+
 
 
 

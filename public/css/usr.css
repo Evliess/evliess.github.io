@@ -24,7 +24,11 @@ a:hover{
 } 
 
 div#sidebar {
-	background-color: #9855D4;
+	background: -webkit-linear-gradient(left bottom,#9855D4,#412356);  
+    background: -o-linear-gradient(left bottom,#9855D4,#412356);  
+    background: -mos-linear-gradient(left bottom,#9855D4,#412356);  
+    background: -moz-linear-gradient(left bottom,#9855D4,#412356);  
+    background: linear-gradient(left bottom,#9855D4,#412356);  
 }
 
 ul.nav {

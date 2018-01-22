@@ -11,6 +11,18 @@ a:hover{
  text-decoration: none;
 }
 
+@media screen and (max-width: 800px) { 
+	div.container {
+		min-width: 30rem;
+	}
+}
+
+@media screen and (min-width: 1200px) { 
+	div.container {
+		min-width: 52rem;
+	}
+} 
+
 div#sidebar {
 	background-color: #9855D4;
 }

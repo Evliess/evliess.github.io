@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Welcome to JackGui's world</title>
+
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="/public/css/style2.css">
+        <!-- Scrollbar Custom CSS -->
+        <link rel="stylesheet" href="/public/css/jquery.mCustomScrollbar.min.css">
+
+        <link rel="stylesheet" href="/public/css/usr.css">
+
+    </head>
+    <body>
+
+
+
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Documentation</h3>
+                </div>
+
+                 <ul class="list-unstyled components">
+                 <p>Categories</p>
+                    
+                        
+                        
+                        
+                    
+                        
+                        
+                        
+                            
+                           
+                                <li class="active" data-order="">
+                                 <a href="#Java" data-toggle="collapse" aria-expanded="false">Java</a>
+                            
+                            <ul class="collapse list-unstyled" id="Java">
+                                <li><a href="/java/themeleaf-java.html">Themeleaf</a></li>
+                            </ul>
+                        </li>
+                        
+                            
+                            <ul class="collapse list-unstyled" id="Java">
+                                <li><a href="/java/springwebsocket-java.html">Springboot Websocket Usage</a></li>
+                            </ul>
+                        </li>
+                        
+                    
+                        
+                        
+                        
+                            
+                           
+                                <li class="active" data-order="">
+                                 <a href="#JavaScript" data-toggle="collapse" aria-expanded="false">JavaScript</a>
+                            
+                            <ul class="collapse list-unstyled" id="JavaScript">
+                                <li><a href="/javascript/jquery-javascript.html">JQuery</a></li>
+                            </ul>
+                        </li>
+                        
+                    
+                        
+                        
+                        
+                    
+                        
+                        
+                        
+                            
+                           
+                                <li class="active" data-order="">
+                                 <a href="#Linux" data-toggle="collapse" aria-expanded="false">Linux</a>
+                            
+                            <ul class="collapse list-unstyled" id="Linux">
+                                <li><a href="/linux/cmd-linux.html">Command</a></li>
+                            </ul>
+                        </li>
+                        
+                    
+                        
+                        
+                        
+                     </ul>
+
+
+                <ul class="list-unstyled CTAs">
+                    <li><a href="#" class="download">Download source</a></li>
+                    <!-- <li><a href="#" class="article">Back to article</a></li> -->
+                </ul>
+                <p class="copyright">&copy; 2018. All rights reserved.</p>
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn navbar-btn sidebar-btn">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav navbar-left">
+                                <li><a href="#">Command</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+               <h2 id="useful-linux-command">Useful Linux Command</h2>
+
+            </div>
+        </div>
+
+
+
+
+
+        <!-- jQuery CDN -->
+        <script src="/public/js/jquery-1.12.0.min.js"></script>
+        <!-- Bootstrap Js CDN -->
+        <script src="/public/js/bootstrap.min.js"></script>
+        <!-- jQuery Custom Scroller CDN -->
+        <script src="/public/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#sidebar").mCustomScrollbar({
+                    theme: "minimal"
+                });
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar, #content').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -27,21 +27,20 @@
                 <div class="sidebar-header">
                     <h3>Documentation</h3>
                 </div>
-
                  <ul class="list-unstyled components">
                  <p>Categories</p>
-                    <div class="dynamic-sidebar">
-					    {% for section in site.sections %}
-					        {% assign attr = section[0] %}
-					        {% assign label = section[1] %}
-					        {% for page in site.categories[attr] %}
-					            {% if forloop.first %}
-					                <li class="nav-header"><span class="sidebar-title">{{ label }}</span></li>
-					            {% endif %}
-					            <li data-order="{{ page.order }}"><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
-					        {% endfor %}
-						{% endfor %}
-					</div></ul>
+                    {% for section in site.sections %}
+                    {% assign attr = section[0] %}
+                    {% assign label = section[1] %}
+                    <li class="active">
+                    <a href="#{{ label }}" data-toggle="collapse" aria-expanded="false">{{ label }}</a>
+                    <ul class="collapse list-unstyled" id="{{ label }}">
+                    {% for page in site.categories[attr] %}
+                        <li ><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                    </ul></li>
+                    {% endfor %}
+                </ul>
                 <ul class="list-unstyled CTAs">
                     <li><a href="#" class="download">Download source</a></li>
                     <!-- <li><a href="#" class="article">Back to article</a></li> -->

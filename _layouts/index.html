@@ -30,23 +30,18 @@
 
                  <ul class="list-unstyled components">
                  <p>Categories</p>
-                    {% for section in site.sections %}
-                        {% assign attr = section[0] %}
-                        {% assign label = section[1] %}
-                        {% for page in site.categories[attr] %}
-                            {% if forloop.first %}
-                           
-                                <li class="active" data-order="{{ page.order }}">
-                                 <a href="#{{ label }}" data-toggle="collapse" aria-expanded="false">{{ label }}</a>
-                            {% endif %}
-                            <ul class="collapse list-unstyled" id="{{ label }}">
-                                <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
-                            </ul>
-                        </li>
-                        {% endfor %}
-                    {% endfor %} </ul>
-
-
+                    <div class="dynamic-sidebar">
+					    {% for section in site.sections %}
+					        {% assign attr = section[0] %}
+					        {% assign label = section[1] %}
+					        {% for page in site.categories[attr] %}
+					            {% if forloop.first %}
+					                <li class="nav-header"><span class="sidebar-title">{{ label }}</span></li>
+					            {% endif %}
+					            <li data-order="{{ page.order }}"><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+					        {% endfor %}
+						{% endfor %}
+					</div></ul>
                 <ul class="list-unstyled CTAs">
                     <li><a href="#" class="download">Download source</a></li>
                     <!-- <li><a href="#" class="article">Back to article</a></li> -->

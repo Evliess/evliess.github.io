@@ -19,4 +19,9 @@ p.copyright {
     color: #fff;
 }
 
-
+.sidebar-title {
+	padding-left: 10px;
+	color:#41D6C3;
+	font-size: 1.1em;
+	font-style: italic;
+}

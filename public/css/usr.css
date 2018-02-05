@@ -1,9 +1,10 @@
 nav#sidebar {
-	background: -webkit-linear-gradient(left bottom,#9855D4,#412356);  
+    background: -webkit-linear-gradient(left bottom,#9855D4,#412356);  
     background: -o-linear-gradient(left bottom,#9855D4,#412356);  
     background: -mos-linear-gradient(left bottom,#9855D4,#412356);  
     background: -moz-linear-gradient(left bottom,#9855D4,#412356);  
-    background: linear-gradient(left bottom,#9855D4,#412356);  
+    background: linear-gradient(left bottom,#9855D4,#412356);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#9855D4',endColorStr='#412356',gradientType='0'); 
 }
 
 p.copyright {

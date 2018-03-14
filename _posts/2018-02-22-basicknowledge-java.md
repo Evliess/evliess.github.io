@@ -44,11 +44,7 @@ System.out.println(a==c);//false
 - Comparable接口只提供一个compareTo方法  
 - Comparator接口提供compare（）和equals（）两个方法  
 
-**8. 数据库左连接和右连接的区别？**  
-```
-//左连接后的检索结果是显示t1的所有数据和t2中满足where条件的数据
-select * from t1 left join t2 where t1.id = t2.sid;
-```
+
 
 
 

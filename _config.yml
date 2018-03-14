@@ -21,6 +21,7 @@ codeurl: 'https://github.com/bruth/jekyll-docs-template'
 sections: [
     ['java', 'Java'],
     ['javascript', 'JavaScript'],
+    ['database', 'DataBase'],
     ['linux', 'Linux']
 ]
 

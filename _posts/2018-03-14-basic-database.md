@@ -81,7 +81,7 @@ select * from employ where salary = 1000; //此时返回11条数据
 - PROPAGATION_MANDATORY  
 支持当前事务，如果当前没有事务，抛异常  
 - PROPAGATION_NESTED  
-如果存在事务，则在一个嵌套的事务中运行，否则行为和PROPAGATION_REQUIRED一样
+如果存在事务，则在一个嵌套的事务中运行，否则行为和PROPAGATION_REQUIRED一样  
 - PROPAGATION_NEVER  
 以非事务的方式运行，如果有事务，抛异常  
 - PROPAGATION_NOT_SUPPORTED  

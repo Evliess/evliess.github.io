@@ -6,11 +6,12 @@ date: 2018-03-22 15:17:55
 ---
 
 ### 现代计算机硬件架构的简单图示
-![CPU架构](../public/images/java/cpu_structure.png)
-#### 多个CPU  
-#### CPU寄存器  
-#### 高速缓存Cache  
-#### 内存  
+![CPU架构](../public/images/java/cpu_structure.png)  
+特点如下：
+- 多个CPU  
+- CPU寄存器  
+- 高速缓存Cache  
+- 内存  
 
 由于计算机的存储设备与处理器的运算能力之间有几个数量级的差距，所以现代计算机系统都不得不加入一层读写速度尽可能接近处理器运算速度的高速缓存(cache)来作为内存与处理器之间的缓冲：将运算需要使用到的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。
 基于高速缓存的存储交互很好地解决了处理器与内存的速度矛盾，但是引入了一个新的问题：缓存一致性（Cache Coherence）。在多处理器系统中，每个处理器都有自己的高速缓存，而他们又共享同一主存，如下图所示：多个处理器运算任务都涉及同一块主存，需要一种协议可以保障数据的一致性，这类协议有MSI、MESI、MOSI及Dragon Protocol等。
@@ -19,7 +20,41 @@ date: 2018-03-22 15:17:55
 ### Java内存模型(Java Memory Model, JMM)
 Java虚拟机规范中定义了Java内存模型(Java Memory Model，JMM),用于屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的并发效果，JMM规范了Java虚拟机与计算机内存是如何协同工作的：规定了一个线程如何和何时可以看到由其他线程修改过后的共享变量的值，以及在必须时如何同步的访问共享变量.
 
-![JMM](../public/images/java/jmm.jpg)
+![JMM](../public/images/java/jmm.jpg)  
+
+Java内存模型通过图中的八种操作来完成变量从主内存加载到工作内存，然后从工作内存同步到主内存。
+**Lock --> Read --> Load --> Use --> Assign --> Store --> Write --> Unlock**  
+JMM 要求这个过程必须按顺序执行，但是可以不必连续执行！举个栗子：（Read A，Read B, Load B, Load A, Store B, Write B, Store A, Write A）。
+此外，JMM还规定了执行上述8个操作必须满足以下规则：
+- 不允许read和load、store和write操作之一单独出现  
+- 不允许一个线程丢弃它的最近assign的操作，即变量在工作内存中改变了之后必须同步到主内存中  
+- 不允许一个线程无原因地（没有发生过任何assign操作）把数据从工作内存同步回主内存中  
+- 一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load或assign）的变量。即就是对一个变量实施use和store操作之前，必须先执行过了assign和load操作  
+- 一个变量在同一时刻只允许一条线程对其进行lock操作，lock和unlock必须成对出现  
+- 如果对一个变量执行lock操作，将会清空工作内存中此变量的值，在执行引擎使用这个变量前需要重新执行load或assign操作初始化变量的值  
+- 如果一个变量事先没有被lock操作锁定，则不允许对它执行unlock操作；也不允许去unlock一个被其他线程锁定的变量  
+- 对一个变量执行unlock操作之前，必须先把此变量同步到主内存中（执行store和write操作）  
+
+**JMM 使用先行发生（happens-before）原则来确定一个内存访问在并发环境中是否安全**  
+### 先行发生（happens-before） 概念  
+一句话概括：操作A先行发生于操作B，操作A的影响会被操作B观察到  
+主要包括以下情况：  
+- 程序次序规则(Program Order Rule)： 在同一个线程中，按照程序代码顺序，书写在前面的操作先行发生于书写在后面的操纵。准确的说是程序的控制流顺序，考虑分支和循环等。  
+- 管理锁定规则(Monitor Lock Rule)：一个unlock操作先行发生于后面（时间上的顺序）对同一个锁的lock操作。
+- volatile变量规则(Volatile Variable Rule)：对一个volatile变量的写操作先行发生于后面（时间上的顺序）对该变量的读操作。  
+- 线程启动规则(Thread Start Rule)：Thread对象的start()方法先行发生于此线程的每一个动作。  
+- 线程终止规则(Thread Termination Rule)：线程的所有操作都先行发生于对此线程的终止检测，可以通过Thread.join()方法结束、Thread.isAlive()的返回值等手段检测到线程已经终止执行。  
+- **线程中断规则(Thread Interruption Rule)：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断时事件的发生。Thread.interrupted()可以检测是否有中断发生。**  
+- 对象终结规则(Finilizer Rule)：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize()的开始。  
+- 传递性(Transitivity)：如果操作A 先行发生于操作B，操作B 先行发生于操作C，那么可以得出A 先行发生于操作C。  
+
+**敲黑板!!!**  
+不同操作时间先后顺序与先行发生原则之间没有关系，二者不能相互推断，衡量并发安全问题不能受到时间顺序的干扰，一切都要以happens-before原则为准.  
+**敲黑板!!!**  
+
+
+
+
 
 
 

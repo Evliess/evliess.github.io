@@ -76,10 +76,190 @@ MM的有序性表现为：如果在本线程内观察，所有的操作都是有
 
 **源代码 --> 编译器优化的重排序 --> 指令级并行的重排序 --> 内存系统的重排序 --> 最终执行**
 
-### 4.引用  
+
+### 4. Java中的ReentrantLock  
+一个线程如果已经获得一个对象的锁，那么该线程在持有锁的期间可以重复多次获得改对象的锁。Java中的synchronized块是可以被重入的。当多个线程对共享资源激烈竞争的时候，使CPU减少频繁的线程调度，是线程的执行效率更高。  
+ReentrantLock有两种实现，一种是公平锁，另外一种是非公平锁。公平锁就是一个线程等待获取某个锁的时间最长，那么该线程最先获得锁。而非公平锁则不一定。
+
+#### 4.1 如何使用
+```
+	//公平锁new ReentrantLock(true),非公平锁new ReentrantLock(false)[推荐]
+    Lock lock = new ReentrantLock(false);   
+    lock.lock();  
+    try {   
+      //对共享资源的操作
+    }  
+    finally {  
+      lock.unlock();   
+    }  
+```
+
+#### 4.2 通过代码来看如何实现  
+**非公平锁:**  
+```
+static final class NonfairSync extends Sync {
+        final void lock() {
+        //如果CAS成功，将当前线程设置为资源的持有者
+            if (compareAndSetState(0, 1))
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+        //否则，尝试申请资源
+                acquire(1);
+        }
+
+        protected final boolean tryAcquire(int acquires) {
+        	//使用非公平锁的机制去获取资源
+            return nonfairTryAcquire(acquires);
+        }
+    }
+
+    final boolean nonfairTryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            //如果具备获取资源的条件，设置当前线程为资源的持有者，返回
+            if (c == 0) {
+                if (compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            //如果发现申请资源的线程是持有该资源线程本身，则将状态加1,返回
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc < 0) // overflow
+                    throw new Error("Maximum lock count exceeded");
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+
+```
+**非公平锁:**  
+```
+static final class FairSync extends Sync {
+        private static final long serialVersionUID = -3000897897090466540L;
+
+        final void lock() {
+            acquire(1);
+        }
+
+        /**
+         * Fair version of tryAcquire.  Don't grant access unless
+         * recursive call or no waiters or is first.
+         */
+        protected final boolean tryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+            	//此处多一个条件，该线程前面没有其他的线程在等待获取共享资源的锁
+                if (!hasQueuedPredecessors() &&
+                    compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc < 0)
+                    throw new Error("Maximum lock count exceeded");
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+    }
+
+```
+
+### 5. Read / Write Locks  
+ReentrantReadWriteLock是ReadWriteLock的一种实现，该类包含两个锁，一个是读锁，一个是写锁。  
+```
+public ReentrantReadWriteLock(boolean fair) {
+        sync = fair ? new FairSync() : new NonfairSync();
+        //读锁
+        readerLock = new ReadLock(this);
+        //写锁
+        writerLock = new WriteLock(this);
+    }
+```
+写锁的申请条件:  
+```
+/**
+ * 申请写锁.
+ *
+ * 1.该线程申请的时刻没有其他的线程持有读锁或者写锁，申请成功后将写锁的持有数目更新为1.  
+ * 2.如果该线程申请的时刻已经持有写锁，仅仅将持有的数目+1.  
+ * 3.该线程申请的时刻如果有其他的线程正在持有写锁，则当前的线程将不会被线程调度器调度将会进入lies dormant状态，只至该线程获得写锁.  
+ * 成功后将写锁的持有数目更新为1.
+ */
+public void lock() {
+    sync.acquire(1);
+}
+```
+读锁的申请条件:  
+```
+    /**
+     * 申请读锁.
+     *
+     * 1.该线程申请时刻没有其他线程持有写锁。  
+     * 2.该线程申请的时刻如果有其他的线程正在持有写锁，则当前的线程将不会被线程调度器调度将会进入lies dormant状态，只至该线程获得读锁.
+     */
+    public void lock() {
+        sync.acquireShared(1);
+    }
+```
+### 6.ExecutorService
+
+```
+ExecutorService fixedThreadPool =Executors.newFixedThreadPool(9);
+	fixedThreadPool.execute(new Thread() {public void run() {
+		//operation
+	}});
+ExecutorService singleThreadPool =Executors.newSingleThreadExecutor();
+ExecutorService cachedThreadPool =Executors.newCachedThreadPool();
+
+```
+
+### 7.CountDownLatch
+一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成。
+```
+public class Test {
+	public static void main(String[] args) {
+		//主线程中创建一个CountDownLatch对象,构造函数的参数表示线程的数目
+		CountDownLatch countDownLatch = new CountDownLatch(5);
+		for (int i = 0; i < 5; i++) {
+			Thread thread = new MyThread(countDownLatch);
+			thread.setName("Thread " + i);
+			thread.start();
+		}
+		try {
+			//调用await方法等待其他线程的工作全部完成
+			countDownLatch.await();
+		} catch (InterruptedException e) {
+		}
+		System.out.println("All pre Job are done.");
+	}
+}
+
+class MyThread extends Thread {
+	private CountDownLatch countDownLatch;
+	public MyThread(CountDownLatch countDownLatch) {
+		this.countDownLatch = countDownLatch;
+	}
+	public void run() {
+		System.out.println(getName() + " is Done!");
+		//使用CountDownLatch对象递减已经完成的线程数量
+		countDownLatch.countDown();
+	}
+}
+```
+
+### 8.引用  
 - [参考链接1](https://blog.csdn.net/u011080472/article/details/51337422)
 - [参考链接2](http://tutorials.jenkov.com/java-concurrency/java-memory-model.html)
-
+- [参考链接3](https://blog.csdn.net/fw0124/article/details/6672522)
+- [参考链接4](http://tutorials.jenkov.com/java-concurrency/reentrance-lockout.html)
 
 
 

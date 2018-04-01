@@ -209,7 +209,7 @@ public void lock() {
         sync.acquireShared(1);
     }
 ```
-### 6.ExecutorService
+### 6. ExecutorService
 
 ```
 ExecutorService fixedThreadPool =Executors.newFixedThreadPool(9);
@@ -221,7 +221,7 @@ ExecutorService cachedThreadPool =Executors.newCachedThreadPool();
 
 ```
 
-### 7.CountDownLatch
+### 7. CountDownLatch
 一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成。
 ```
 public class Test {

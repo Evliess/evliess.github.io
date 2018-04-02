@@ -27,6 +27,7 @@ java -jar selenium-server-standalone-3.7.1.jar -role hub
 */
 java -Dwebdriver.gecko.driver="C:/AAA/jiajia/CDL/selenium/selenium-java-3.7.1/geckodriver.exe" -Dwebdriver.chrome.driver="C:/AAA/jiajia/CDL/selenium/selenium-java-3.7.1/chromedriver.exe" -jar selenium-server-standalone-3.7.1.jar -role node -hub http://localhost:4444/grid/register/
 ```
+
 > 查看node启动参数配置  
 
 ```

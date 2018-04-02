@@ -221,7 +221,8 @@ ExecutorService cachedThreadPool =Executors.newCachedThreadPool();
 ```
 
 ### 7. CountDownLatch
-一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成。
+> 一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成.
+
 ```
 public class Test {
 	public static void main(String[] args) {
@@ -254,7 +255,22 @@ class MyThread extends Thread {
 }
 ```
 
-### 8.引用  
+### Future类的使用  
+> Future 是一个接口，通过它可以获得线程执行完成之后的返回值. Future没有提供线程完成通知的机制，只能通过轮询调用isDone()方法或者调用get()方法阻塞线程来获得结果。
+
+```
+boolean cancel(boolean mayInterruptIfRunning);
+boolean isCancelled();
+boolean isDone();
+V get() throws InterruptedException, ExecutionException;
+V get(long timeout, TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException;
+```
+
+> Java8 提供的CompletableFuture可以弥补Future的不足,让Java拥有了完整的非阻塞编程模型.
+
+
+### 9.引用  
 - [参考链接1](https://blog.csdn.net/u011080472/article/details/51337422)
 - [参考链接2](http://tutorials.jenkov.com/java-concurrency/java-memory-model.html)
 - [参考链接3](https://blog.csdn.net/fw0124/article/details/6672522)

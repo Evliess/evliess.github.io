@@ -5,7 +5,6 @@ category: java
 date: 2018-03-22 15:17:55
 ---
 
-
 ### 1. 计算机硬件架构的简单图示
 ![CPU架构](../public/images/java/cpu_structure.png)  
 特点如下：

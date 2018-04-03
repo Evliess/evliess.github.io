@@ -67,8 +67,6 @@
                         </div>
                     </div>
                 </nav>
-                <embed autostart="true" hidden="hidden" loop="true" src="{{ site.baseurl }}/public/music/night.mp3" class="player"></embed>
-
                {{ content }}
             </div>
         </div>
@@ -95,6 +93,10 @@
                     $('.collapse.in').toggleClass('in');
                     $('a[aria-expanded=true]').attr('aria-expanded', 'false');
                 });
+
+                $("table").addClass("table table-hover");
+                $("table thead tr th").attr("scope","col");
+                $("table tbody tr th").attr("scope","row");
             });
         </script>
     </body>

@@ -7,7 +7,7 @@ date: 2018-01-21 15:17:55
 
 #### Javascript对象或者数组转化为字符串
 
-```
+{% highlight javascript %}
 //1. Javascript对象或者数组转化为字符串
 
 /**
@@ -35,7 +35,7 @@ JSON.parse('{"p": 5}', (key, value) =>
 );
 
 
-```
+{% endhighlight %}
 
 #### How to add a HTMLEvent to Html element
 
@@ -62,7 +62,7 @@ JSON.parse('{"p": 5}', (key, value) =>
 
 #### Add indicator when ajax call
 
-```
+{% highlight javascript %}
 $(document)
 	  .ajaxStart(function () {
 	    $loading.show();
@@ -70,12 +70,12 @@ $(document)
 	  .ajaxStop(function () {
 	    $loading.hide();
 	  });
-```
+{% endhighlight %}
 
 #### Html 中取得Iframe中的元素
 
-```
+{% highlight javascript%}
 var f = document.getElementById("#FrameId");
 f.contentDocument.getElementById("#ElementId").value;
-```
+{% endhighlight%}
 

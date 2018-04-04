@@ -32,3 +32,9 @@ blockquote {
     border-left: 4px solid #ccc; 
 }
 
+pre {
+    overflow: auto;
+    background: #fcfcfc;
+    padding: 2em;
+}
+

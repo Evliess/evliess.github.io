@@ -9,15 +9,16 @@ date: 2018-04-02 15:17:55
 
 > 如何启动selenium grid?  
 
-1. 启动Hub  
-```
+
+
+```java
+1.启动Hub  
 /**
 *指定启动的角色是hub
 */
 java -jar selenium-server-standalone-3.7.1.jar -role hub
-```
-2. 启动Node  
-```
+
+2.启动Node  
 /**
 *指定启动的角色是node
 *指定测试浏览器对应的driver路径
@@ -30,6 +31,7 @@ java -Dwebdriver.gecko.driver="C:/AAA/jiajia/CDL/selenium/selenium-java-3.7.1/ge
 
 > 查看node启动参数配置  
 
-```
+```java
 java -jar selenium-server-standalone-3.7.1.jar -role node -h
 ```
+

@@ -1,3 +1,10 @@
+h1, h2, h3, h4{
+    line-height: normal;
+    font-weight: 500;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #cccccc;
+}
 nav#sidebar {
     background: -webkit-linear-gradient(left bottom,#9855D4,#412356);  
     background: -o-linear-gradient(left bottom,#9855D4,#412356);  

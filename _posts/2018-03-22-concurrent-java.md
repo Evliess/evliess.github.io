@@ -269,12 +269,31 @@ V get(long timeout, TimeUnit unit)
 
 > Java8 提供的CompletableFuture可以弥补Future的不足,让Java拥有了完整的非阻塞编程模型.
 
+```java
+public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {}
+```
 
-### 9.引用  
+### 9. Java中的CAS  
+CAS是compare and swap 的缩写。随着Java的发展，Java本地方法调用(JNI)的出现，使得Java程序可以越过JVM而直接调用本地方法，这为Java实现并发拓展一条新的途径。CAS理论是java concurrent包的理论基石。  
+
+Java可以通过synchronized实现线程之间同步，但是这种方法有以下弊端:  
+- 在多线程环境下，加锁和释放锁，或导致CPU比较多的上下文切换，影响性能。  
+- 一个线程持有锁，会导致其他需要此锁的线程挂起。  
+- 如果一个线程优先级高的去长时间等待优先级比较低的线程释放锁，也会引起性能风险。  
+
+Synchronized就是一种独占锁或者是悲观锁，乐观锁就是每次操作都不加锁而是假设该线程没有和其他线程冲突，如果有冲突失败就重试，直到成功为止，通过CAS可以实现乐观锁。  
+
+CAS包含三个操作数:内存位置(V), 预期原值(A)和新值(B)。如果内存位置的当前值与预期原值一样，那么处理器就会将新值更新内存位置(V)的值。否则，不做任何操作，只需要告诉我内存位置(V)的值就好了。无论哪种情况，它都会在 CAS指令之前返回该位置的值。
+
+
+
+
+### 10.引用  
 - [参考链接1](https://blog.csdn.net/u011080472/article/details/51337422)
 - [参考链接2](http://tutorials.jenkov.com/java-concurrency/java-memory-model.html)
 - [参考链接3](https://blog.csdn.net/fw0124/article/details/6672522)
-- [参考链接4](http://tutorials.jenkov.com/java-concurrency/reentrance-lockout.html)
+- [参考链接4](http://tutorials.jenkov.com/java-concurrency/reentrance-lockout.html)  
+- [参考链接5](https://blog.csdn.net/ls5718/article/details/52563959)  
 
 
 

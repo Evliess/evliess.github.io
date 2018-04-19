@@ -5,7 +5,7 @@ category: java
 date: 2018-04-02 15:17:55
 ---
 
-**Tips: 执行脚本的时候千万不要通过系统自带的记事本直接复制，使用notepadd++,或者sublime文本编辑工具!!!**
+**Tips: 执行脚本的时候千万不要通过系统自带的记事本直接复制,使用notepadd++,或者sublime文本编辑工具!!!**
 
 #### 如何启动selenium grid  
 
@@ -27,7 +27,7 @@ java -jar selenium-server-standalone-3.7.1.jar -role hub
 *ie driver version: IEDriverServer_x64_3.9.0
 *指定相应的hub
 */
-java -Dwebdriver.gecko.driver="C:/AAA/jiajia/CDL/selenium/selenium-java-3.7.1/geckodriver.exe" -Dwebdriver.chrome.driver="C:/AAA/jiajia/CDL/selenium/selenium-java-3.7.1/chromedriver.exe" -jar selenium-server-standalone-3.7.1.jar -role node -hub http://localhost:4444/grid/register/
+java -Dwebdriver.ie.driver="./selenium-java-3.7.1/IEDriverServer.exe" -Dwebdriver.gecko.driver="./selenium-java-3.7.1/geckodriver.exe" -Dwebdriver.chrome.driver="./selenium-java-3.7.1/chromedriver.exe" -jar selenium-server-standalone-3.7.1.jar -role node -hub http://localhost:4444/grid/register/
 ```
 
 #### 查看node启动参数配置  

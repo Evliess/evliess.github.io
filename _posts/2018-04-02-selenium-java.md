@@ -16,7 +16,7 @@ date: 2018-04-02 15:17:55
 /**
 *指定启动的角色是hub
 */
-java -jar selenium-server-standalone-3.7.1.jar -role hub -browserTimeout 30  -timeout 30 -sessionTimeout 30
+java -jar selenium-server-standalone-3.7.1.jar -role hub -newSessionWaitTimeout 30 -sessionTimeout 30 
 
 2.启动Node  
 /**
@@ -27,7 +27,7 @@ java -jar selenium-server-standalone-3.7.1.jar -role hub -browserTimeout 30  -ti
 *ie driver version: IEDriverServer_x64_3.9.0
 *指定相应的hub
 */
-java -Dwebdriver.ie.driver="./selenium-java-3.7.1/IEDriverServer.exe" -Dwebdriver.gecko.driver="./selenium-java-3.7.1/geckodriver.exe" -Dwebdriver.chrome.driver="./selenium-java-3.7.1/chromedriver.exe" -jar selenium-server-standalone-3.7.1.jar -role node -hub http://localhost:4444/grid/register/ -browserTimeout 30  -timeout 30 -sessionTimeout 30
+java -Dwebdriver.gecko.driver="./selenium-java-3.7.1/geckodriver.exe" -Dwebdriver.chrome.driver="./selenium-java-3.7.1/chromedriver.exe" -Dwebdriver.ie.driver="./selenium-java-3.7.1/IEDriverServer.exe" -jar selenium-server-standalone-3.7.1.jar -role node -hub http://localhost:4444/grid/register/ -browserTimeout 60 -sessionTimeout 30
 ```
 
 #### 查看node启动参数配置  

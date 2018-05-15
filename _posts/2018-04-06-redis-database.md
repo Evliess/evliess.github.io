@@ -5,7 +5,7 @@ category: database
 date: 2018-04-06 15:17:55
 ---
 
-### Redis 概览
+# Redis 概览
 
 Redis与其他内存数据库与众不同，是因为以下三个原因：  
 - Redis将数据库中所有的数据都加载到内存中，磁盘只是用来存储数据。  
@@ -18,7 +18,7 @@ Redis的优势
 - **所有的操作都是原子性**   
 - **用途广泛** 可以用作缓存，消息队列（Redis天生支持Publish/Subscribe），存储Web应用中的session，网页命中计数等。
 
-### Redis 安装
+# Redis 安装
 
 ```shell
 $ wget http://download.redis.io/releases/redis-4.0.9.tar.gz
@@ -27,13 +27,13 @@ $ cd redis-4.0.9
 $ make
 ```
 
-#### 启动Redis
+## 启动Redis
 
 ```shell
 . src/redis-server
 ```
 
-#### 使用命令行与Redis交互
+## 使用命令行与Redis交互
 ```shell
 ./redis-cli
 127.0.0.1:6379>
@@ -46,7 +46,7 @@ $ make
 $ redis-cli -h host -p port -a password
 ```
 
-#### 关闭Redis服务器
+## 关闭Redis服务器
 ```shell
 //查找正在运行redis的进程以及端口号
 ps -ef |grep redis
@@ -55,9 +55,9 @@ ps -ef |grep redis
 ./redis-cli -p 6379 shutdown
 ```
 
-### Redis命令
+# Redis命令
 
-#### Keys
+## Keys
 
 - DEL key [key ...]  
 删除一个或者多个key
@@ -140,7 +140,7 @@ get mykey
 ```
 
 
-#### Strings
+## Strings
 
 - APPEND key value
 如果key已经存在并且它的value是String类型，那么将value追加到value的结尾。  
@@ -171,7 +171,7 @@ GET key1
 - STRLEN key  
 返回key的value的长度  
 
-#### Hashes
+## Hashes
 数据结构和map类似，key和value都是string类型。  
 
 - HSET key field value
@@ -201,7 +201,7 @@ hget people name
 返回map中所有的value  
 
 
-#### Lists  
+## Lists  
 
 - LPUSH key value [value ...]  
 在list中添加一个元素  
@@ -251,7 +251,7 @@ lset mylist 0 wangwu
 - RPOP key  
 移除并返回list的尾元素  
 
-#### Sets  
+## Sets  
 
 - SADD key member [member ...]  
 在set中添加一条或者多条记录，set中的元素不重复  
@@ -336,7 +336,7 @@ SISMEMBER myset "two"
 - SREM key member [member ...]  
 删除集合中的一个或者多个元素  
 
-#### Sorted Sets  
+## Sorted Sets  
 有序集合里面的成员是不能重复的都是唯一的，但是，不同成员间有可能有相同的分数  
 
 - ZADD key [NX\|XX] [CH] [INCR] score member [score member ...]  
@@ -479,5 +479,5 @@ zrange Q1Q2 0 -1 withscores
 8) "200"
 ```
 
-### 引用
+# 引用
 [参考链接1](http://www.redis.cn/commands/zadd.html) [参考链接2](https://redis.io/commands/zadd)  

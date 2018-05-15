@@ -5,7 +5,7 @@ category: java
 date: 2018-01-21 15:17:55
 ---
 
-### Bootstrap Modal 遇到的问题  
+## Bootstrap Modal 遇到的问题  
 
 > 当关闭modal的时候，清除modal上的数据  
 
@@ -25,7 +25,7 @@ $("#uploadTestData").on('shown.bs.modal' , function(e) {
 
 ```
 
-### Springboot 四种常用的传递参数的方式  
+## Springboot 四种常用的传递参数的方式  
 
 > @PathVariable  
 
@@ -76,7 +76,7 @@ public void handle(
 }
 ```
 
-### Springboot FileUpload配置  
+## Springboot FileUpload配置  
 - 配置MultipartConfigElement  
 
 ```java

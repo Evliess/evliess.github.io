@@ -5,7 +5,7 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
-#### Javascript对象或者数组转化为字符串
+## Javascript对象或者数组转化为字符串
 
 {% highlight javascript %}
 //1. Javascript对象或者数组转化为字符串
@@ -37,7 +37,7 @@ JSON.parse('{"p": 5}', (key, value) =>
 
 {% endhighlight %}
 
-#### How to add a HTMLEvent to Html element
+## How to add a HTMLEvent to Html element
 
 {% highlight javascript %}
 <script type="text/javascript">
@@ -60,7 +60,7 @@ JSON.parse('{"p": 5}', (key, value) =>
 </script>
 {% endhighlight %}
 
-#### Add indicator when ajax call
+## Add indicator when ajax call
 
 {% highlight javascript %}
 $(document)
@@ -72,7 +72,7 @@ $(document)
 	  });
 {% endhighlight %}
 
-#### Html 中取得Iframe中的元素
+## Html 中取得Iframe中的元素
 
 {% highlight javascript%}
 var f = document.getElementById("#FrameId");

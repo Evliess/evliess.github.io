@@ -6,7 +6,7 @@ date: 2018-01-21 15:17:55
 ---
 
 
-### 标准的表达式语法
+# 标准的表达式语法
 
 - 简单的表达式  
 	- 变量表达式：${...}  
@@ -45,12 +45,12 @@ date: 2018-01-21 15:17:55
 	- No-Operation: _  
 
 
-### Using Texts  
+# Using Texts  
 
 - th:text
 - th:utext
 
-### 常用对象的工具类  
+# 常用对象的工具类  
 
 - #execInfo: information about the template being processed.  
 - #messages: methods for obtaining externalized messages inside variables expressions, in the same way as they would be obtained using #{…} syntax.  
@@ -68,18 +68,18 @@ date: 2018-01-21 15:17:55
 - #aggregates: methods for creating aggregates on arrays or collections.  
 - #ids: methods for dealing with id attributes that might be repeated (for example, as a result of an iteration).  
 
-### Fragment
+# Fragment
 
 th:include, th:insert  
 
-### 条件表达式  
+# 条件表达式  
 ```
 <tr th:class="${row.even}? 'even' : 'odd'">
   ...
 </tr>
 ```
 
-### 迭代表达式 (th：each)
+# 迭代表达式 (th：each)
 ```
 <tr th:each="prod : ${prods}">
     <td th:text="${prod.name}">Onions</td>
@@ -87,7 +87,7 @@ th:include, th:insert
     <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
 </tr>
 ```
-#### 可以获取迭代过程中的一些状态
+## 可以获取迭代过程中的一些状态
 - The current iteration index, starting with 0. This is the **index** property.  
 - The current iteration index, starting with 1. This is the **count** property.  
 - The total amount of elements in the iterated variable. This is the **size** property.  
@@ -104,7 +104,7 @@ th:include, th:insert
 </tr>
 ```
 
-### 条件表达式
+# 条件表达式
 th:if, th:unless,th:switch  
 
 对于th:switch语句，一旦其中的一个th:case满足条件，那么后续的所有th:case的值都将被计算为false,默认的语句用th:case="*"表示。  
@@ -116,11 +116,11 @@ th:if, th:unless,th:switch
 </div>
 ```
 
-### Thymeleaf布局
+# Thymeleaf布局
 
-#### th:insert,  th:replace,th:include (从thymeleaf3.0开始，不推荐使用)  
+## th:insert,  th:replace,th:include (从thymeleaf3.0开始，不推荐使用)  
 "{templatename::selector}" ：templatename指的是html的名字，selector指的是fragment的名字(th:fragment="copy")
-#### 可以通过selector选择器使用th:fragment  
+## 可以通过selector选择器使用th:fragment  
 
 ```
 <div id="copy-section">
@@ -137,11 +137,11 @@ th:if, th:unless,th:switch
 </body>
 ```
 
-#### th:insert和th:replace,th:include的不同点  
+## th:insert和th:replace,th:include的不同点  
 - th:insert is the simplest: it will simply insert the specified fragment as the body of its host tag.  
 - th:replace actually replaces its host tag with the specified fragment.  
 - th:include is similar to th:insert, but instead of inserting the fragment it only inserts the contents of this fragment.  
 
 
-### 参考  
+# 参考  
 [Thymeleaf Doc](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#mixing-coupled-and-decoupled-logic)

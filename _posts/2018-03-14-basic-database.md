@@ -8,14 +8,16 @@ date: 2018-03-14 15:17:55
 ## 数据库基础知识
 
 
-**1. 数据库左连接和右连接的区别？**  
+> 数据库左连接和右连接的区别？  
+
 ```sql
-/**左连接后的检索结果是显示t1的所有数据和t2中满足where条件的数据**/
+/左连接后的检索结果是显示t1的所有数据和t2中满足where条件的数据/
 select * from t1 left join t2 where t1.id = t2.sid;
 ```
 
 
-**2. 数据库的4个隔离级别**  
+> 数据库的4个隔离级别  
+
 - ISOLATION_DEFAULT  
 - ISOLATION_READ_UNCOMMITTED  
 可能会发生读脏，不可重复读和幻读
@@ -26,23 +28,24 @@ select * from t1 left join t2 where t1.id = t2.sid;
 - ISOLATION_SERIALIZABLE  
 阻止发生读脏，不可重复读和幻读  
 
-**3. 数据库的读脏，不可重复读和幻读的区别**  
+> 数据库的读脏，不可重复读和幻读的区别  
+
 - 读脏  
 读脏又称无效数据的读取，举例说明：  
 
 ```sql
 begin transaction1
-/**修改前工资为500**/
+/修改前工资为500/
 update employee set salary = 1000 where id = 1;
 
 
 begin transaction2
-/**事务2 发现工资已经变为1000**/
+/事务2 发现工资已经变为1000/
 select * from employee where id =1;  
 
 transaction1
 rollback
-/**现在工资又变为修改前的500，因此事务2读的就是脏数据**/  
+/现在工资又变为修改前的500，因此事务2读的就是脏数据/  
 
 ```
 - 不可重复读  针对更新某一行的数据  
@@ -52,14 +55,14 @@ rollback
 begin transaction1
 select * from employee where id =1;
 
-/**事务2更新了这条数据**/  
+/事务2更新了这条数据/  
 begin transaction2
 update employee set salary = 1000 where id = 1;
 commit
 
 transaction1
 select * from employee where id =1;
-/**发现两次读到的数据不一致**/  
+/发现两次读到的数据不一致/  
 
 ```
 - 幻读  针对新增或者删除数据  
@@ -67,17 +70,18 @@ select * from employee where id =1;
 
 ```sql
 begin transaction1
-select * from employ where salary = 1000; /**假如返回10条数据**/
+select * from employ where salary = 1000; /假如返回10条数据/
 
 begin transaction2
 insert into employ(,salary,) values(,1000,);
 commit
 
 transaction1
-select * from employ where salary = 1000; /**此时返回11条数据**/
+select * from employ where salary = 1000; /此时返回11条数据/
 ```
 
-**4. 数据库的7种传播行为**  
+> 数据库的7种传播行为  
+
 - PROPAGATION_MANDATORY  
 支持当前事务，如果当前没有事务，抛异常  
 - PROPAGATION_NESTED  

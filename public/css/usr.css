@@ -1,4 +1,4 @@
-h1, h2, h3, h4{
+h1, h2 {
     line-height: normal;
     font-weight: 500;
     margin-bottom: 30px;
@@ -30,6 +30,7 @@ img {
 	border: solid #CCC 1px;
     max-width: 100%;
     max-height: 100%;
+    margin-bottom: 1em;
 }
 
 blockquote {

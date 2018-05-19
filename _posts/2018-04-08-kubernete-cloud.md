@@ -7,6 +7,8 @@ date: 2018-04-28 15:17:55
 
 # Minikube Installation
 
+> Environment: Ubuntu 16.04.4 LTS  X86_64bit  
+
 ## 1.1 Install Kubectl
 
 > version v1.10.0
@@ -46,7 +48,7 @@ source <(kubectl completion bash)
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 ```
 
-## 1.5 Stop minikube
+## 1.5 Stop Minikube
 ```shell
 rm -rf .minikube
 miniube status

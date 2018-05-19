@@ -46,6 +46,7 @@ Active: active (running) since Fri 2018-05-11 12:26:54 CST;
 ```shell
 sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 ```
+
 ## 1.2 Install docker-machine (Optional)
 
 1. Install docker-machine:  

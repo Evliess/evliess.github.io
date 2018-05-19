@@ -11,44 +11,38 @@ date: 2018-04-08 15:17:55
 
 > Environment: Ubuntu 16.04.4 LTS  X86_64bit  
 
-1. First, add the GPG key for the official Docker repository to the system:
-
+1. First, add the GPG key for the official Docker repository to the system:  
 ```shell
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
 ```
-2. Add the Docker repository to APT sources:
+
+2. Add the Docker repository to APT sources:  
 ```shell
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
 ```
 
-3. Next, update the package database with the Docker packages from the newly added repo:
-
+3. Next, update the package database with the Docker packages from the newly added repo:  
 ```shell
 sudo apt-get update
 ```
 
-4. Make sure you are about to install from the Docker repo instead of the default Ubuntu 16.04 repo:
-
+4. Make sure you are about to install from the Docker repo instead of the default Ubuntu 16.04 repo:  
 ```shell
 apt-cache policy docker-ce
 ```
 
-5. Finally, install Docker:
+5. Finally, install Docker:  
 ```shell
 sudo apt-get install -y docker-ce
 ```
 
-6. Check that it's running:
-
+6. Check that it's running:  
 ```shell
 sudo systemctl status docker
 ```
+Active: active (running) since Fri 2018-05-11 12:26:54 CST;
 
-> Active: active (running) since Fri 2018-05-11 12:26:54 CST;
-
-7. Install docker-compose:
+7. Install docker-compose:  
 ```
 sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 ```
@@ -96,8 +90,8 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 
 
 # Reference
-[Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
-[Kubernete技术入门与实践](../public/svg/kubernete/kubernete.svg)
+[Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)  
+[Kubernete技术入门与实践](../public/svg/kubernete/kubernete.svg)  
 
 
 

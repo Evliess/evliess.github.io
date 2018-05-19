@@ -95,9 +95,8 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 ```
 
 
-
-
-
+# Reference
+[Install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 [Kubernete技术入门与实践](../public/svg/kubernete/kubernete.svg)
 
 

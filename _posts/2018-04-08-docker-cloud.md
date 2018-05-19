@@ -1,11 +1,11 @@
 ---
 layout: index
-title: "Install Docker"
+title: "Docker Installation"
 category: cloud
 date: 2018-04-18 15:17:55
 ---
 
-# 1. Install Docker
+# 1. Docker Installation
 
 > Environment: Ubuntu 16.04.4 LTS  X86_64bit  
 

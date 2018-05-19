@@ -2,7 +2,7 @@
 layout: index
 title: "Minikube Installation"
 category: cloud
-date: 2018-04-08 15:17:55
+date: 2018-04-28 15:17:55
 ---
 
 # Minikube Installation

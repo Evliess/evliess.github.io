@@ -1,8 +1,8 @@
 ---
 layout: index
-title: "docker基础知识"
+title: "Install Docker"
 category: cloud
-date: 2018-04-08 15:17:55
+date: 2018-04-18 15:17:55
 ---
 
 # 1. Install Docker

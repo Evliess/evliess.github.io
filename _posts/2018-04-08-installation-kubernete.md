@@ -1,7 +1,7 @@
 ---
 layout: index
 title: "Minikube Installation"
-category: cloud
+category: kubernetes
 date: 2018-04-28 15:17:55
 ---
 

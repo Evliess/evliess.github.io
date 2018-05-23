@@ -1,8 +1,8 @@
 ---
 layout: index
 title: "Docker Installation"
-category: cloud
-date: 2018-04-18 15:17:55
+category: docker
+date: 2018-05-20 15:17:55
 ---
 
 # 1. Docker Installation

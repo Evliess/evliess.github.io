@@ -22,7 +22,8 @@ sections: [
     ['java', 'Java'],
     ['javascript', 'JavaScript'],
     ['database', 'DataBase'],
-    ['cloud', 'Cloud'],
+    ['kubernetes', 'Kubernetes'],
+    ['docker', 'Docker'],
     ['linux', 'Linux']
 ]
 

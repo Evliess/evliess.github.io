@@ -24,7 +24,6 @@
                     <h3>Documentation</h3>
                 </div>
                  <ul class="list-unstyled components">
-                 <p>Categories</p>
                     {% for section in site.sections %}
                     {% assign attr = section[0] %}
                     {% assign label = section[1] %}
@@ -38,7 +37,7 @@
                     {% endfor %}
                 </ul>
                 <ul class="list-unstyled CTAs">
-                    <li><a href="#" class="download">Download source</a></li>
+                     <!-- <li><a href="#" class="download">Download source</a></li>-->
                     <!-- <li><a href="#" class="article">Back to article</a></li> -->
                 </ul>
                 <p class="copyright">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>

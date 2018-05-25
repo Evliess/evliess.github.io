@@ -43,7 +43,7 @@ docker run -dt --name tomcat --mount type=bind,source="$(pwd)"/app,target=/usr/l
 
 
 # Userful Commands
-```
+```shell
 //进入容器的内部查看容器
 docker exec -it <container-name> /bin/bash
 //删除所有正在运行的container

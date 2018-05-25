@@ -13,14 +13,12 @@ nav#sidebar {
     background: linear-gradient(left bottom,#9855D4,#412356);
 }
 
-p.copyright {
-	padding: 10px;
-}
-
 .sidebar-btn{
     color: #fff;
     background-color: #412356;
 }
+
+div.sidebar-header
 
 .btn:hover, .btn:focus {
     color: #fff;
@@ -34,15 +32,24 @@ img {
 }
 
 blockquote {
-    padding: 2px 8px;
-    margin: 0 0 10px;
+    padding: 0px 8px;
+    margin: 0 0.1em 1em;
     font-size: 16px;
     border-left: 4px solid darkorchid; 
 }
 
 pre {
     overflow: auto;
-    background: #fcfcfc;
-    padding: 2em;
+    background: #F5F5F5;
+    padding: 0.6em 1em;
 }
 
+p.copyright {
+	margin-left: 1.2em;
+	margin-bottom: 1.2em;
+	color:#BDBDBD;
+}
+
+div.sidebar-header h3 {
+	font-weight: bold;
+}

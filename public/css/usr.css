@@ -6,16 +6,16 @@ h1, h2 {
     border-bottom: 1px solid #cccccc;
 }
 nav#sidebar {
-    background: -webkit-linear-gradient(left bottom,#9855D4,#412356);  
-    background: -o-linear-gradient(left bottom,#9855D4,#412356);  
-    background: -mos-linear-gradient(left bottom,#9855D4,#412356);  
-    background: -moz-linear-gradient(left bottom,#9855D4,#412356);  
-    background: linear-gradient(left bottom,#9855D4,#412356);
+    background: -webkit-linear-gradient(left bottom,#19B986,#970cf8);  
+    background: -o-linear-gradient(left bottom,#19B986,#970cf8);  
+    background: -mos-linear-gradient(left bottom,#19B986,#970cf8);  
+    background: -moz-linear-gradient(left bottom,#19B986,#970cf8);  
+    background: linear-gradient(left bottom,#19B986,#970cf8);
 }
 
 .sidebar-btn{
     color: #fff;
-    background-color: #412356;
+    background-color: #970cf8;
 }
 
 div.sidebar-header

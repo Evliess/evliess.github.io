@@ -53,3 +53,8 @@ p.copyright {
 div.sidebar-header h3 {
     color:#FFF;
 }
+
+div.navbar-header span.page-title {
+    margin-left: 1em;
+    color: #888;
+}

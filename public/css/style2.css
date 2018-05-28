@@ -24,7 +24,7 @@ a, a:hover, a:focus {
     padding: 1em;
     background: #fff;
     border: none;
-    min-height: 78px;
+    min-height: 76px;
     border-radius: 0;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }

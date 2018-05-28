@@ -54,7 +54,18 @@ div.sidebar-header h3 {
     color:#FFF;
 }
 
-div.navbar-header span.page-title {
-    margin-left: 1em;
-    color: #888;
+@media screen and (min-width:1200px) { 
+	div.navbar-header span.page-title {
+	    margin-left: 1em;
+	    color: #888;
+	}
 }
+
+@media screen and (max-width: 479px) {
+	div.navbar-header span.page-title {
+		display: none;
+	}
+}
+
+
+

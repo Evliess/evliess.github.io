@@ -5,7 +5,7 @@ category: database
 date: 2018-03-14 15:17:55
 ---
 
-## 数据库基础知识
+# Database basic knowledge
 
 
 > 数据库左连接和右连接的区别？  

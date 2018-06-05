@@ -101,3 +101,25 @@ spring.servlet.multipart.max-request-size: 50M
 //配置文件上传的格式是csv
 <input type="file" accept=".csv,application/vnd.ms-excel" id="uploadfile"/>
 ```
+
+## Springboot with Docker
+
+### 1. Write a docker file:
+```shell
+FROM java:8u111-jdk-alpine
+COPY spring-cloud-eureka-0.0.1-SNAPSHOT.jar /usr/src/myapp/app.jar
+WORKDIR /usr/src/myapp
+CMD ["java", "-jar", "app.jar"]
+```
+
+### 2. Build an image
+```shell
+docker build -f dockerfile -t waitplay/myImage:latest
+```
+
+### 3. Run the image
+```shell
+//-e option 设置运行时环境变量
+docker run -dt --name waitplay-server-1 -e "spring.profiles.active=srv1" -p 8761:8761 waitplay/eureka-server
+```
+

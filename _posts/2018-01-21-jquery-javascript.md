@@ -5,6 +5,13 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
+## Selec2 设置select控件只读
+```javascript
+//version 4.x
+$("select#commandType").prop("disabled", true);
+```
+
+
 ## Javascript对象或者数组转化为字符串
 
 {% highlight javascript %}

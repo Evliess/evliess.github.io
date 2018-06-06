@@ -100,7 +100,8 @@ networks:
       config:
         - subnet: 172.16.238.0/24
 ```
-> 3.2 Using server name as host name
+> 3.2 Using server name as host name  
+
 ```shell
 version: '3'
 services:

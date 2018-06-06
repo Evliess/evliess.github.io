@@ -100,3 +100,32 @@ networks:
       config:
         - subnet: 172.16.238.0/24
 ```
+> 3.2 Using server name as host name
+```shell
+version: '3'
+services:
+  eureka-server-1:
+    image: waitplay/eureka-server:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      spring.profiles.active: srv1
+      eureka.client.serviceUrl.defaultZone: http://eureka-server-2:8762/eureka/
+      spring.application.name: Eureka-Server
+    ports:
+      - "8761:8761"
+
+  eureka-server-2:
+    image: waitplay/eureka-server:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      spring.profiles.active: srv2
+      eureka.client.serviceUrl.defaultZone: http://eureka-server-1:8761/eureka/
+      spring.application.name: Eureka-Server
+    ports:
+      - "8762:8762"
+
+```

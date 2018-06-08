@@ -22,10 +22,11 @@ An quick start project with requirejs, bootstrap and codemirror.js
 			- javascript.js  
 			- scheme.js  
 			- require.js  
+		- app/  
+			- index.js
 
-			index.js  
 			require-common.js  
-			require-main.js  
+			require-index.js  
 	- css/  
 		- bootstrap.min.css  
 		- bootstrap-grid.min.css  
@@ -36,7 +37,7 @@ An quick start project with requirejs, bootstrap and codemirror.js
 - index.html  
 
 ```html
-<script data-main="../js/require-main.js" src="../js/lib/require.js"></script>
+<script data-main="../js/require-index.js" src="../js/lib/require.js"></script>
 
 ```
 
@@ -68,11 +69,11 @@ require.config({
 });
 ```
 
-- require-main.js  
+- require-index.js  
 
 ```javascript
 require(["./require-common"], function(common) {
-    require(["../js/index.js"]); //从index.html页面引用index.js文件的路径
+    require(["../js/app/index.js"]); //从index.html页面引用index.js文件的路径
 })
 ```
 

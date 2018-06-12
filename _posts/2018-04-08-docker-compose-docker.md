@@ -52,81 +52,31 @@ docker-compose start
 > 3.1 Configure container network and ip
 
 ```shell 
-# docker compose version
 version: '3'
 services:
-#service name
   eureka-server-1:
     image: waitplay/eureka-server:latest
-    deploy:
-      restart_policy:
-        condition: on-failure
-#runtime environment
     environment:
       spring.profiles.active: srv1
-      eureka.client.serviceUrl.defaultZone: http://172.16.238.11:8762/eureka/
+      eureka.client.serviceUrl.defaultZone: http://172.16.238.12:8762/eureka/
       spring.application.name: Eureka-Server
+#preferIpAddress makes sure that Microservices register with their IP address and not with their host name. In a Docker environment host names are unfortunately not easily resolvable by other hosts. This problem is circumvented by the use of IP addresses.
+      eureka.instance.preferIpAddress: "true"
+      eureka.instance.hostname: eureka-server-1
     ports:
       - "8761:8761"
-#cofigure docker container IPAddr
-    networks:
-      app_net:
-        ipv4_address: 172.16.238.10
-
-#service name
-  eureka-server-2:
-    image: waitplay/eureka-server:latest
-    deploy:
-      restart_policy:
-        condition: on-failure
-#runtime environment
-    environment:
-      spring.profiles.active: srv2
-      eureka.client.serviceUrl.defaultZone: http://172.16.238.10:8761/eureka/
-      spring.application.name: Eureka-Server
-    ports:
-      - "8762:8762"
-#configure docker container IPAddr
+    container_name: eureka-server-1
     networks:
       app_net:
         ipv4_address: 172.16.238.11
 
-#configure network for docker compose
-networks:
+
+  networks:
   app_net:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: 172.16.238.0/24
-```
-> 3.2 Using server name as host name  
-
-```shell
-version: '3'
-services:
-  eureka-server-1:
-    image: waitplay/eureka-server:latest
-    deploy:
-      restart_policy:
-        condition: on-failure
-    environment:
-      spring.profiles.active: srv1
-      eureka.client.serviceUrl.defaultZone: http://eureka-server-2:8762/eureka/
-      spring.application.name: Eureka-Server
-    ports:
-      - "8761:8761"
-
-  eureka-server-2:
-    image: waitplay/eureka-server:latest
-    deploy:
-      restart_policy:
-        condition: on-failure
-    environment:
-      spring.profiles.active: srv2
-      eureka.client.serviceUrl.defaultZone: http://eureka-server-1:8761/eureka/
-      spring.application.name: Eureka-Server
-    ports:
-      - "8762:8762"
+      - subnet: 172.16.238.0/24
 
 ```

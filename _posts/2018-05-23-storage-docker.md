@@ -56,6 +56,8 @@ docker rmi -f $(docker images | grep "none" | awk '{print$3}')
 docker rmi -f $(docker images | grep "^test" | awk '{print$3}')
 //删除所有的数据卷
 docker volume prune
+//查看容器的log
+docker logs -f -t YOUR_CONTAINER_NAME
 ```
 
 

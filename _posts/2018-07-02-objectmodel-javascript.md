@@ -9,7 +9,7 @@ date: 2018-07-02 12:17:55
 
 > JavaScript不是基于class，而是基于object的语言。由于这个原因，创建一个继承关系就变得不是特别显而易见。  
 
-## 基于Class的语言与基于object的语言的区别  
+## The differences between class-based and object-based languange
 
 1. 基于class的语言清楚的区分类与实例。*class* 就是某一类物体的抽象，包括属性，方法。*instance* 就是某个类一个具体的实例。
 
@@ -91,7 +91,7 @@ console.log(engine.name, engine.dept, engine.projects, engine.machine); //Jack e
 
 ```
 
-### 原型链
+### Prototype Chain
 
 ```javascript
 //原型链就是对象的继承链，查找属性的时候沿着这个链条向上查找
@@ -127,7 +127,7 @@ instanceOf(chris, Object);//true
 
 ```
 
-### local or inherited values  
+### Local or Inherited values  
 
 > 如果你想在运行时修改一个对象的属性，并且想让这个修改影响到这个对象的子类，使用inherited 的值。反之，使用local值。
 
@@ -143,7 +143,6 @@ Employee.prototype.type = 'none';
 
 ```
 
-### 
 
 
 

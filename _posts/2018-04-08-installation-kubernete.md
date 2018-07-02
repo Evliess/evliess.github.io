@@ -51,7 +51,7 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 ## 1.5 Stop Minikube
 ```shell
 rm -rf .minikube
-miniube status
+minikube status
 ```
 
 

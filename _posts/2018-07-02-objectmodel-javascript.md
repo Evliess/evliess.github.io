@@ -23,8 +23,129 @@ date: 2018-07-02 12:17:55
 
 ## The employee example
 
+![image](../public/images/js/objectmodel-01.png)  
 
-![image](../public/images/js/objectmodel-01.png)
+### Simple constructors
+
+```javascript
+//define Employee
+
+function Employee() {
+  this.name = '';
+  this.dept = 'general';
+};
+
+//define Manager
+
+function Manager() {
+  Employee.call(this);
+  //或者使用以下形式
+  //this.base = Employee;
+  this.reports = [];
+  this.dept = "sale";
+  this.team = "QQ";
+};
+Manager.prototype = Object.create(Employee.prototype);
+//或者使用以下形式
+//Manager.prototype = new Employee;
+
+var manager = new Manager;
+
+var m = new Manager;
+
+console.log(m.dept);   //sale
+console.log(m.reports); // []
+console.log(m.team); // QQ
+
+```
+
+### More flexible constructors
+
+```javascript
+
+function Employee(name, dept) {
+  this.name = name || '';
+  this.dept = dept || 'general';
+}
+
+function WorkerBee(name, dept, projs) {
+  //指定父类
+  this.base = Employee;
+  //调用父类构造方法
+  this.base(name, dept);
+  this.projects = projs || [];
+}
+WorkerBee.prototype = new Employee;
+
+function Engineer(name, project, mach) {
+  this.base = WorkerBee;
+  this.base(name, 'engineering', project);
+  this.dept = 'engineering';
+  this.machine = mach || '';
+}
+Engineer.prototype = new WorkerBee;
+
+var engine = new Engineer('Jack', ['python', 'perl'], 'belau');
+
+console.log(engine.name, engine.dept, engine.projects, engine.machine); //Jack engineering [ 'python', 'perl' ] belau
+
+```
+
+### 原型链
+
+```javascript
+//原型链就是对象的继承链，查找属性的时候沿着这个链条向上查找
+var chris = new Engineer('Jack', ['python', 'perl'], 'belau');
+
+// engine的原型链如下:
+
+chris.__proto__ == Engineer.prototype;
+chris.__proto__.__proto__ == WorkerBee.prototype;
+chris.__proto__.__proto__.__proto__ == Employee.prototype;
+chris.__proto__.__proto__.__proto__.__proto__ == Object.prototype;
+chris.__proto__.__proto__.__proto__.__proto__.__proto__ == null;
+
+//instance of 函数
+
+function instanceOf(object, constructor) {
+   object = object.__proto__;
+   while (object != null) {
+      if (object == constructor.prototype)
+         return true;
+      if (typeof object == 'xml') {
+        return constructor.prototype == XML.prototype;
+      }
+      object = object.__proto__;
+   }
+   return false;
+}
+
+instanceOf(chris, Engineer); //true
+instanceOf(chris, WorkerBee);//true
+instanceOf(chris, Employee);//true
+instanceOf(chris, Object);//true
+
+```
+
+### local or inherited values  
+
+> 如果你想在运行时修改一个对象的属性，并且想让这个修改影响到这个对象的子类，使用inherited 的值。反之，使用local值。
+
+```javascript
+function Employee(name, dept) {
+  // name and dept are local values
+  this.name = name || '';
+  this.dept = dept || 'general';
+}
+
+// type is a inherited value
+Employee.prototype.type = 'none';
+
+```
+
+### 
+
+
 
 
 

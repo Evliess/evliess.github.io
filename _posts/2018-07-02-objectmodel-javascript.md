@@ -129,7 +129,7 @@ instanceOf(chris, Object);//true
 
 ### Local or Inherited values  
 
-> 如果你想在运行时修改一个对象的属性，并且想让这个修改影响到这个对象的子类，使用inherited 的值。反之，使用local值。
+> 如果需要在运行时修改一个对象的属性，并且想让这个修改影响到这个对象的子类，使用inherited 的值。反之，使用local值。
 
 ```javascript
 function Employee(name, dept) {

@@ -33,7 +33,7 @@ spec:
 ```
 
 
-## 三种IP
+## Types of IP
 
 - NodeIP: Node节点的IP
 - Pod IP：POD的IP

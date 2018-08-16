@@ -129,6 +129,35 @@ public void productFood() {
 
 ```
 
+> 二分查找算法
+
+```java
+
+private int binarySearch(int arr[], int start, int end, int target) {
+    int middle = (start + end) / 2;   //算middle的位置一定要是(start + end)/2 , 想想为什么不能是end/2?
+    if (target == arr[middle]) {
+      return middle;
+    }
+    //middle >=1 保证end的最小值是0
+    if (target < arr[middle] && middle >= 1) {
+      return binarySearch(arr, 0, middle - 1, target);
+      //middle + 1 <=end 保证起始位置应该<=结束位置
+    } else if (middle + 1 <= end) {
+      return binarySearch(arr, middle + 1, end, target);
+    } else {
+      return -1;
+    }
+  }
+
+```
+
+> 快速排序算法
+
+```java
+
+
+```
+
 #### 参考链接  
 
 [参考链接1](https://www.zhihu.com/question/37601861/answer/145545371)

@@ -133,6 +133,7 @@ public void productFood() {
 
 ```java
 
+//递归实现
 private int binarySearch(int arr[], int start, int end, int target) {
     int middle = (start + end) / 2;   //算middle的位置一定要是(start + end)/2 , 想想为什么不能是end/2?
     if (target == arr[middle]) {
@@ -147,6 +148,23 @@ private int binarySearch(int arr[], int start, int end, int target) {
     } else {
       return -1;
     }
+  }
+ 
+ //非递归实现
+ private int binarySearch(int[] arr, int target) {
+    int low = 0;
+    int hight = arr.length;
+    while (low <= hight) {
+      int middle = (low + hight) / 2;
+      if (target == arr[middle]) {
+        return middle;
+      } else if (target > arr[middle]) {
+        low = middle + 1;
+      } else {
+        hight = middle - 1;
+      }
+    }
+    return -1;
   }
 
 ```

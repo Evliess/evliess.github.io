@@ -173,6 +173,49 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 ```java
 
+  private int getBasePosition(int[] array, int start, int end) {
+    int base = array[start];
+    int temp;
+    while (start < end) {
+      // 1.从右边找到比key小的数
+      while (start < end && array[end] >= base) {
+        end--;
+      }
+      // 交换
+      if (start < end) {
+        temp = array[start];
+        array[start] = array[end];
+        array[end] = temp;
+      }
+      // 2.从左边找比key大的数
+      while (start < end && array[start] < base) {
+        start++;
+      }
+      // 交换
+      if (start < end) {
+        temp = array[start];
+        array[start] = array[end];
+        array[end] = temp;
+      }
+    }
+    // 此时start==end
+    return end;
+
+  }
+
+  private void quickSort(int[] array, int start, int end) {
+    if (start > end) {
+      return;
+    } else {
+      //1.找到basePosition
+      int basePosition = getBasePosition(array, start, end);
+      //2.递归排序base左边的子数组
+      quickSort(array, start, basePosition - 1);
+      //3.递归排序base右边的子数组
+      quickSort(array, basePosition + 1, end);
+    }
+  }
+
 
 ```
 

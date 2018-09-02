@@ -248,6 +248,15 @@ private int binarySearch(int arr[], int start, int end, int target) {
         return -1;
     }
 
+    /**
+     *
+     * Reference:
+     * https://blog.csdn.net/v_july_v/article/details/7041827
+     */
+    public static int strMatch_kmp(char[] source, char[] target) {
+        return -1;
+    }
+
 ```
 
 #### 参考链接  

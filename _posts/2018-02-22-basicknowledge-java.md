@@ -249,13 +249,8 @@ private int binarySearch(int arr[], int start, int end, int target) {
     }
 
     /**
-     *
-     * Reference:
-     * https://blog.csdn.net/v_july_v/article/details/7041827
+     * 字符串匹配还有KMP算法，BM算法以及Sunday算法
      */
-    public static int strMatch_kmp(char[] source, char[] target) {
-        return -1;
-    }
 
 ```
 

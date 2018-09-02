@@ -219,6 +219,37 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 ```
 
+串的查找算法
+
+```
+//如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1
+    public static int strMatch_1(char[] source, char[] target) {
+        int i = 0, j = 0;
+        int sourceLength = source.length;
+        int targetLength = target.length;
+        while (i < sourceLength && j < targetLength ) {
+            if (source[i] == target[j]) {
+                if (j == targetLength - 1) {
+                    return i - targetLength + 1;
+                } else {
+                    i++;
+                    j++;
+                }
+            } else {
+                //如果source中剩余的字符串长度小于target，那么直接返回 -1
+                if(i > sourceLength - targetLength) {
+                    break;
+                } else {
+                    j = 0;
+                    i = i - j + 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+```
+
 #### 参考链接  
 
 [参考链接1](https://www.zhihu.com/question/37601861/answer/145545371)

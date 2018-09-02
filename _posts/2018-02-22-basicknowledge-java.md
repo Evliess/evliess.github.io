@@ -221,7 +221,7 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 串的查找算法
 
-```
+```java
 //如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1
     public static int strMatch_1(char[] source, char[] target) {
         int i = 0, j = 0;

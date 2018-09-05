@@ -10,25 +10,25 @@ date: 2018-02-22 11:03:55
 > Use condition in ant script
 
 ```xml
-<!-- Execute task by different operation system -->
+<<!-- Execute task by different operation system -->
 
 <project name="My Project" default="package_designer_without_report_v3" basedir=".">
 
-  <condition property="isWindows">
-    <os family="windows" />
-  </condition>
-	
-	<condition property="isLinux">
-    <os family="unix" />
+	<condition property="isWindows">
+		<os family="windows" />
 	</condition>
 
-  <target name="operateInWindows" if="isWindows">
-    <echo message="operate in windows"/>
-  </target>
+	<condition property="isLinux">
+		<os family="unix" />
+	</condition>
 
-  <target name="operateInLinux" if="isLinux">
-    <echo message="operate in linux"/>
-  </target>
+	<target name="operateInWindows" if="isWindows">
+		<echo message="operate in windows" />
+	</target>
+
+	<target name="operateInLinux" if="isLinux">
+		<echo message="operate in linux" />
+	</target>
 
 </project>
 

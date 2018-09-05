@@ -11,7 +11,6 @@ date: 2018-02-22 11:03:55
 
 ```xml
 <!-- Execute task by different operation system -->
-
 <project name="My Project" default="package_designer_without_report_v3" basedir=".">
 
 	<condition property="isWindows">
@@ -31,8 +30,6 @@ date: 2018-02-22 11:03:55
 	</target>
 
 </project>
-
-
 ```
 
 

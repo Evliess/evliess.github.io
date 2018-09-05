@@ -13,15 +13,14 @@ date: 2018-02-22 11:03:55
 <!-- Execute task by different operation system -->
 
 <project name="My Project" default="package_designer_without_report_v3" basedir=".">
-
-
- <condition property="isWindows">  
-	    <os family="windows" />  
-	</condition>
+ 
+ <condition property="isWindows">
+	<os family="windows" />
+ </condition>
 	
-	<condition property="isLinux">  
-	    <os family="unix" />  
-	</condition> 
+	<condition property="isLinux">
+	  <os family="unix" />
+	</condition>
 
   <target name="operateInWindows" if="isWindows">
     <echo message="operate in windows"/>

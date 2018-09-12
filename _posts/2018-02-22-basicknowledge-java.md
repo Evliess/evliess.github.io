@@ -14,18 +14,21 @@ date: 2018-02-22 11:03:55
 - List提供一个特殊的迭代ListIterator，可以插入，修改，以及提供双向访问的能力。  
 
 > HashSet是如何保证不重复的  
-- HashSet用HashMap存储元素  
-- 将元素中作为HaspMap的key
+
+- HashSet用HashMap存储元素    
+- 将元素中作为HaspMap的key  
+
 ```java
 // Dummy value to associate with an Object in the backing Map
 private static final Object PRESENT = new Object();
 
 public boolean add(E e) {
-        return map.put(e, PRESENT)==null;
-    }
+    return map.put(e, PRESENT)==null;
+}
+
 ```
 
-> Use condition in ant script
+> Use condition in ant script  
 
 ```xml
 <!-- Execute task by different operation system -->

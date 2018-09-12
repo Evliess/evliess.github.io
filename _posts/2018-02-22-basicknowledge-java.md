@@ -10,13 +10,13 @@ date: 2018-02-22 11:03:55
 > List与Set的区别  
 
 - List中的元素是有序的，可以通过index准确的查找内部的元素。  
-- List中的元素可以重复，Set中的元素不能重复。List中可以允许添加多个null元素。Set中之多可以有一个null元素。      
-- List提供一个特殊的迭代ListIterator，可以插入，修改，以及提供双向访问的能力。  
+- List中的元素可以重复，Set中的元素不能重复。List中可以允许添加多个null元素。Set中至多可以有一个null元素。      
+- List提供一个特殊的迭代ListIterator，可以插入，修改，以及提供双向遍历的能力。  
 
 > HashSet是如何保证不重复的  
 
 - HashSet用HashMap存储元素  
-- 将元素中作为HaspMap的key  
+- 将元素中作为HashMap的key  
 
 ```java
 // Dummy value to associate with an Object in the backing Map

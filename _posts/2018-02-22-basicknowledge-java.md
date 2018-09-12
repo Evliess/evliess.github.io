@@ -15,7 +15,7 @@ date: 2018-02-22 11:03:55
 
 > HashSet是如何保证不重复的  
 
-- HashSet用HashMap存储元素    
+- HashSet用HashMap存储元素  
 - 将元素中作为HaspMap的key  
 
 ```java

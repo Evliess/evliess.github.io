@@ -7,7 +7,6 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
-
 > List与Set的区别  
 
 - List中的元素是有序的，可以通过index准确的查找内部的元素。  
@@ -26,6 +25,34 @@ public boolean add(E e) {
     }
 ```
 
+> Use condition in ant script
+
+```xml
+<!-- Execute task by different operation system -->
+<project name="My Project" default="package_designer_without_report_v3" basedir=".">
+
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+
+	<condition property="isLinux">
+		<os family="unix" />
+	</condition>
+
+	<target name="operateInWindows" if="isWindows">
+		<echo message="operate in windows" />
+	</target>
+
+	<target name="operateInLinux" if="isLinux">
+		<echo message="operate in linux" />
+	</target>
+
+</project>
+```
+
+
+
+>>>>>>> 2a8fe161a45c4e31c039f767bf7be6c436357b07
 > Java中equals()方法与"=="的区别?  
 
 equals()比较字符串字面值是否相等，"=="比较对象的地址是否相等  

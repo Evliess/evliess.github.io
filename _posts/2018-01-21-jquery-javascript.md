@@ -5,6 +5,47 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
+## Jquery Unbind 事件
+
+```javascript
+("#id").unbind();
+```
+
+
+
+
+## Checkbox widget
+
+```javascript
+//判断是否选中， chrome 选中返回"checked"，未选中返回undefined
+$("#Checkbox2").attr("checked") 
+//设置radio选中
+$("#Checkbox2").attr("checked", "checked")
+$("#Checkbox2").prop("checked", "checked");
+//触发onChanges事件
+$("#Checkbox2").prop("checked", "checked").change()
+
+```
+
+## Radio widget
+
+```javascript
+//设置radio选中
+$("#radio").prop("checked", "checked");
+//设置radio不选中
+$("#radio").prop("checked", false);
+```
+
+## Select widget
+
+```javascript
+//设置select是disable 但是此状态form提交的时候，该字段的值不会被提交
+$("#select").prop("disable", false);
+
+```
+
+
+
 ## Selec2 设置select控件只读
 ```javascript
 //version 4.x

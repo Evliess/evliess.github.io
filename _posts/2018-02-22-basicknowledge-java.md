@@ -7,6 +7,73 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> HashMap 与 HashTable  
+
+- HashMap非线程安全的  
+
+```java
+
+/*
+Parameters:
+    hash hash for key
+    key the key
+    value the value to put
+    onlyIfAbsent if true, don't change existing value
+    evict if false, the table is in creation mode.
+Returns:
+    previous value, or null if none
+*/
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+    // 如果table为空，或者还没有元素时，则扩容
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    // 如果首结点值为空，则创建一个新的首结点。
+    // 注意：(n - 1) & hash才是真正的hash值，也就是存储在table位置的index。在1.6中是封装成indexFor函数。
+    if ((p = tab[i = (n - 1) & hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else {    // 到这儿了，就说明碰撞了，那么就要开始处理碰撞。
+            Node<K,V> e; K k;
+            // 如果在首结点与我们待插入的元素有相同的hash和key值，则先记录。
+            if (p.hash == hash && ((k = p.key) == key || (key != null && key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode) // 如果首结点的类型是红黑树类型，则按照红黑树方法添加该元素
+                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+            else {  // 到这一步，说明首结点类型为链表类型。
+                    for (int binCount = 0; ; ++binCount) {
+                        // 如果遍历到末尾时，先在尾部追加该元素结点。
+                        if ((e = p.next) == null) {
+                            p.next = newNode(hash, key, value, null);
+                            // 当遍历的结点数目大于8时，则采取树化结构。
+                            if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                                treeifyBin(tab, hash);
+                                break;
+                        }
+                        // 如果找到与我们待插入的元素具有相同的hash和key值的结点，则停止遍历。此时e已经记录了该结点
+                        if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
+                            break;
+                        p = e;
+                    }
+                }
+            // 表明，记录到具有相同元素的结点
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null) //判断是否用新值覆盖旧值
+                    e.value = value;
+                afterNodeAccess(e);  // 这个是空函数，可以由用户根据需要覆盖
+                return oldValue;
+            }
+        }
+    ++modCount;
+    // 当结点数+1大于threshold时，则进行扩容
+    if (++size > threshold)
+        resize();
+    afterNodeInsertion(evict); // 这个是空函数，可以由用户根据需要覆盖
+    return null;
+}
+
+```
+
 > List与Set的区别  
 
 - List中的元素是有序的，可以通过index准确的查找内部的元素。  
@@ -17,6 +84,7 @@ date: 2018-02-22 11:03:55
 
 - HashSet用HashMap存储元素  
 - 将元素中作为HashMap的key  
+- 不是线程安全的  
 
 ```java
 // Dummy value to associate with an Object in the backing Map
@@ -53,22 +121,12 @@ public boolean add(E e) {
 </project>
 ```
 
-
-
->>>>>>> 2a8fe161a45c4e31c039f767bf7be6c436357b07
 > Java中equals()方法与"=="的区别?  
 
-equals()比较字符串字面值是否相等，"=="比较对象的地址是否相等  
-举例：  
-```java
-String a = "abc";
-String b = "abc";
-String c = new String("abc");
-System.out.println(a.equals(b));//true
-System.out.println(a==b);//true
-System.out.println(a.equals(c));//true
-System.out.println(a==c);//false
-```
+- "==" 对于引用类型，比较的是对象的地址，对于基本类型，比较的是字面值。  
+- equals方法是Object基类的方法，如果子类没有复写该方法，默认的是比较对象的地址。一般复写此方法的时候同时复写hashCode方法。
+
+
 > Java抽象类可以有实体方法么？  
 
 可以.  
@@ -111,10 +169,6 @@ public interface MyImpl {
 - 如果一个类不能实现父类中所有的抽象方法，那么它本身必须是抽象类  
 - Java接口中声明的变量默认都是final的，抽象类可以包含非final的变量  
 - Java接口中的成员函数默认是public的，抽象类的成员函数可以是private，protected或者是public  
-
-> HashMap与Hashtable的不同点？  
-
-- HashMap的key和value都可以为null，Hashtable的key不可以为null  
 
 > ArrayList和Linkedlist的区别？  
 

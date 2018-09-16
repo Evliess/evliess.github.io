@@ -7,6 +7,29 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> 强引用，软引用，弱引用，虚引用  
+
+- 强引用的对象如果不为null，那么GC不会去回收此对象  
+- 软引用的对象当jvm内存不足的时候，GC会去回收这些对象  
+- 弱引用的对象无论jvm是否充足，在GC的时候均会被回收
+- 虚引用也称幽灵引用，一个对象是否有虚引用，不会对其生命周期有影响。为一个对象设置一个虚引用关联的唯一目的是希望该对象被收集器回收的时候收到一个系统通知。  
+
+
+> final, finally与finalize  
+
+- final 修饰类，变量，方法。修饰类的时候，表明这个类不允许被继承，例如String类。修饰方法的时候表示在子类中不允许被覆写，private关键字修饰的方法默认是final的。修饰变量的时候分两种情况，修饰基本类型的时候，表示其数值一旦初始化就不允许修改。修饰引用类型的时候，表示其初始化之后不能再指向另外一个对象。  
+- finally 一般与try，catch,finally 做异常处理。但是finally块中的语句不一定会执行。有以下几种情况：  
+    - try中的代码还未执行到程序就退出。  
+    - try中的代码执行之后，虚拟机停止。例如调用  ```java  System.exit(0); ``` . 
+    - 程序执行到try或者catch块的时候，线程被中断或者终止。  
+
+- finalize是Object的方法, 可以在垃圾收集器对此对象进行回收的时候做一些处理工作。  
+
+```java
+protected void finalize() throws Throwable { }
+```
+
+
 > HashMap 与 HashTable  
 
 - HashMap非线程安全的  
@@ -74,6 +97,40 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
 
 ```
 
+- HashTable 是线程安全的  
+
+```java
+
+    /*
+    * 添加元素的时候使用synchronized锁
+    * 返回之前对应位置的值，如果不存在，则返回null
+    */
+    public synchronized V put(K key, V value) {
+        // Make sure the value is not null
+        if (value == null) {
+            throw new NullPointerException();
+        }
+
+        // Makes sure the key is not already in the hashtable.
+        Entry<?,?> tab[] = table;
+        int hash = key.hashCode();
+        int index = (hash & 0x7FFFFFFF) % tab.length;
+        @SuppressWarnings("unchecked")
+        Entry<K,V> entry = (Entry<K,V>)tab[index];
+        //遍历整个table，看是否存在
+        for(; entry != null ; entry = entry.next) {
+            if ((entry.hash == hash) && entry.key.equals(key)) {
+                V old = entry.value;
+                entry.value = value;
+                return old;
+            }
+        }
+        //不存在则插入元素
+        addEntry(hash, key, value, index);
+        return null;
+    }
+```
+
 > List与Set的区别  
 
 - List中的元素是有序的，可以通过index准确的查找内部的元素。  
@@ -124,7 +181,7 @@ public boolean add(E e) {
 > Java中equals()方法与"=="的区别?  
 
 - "==" 对于引用类型，比较的是对象的地址，对于基本类型，比较的是字面值。  
-- equals方法是Object基类的方法，如果子类没有复写该方法，默认的是比较对象的地址。一般复写此方法的时候同时复写hashCode方法。
+- equals方法是Object基类的方法，如果子类没有覆写该方法，默认的是比较对象的地址。一般覆写此方法的时候同时覆写hashCode方法。
 
 
 > Java抽象类可以有实体方法么？  

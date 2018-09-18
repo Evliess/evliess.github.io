@@ -85,6 +85,32 @@
                 $("table").addClass("table table-hover");
                 $("table thead tr th").attr("scope","col");
                 $("table tbody tr th").attr("scope","row");
+
+                var day = new Date().getDay();
+                switch(day) {
+                	case 1:
+                		$("blockquote").css("border-left", "4px solid #6a737d");
+                		break;
+                	case 2:
+                		$("blockquote").css("border-left", "4px solid #fdd600");
+                		break;
+                	case 3:
+                		$("blockquote").css("border-left", "4px solid #f77832");
+                		break;
+                	case 4:
+                		$("blockquote").css("border-left", "4px solid #008571");
+                		break;
+                	case 5:
+                		$("blockquote").css("border-left", "4px solid #7cc7ff");
+                		break;
+                	case 6:
+                		$("blockquote").css("border-left", "4px solid #030100");
+                		break;
+                	case 7:
+                		$("blockquote").css("border-left", "4px solid #ff9eee");
+                		break;
+                }
+
             });
         </script>
     </body>

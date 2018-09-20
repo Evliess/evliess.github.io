@@ -54,7 +54,7 @@ private int binarySearch(int arr[], int start, int end, int target) {
     int temp;
     while (start < end) {
       // 1.从右边找到比key小的数
-      while (start < end && array[end] >= base) {
+      while (start < end &&  base <= array[end]) {
         end--;
       }
       // 交换
@@ -105,17 +105,18 @@ private int binarySearch(int arr[], int start, int end, int target) {
         while (i < sourceLength && j < targetLength ) {
             if (source[i] == target[j]) {
                 if (j == targetLength - 1) {
-                    return i - targetLength + 1;
+                    return i - j;
                 } else {
                     i++;
                     j++;
                 }
             } else {
                 //如果source中剩余的字符串长度小于target，那么直接返回 -1
-                if(i > sourceLength - targetLength) {
+                if(sourceLength  < i + targetLength) {
                     break;
                 } else {
                     j = 0;
+                    //主串需要移动到下一位，然后和字串再次匹配
                     i = i - j + 1;
                 }
             }

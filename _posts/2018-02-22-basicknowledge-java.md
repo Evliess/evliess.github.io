@@ -7,6 +7,39 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> Java的类加载机制  
+
+- Bootstrap ClassLoader  
+最顶层的加载类，主要加载核心类库，%JRE_HOME%\lib下的rt.jar、resources.jar、charsets.jar和class等。另外需要注意的是可以通过启动jvm时指定-Xbootclasspath和路径来改变Bootstrap ClassLoader的加载目录。通过环境变量sun.boot.class.path查找对应的文件。  
+- Extension ClassLoader  
+扩展的类加载器，加载目录%JRE_HOME%\lib\ext目录下的jar包和class文件。还可以加载-D java.ext.dirs选项指定的目录。通过环境变量sun.boot.class.path查找对应的文件。通过环境变量java.ext.dirs 查找对应的文件。  
+- App ClassLoader  
+也称为SystemAppClass 负责加载当前应用的classpath的所有类。 通过环境变量java.ext.dirs 查找对应的文件。  
+- Custom ClassLoader
+
+[一看你就懂，超详细java中的ClassLoader详解](https://blog.csdn.net/briblue/article/details/54973413)
+
+> Java加载类的方法  
+
+- 从本地系统直接获得  
+- 通过网络下载.class文件  
+- 从zip，jar中加载.class文件  
+- 从数据库中提取.class文件  
+- 将java源码动态编译为.class文件  
+- 命令行启动应用的时候由JVM初始化加载  
+- 通过Class.forName()  
+- 通过ClassLoader.loadClass()  
+
+> Java类什么时候会被初始化  
+
+- new 该类一个实例  
+- 访问某个类或者接口的静态变量  
+- 调用类的静态方法  
+- 反射  
+- 初始化子类  
+- JVM启动时指明的启动类  
+
+
 > 强引用，软引用，弱引用，虚引用  
 
 - 强引用的对象如果不为null，那么GC不会去回收此对象  

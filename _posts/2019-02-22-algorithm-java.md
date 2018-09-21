@@ -49,34 +49,30 @@ private int binarySearch(int arr[], int start, int end, int target) {
 > 快速排序算法
 
 ```java
-  private int getBasePosition(int[] array, int start, int end) {
-    int base = array[start];
-    int temp;
-    while (start < end) {
-      // 1.从右边找到比key小的数
-      while (start < end && array[end] >= base) {
-        end--;
-      }
-      // 交换
-      if (start < end) {
-        temp = array[start];
-        array[start] = array[end];
-        array[end] = temp;
-      }
-      // 2.从左边找比key大的数
-      while (start < end && array[start] < base) {
-        start++;
-      }
-      // 交换
-      if (start < end) {
-        temp = array[start];
-        array[start] = array[end];
-        array[end] = temp;
+  private int getBasePosition(int array[], int L, int R) {
+    int base = array[L];
+    int temp, i, j;
+    i = L;
+    j = R;
+    while (i < j) {
+      // 1.从右边找到比base小的数
+      while (i < j && base <= array[j])
+        j--;
+      // 2.从左边找到比base大的数
+      while (i < j && array[i] <= base)
+        i++;
+      //交换位置
+      if (i < j) {
+        temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
       }
     }
-    // 此时start==end
-    return end;
-
+    //当i==j时，需要将array[i]的值与array[L]的值进行交换，因此引入变量i,j。如果直接使用L，R，那么当L==R的时候，base在数组中的初始位置L就会丢失。
+    temp = array[i];
+    array[i] = array[L];
+    array[L] = temp;
+    return i;
   }
 
   private void quickSort(int[] array, int start, int end) {

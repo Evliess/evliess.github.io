@@ -7,6 +7,17 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+
+> Java 8 中基本的数据类型  
+
+byte, char, int, float, double, long ,short, boolean  
+
+> Arrays.sort 与 Collections.sort
+
+- Arrays.sort可以对基本类型的数组进行排序，也可以对实现Comparable接口的集合进行排序。  
+     - Arrays可以使用sort方法以及parallelSort方法对集合进行排序。使用DualPivotQuicksort(双轴双向)排序，基本思路是设置两个参考点pivot1，pivot2，其中pivot1一定要小于pivot2，然后将呆排序的数组分为4部分 [x<=pivot1], [pivot1<x<pivot2], [x>=pivot2], [未排序]，然后对前三个区间分别递归排序。  
+- Collections.sort只能对实现Comparable接口的集合进行排序。  
+
 > Java的类加载机制  
 
 - Bootstrap ClassLoader  

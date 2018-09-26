@@ -283,10 +283,11 @@ public interface MyImpl {
 - Comparable接口只提供一个compareTo方法  
 - Comparator接口提供compare（）和equals（）两个方法  
 
-> Thread.sleep()方法和Thread.yield()方法的相同点和区别？  
+> Thread.sleep()方法和Thread.yield()，Object.wait()方法的相同点和区别？  
 
 - 一个线程调用yield()方法表明这个线程目前没有特别重要的事情做了，如果有其他的线程或者进程需要运行，优先他们运行，如果没有其他的线程或者进程需要运行，那么调用yield()方法的线程就继续运行。  
 - 一个线程调用sleep()方法会使该线程休眠指定的时间，在此期间，不会丢失任何监视器(锁)的信息，如果有其他的线程或者进程需要运行，他们可以获得系统资源运行，如果没有，那么CPU有可能处于空闲状态。  
+- 当调用wait()方法的时候，线程会丢弃对象锁，进入该对象池的等待池中，当其他的线程调用nofity()或则notifyAll()的时候重新去竞争该对象的锁。  
 
 > notify()方法和notifyAll()方法的区别  
 

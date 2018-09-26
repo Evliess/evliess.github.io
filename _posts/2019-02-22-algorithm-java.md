@@ -7,42 +7,54 @@ date: 2018-02-22 11:03:55
 
 # Common algorithm
 
-> 二分查找算法
+> 归并排序算法
 
 ```java
-//递归实现
-private int binarySearch(int arr[], int start, int end, int target) {
-    int middle = (start + end) / 2;   //算middle的位置一定要是(start + end)/2 , 想想为什么不能是end/2?
-    if (target == arr[middle]) {
-      return middle;
-    }
-    //middle >=1 保证end的最小值是0
-    if (target < arr[middle] && middle >= 1) {
-      return binarySearch(arr, 0, middle - 1, target);
-      //middle + 1 <=end 保证起始位置应该<=结束位置
-    } else if (middle + 1 <= end) {
-      return binarySearch(arr, middle + 1, end, target);
-    } else {
-      return -1;
-    }
-  }
- 
- //非递归实现
- private int binarySearch(int[] arr, int target) {
-    int low = 0;
-    int hight = arr.length;
-    while (low <= hight) {
-      int middle = (low + hight) / 2;
-      if (target == arr[middle]) {
-        return middle;
-      } else if (target > arr[middle]) {
-        low = middle + 1;
-      } else {
-        hight = middle - 1;
+  public static void mergeSort(int array[], int start, int end) {
+      if (start == end) {
+          //分解的最终结果，每个数组只有一个元素
+          return;
       }
-    }
-    return -1;
+      int middle = start + ((end - start) >> 1);
+      mergeSort(array, start, middle);
+      mergeSort(array, middle + 1, end);
+      merge(array, start, middle, end);
   }
+
+
+  /**
+    *
+    * @param array
+    * @param start
+    * @param middle
+    * @param end
+    *
+    */
+  private static void merge(int array[], int start, int middle, int end) {
+      int[] help = new int[end - start + 1];
+      int p1 = start;
+      int p2 = middle + 1;
+      int i = 0;
+      //另个数组逐次比较，先将较小的数归位。  例如产生的递增的中间产物数组，[5, 10], [6,7]，经过该循环后help = {5, 6, 7}
+      while (p1 <= middle && p2 <= end) {
+          help[i++] = array[p1] < array[p2] ? array[p1++] : array[p2++];
+      }
+
+      //以下的两个while只会执行其中一个
+      while (p1 <= middle) {
+          help[i++] = array[p1++];
+      }
+      while (p2 <= end) {
+          help[i++] = array[p2++];
+      }
+
+      for (int j = 0; j < help.length; j++) {
+          //将排序了的结果放入数组
+          array[start + j] = help[j];
+      }
+
+  }
+
 
 ```
 
@@ -86,6 +98,45 @@ private int binarySearch(int arr[], int start, int end, int target) {
       //3.递归排序base右边的子数组
       quickSort(array, basePosition + 1, end);
     }
+  }
+
+```
+
+> 二分查找算法
+
+```java
+//递归实现
+private int binarySearch(int arr[], int start, int end, int target) {
+    int middle = (start + end) / 2;   //算middle的位置一定要是(start + end)/2 , 想想为什么不能是end/2?
+    if (target == arr[middle]) {
+      return middle;
+    }
+    //middle >=1 保证end的最小值是0
+    if (target < arr[middle] && middle >= 1) {
+      return binarySearch(arr, 0, middle - 1, target);
+      //middle + 1 <=end 保证起始位置应该<=结束位置
+    } else if (middle + 1 <= end) {
+      return binarySearch(arr, middle + 1, end, target);
+    } else {
+      return -1;
+    }
+  }
+ 
+ //非递归实现
+ private int binarySearch(int[] arr, int target) {
+    int low = 0;
+    int hight = arr.length;
+    while (low <= hight) {
+      int middle = (low + hight) / 2;
+      if (target == arr[middle]) {
+        return middle;
+      } else if (target > arr[middle]) {
+        low = middle + 1;
+      } else {
+        hight = middle - 1;
+      }
+    }
+    return -1;
   }
 
 ```

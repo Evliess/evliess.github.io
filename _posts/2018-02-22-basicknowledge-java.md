@@ -76,9 +76,9 @@ protected void finalize() throws Throwable { }
 ```
 
 
-> HashMap 与 HashTable  
+> HashMap 与 Hashtable  
 
-- HashMap非线程安全的  
+- HashMap非线程安全的， HashMap的key和value都可以是null。  
 
 ```java
 
@@ -143,7 +143,7 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) {
 
 ```
 
-- HashTable 是线程安全的  
+- Hashtable 是线程安全的，Hashtable的key或者value不能是null。    
 
 ```java
 

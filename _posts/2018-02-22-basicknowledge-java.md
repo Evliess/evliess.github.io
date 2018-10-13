@@ -9,15 +9,10 @@ date: 2018-02-22 11:03:55
 
 > Synchronized原理  
 - 修饰普通方法  
-
-通过 ACC_SYNCHRONIZED标识，如果设置该标识，则需要先获取monitor，获取成功才执行方法。方法执行完了释放monitor。
-
-
+通过 ACC_SYNCHRONIZED标识，如果设置该标识，则需要先获取monitor，获取成功才执行方法。方法执行完了释放monitor。  
 - 修饰静态方法  
-
 - 修饰代码块  
 JVM的两个指令monitorenter和monitorexit. Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常. 
-
 
 > Java 中的Clone  
 

@@ -7,8 +7,25 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
-> Java 中的Clone
+> Synchronized原理  
+- 修饰普通方法  
+
+通过 ACC_SYNCHRONIZED标识，如果设置该标识，则需要先获取monitor，获取成功才执行方法。方法执行完了释放monitor。
+
+
+- 修饰静态方法  
+
+- 修饰代码块  
+JVM的两个指令monitorenter和monitorexit. Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常. 
+
+
+> Java 中的Clone  
+
 克隆对象的时候如果需要深克隆，那么该对象中的引用类型也需要实现Cloneable接口。如果该类中的引用对象没有实现Cloneable接口，那么克隆的对象与原对象拥有相同的引用类型的字段。可以通过序列化的手段实现对象的深度克隆。   
+
+> LinkedHashMap的应用   
+可以保证遍历时取数据的顺序和插入顺序是一致的，一般情况下遍历的效率比Hashmap低。当Hashmap的容量很大，实际存放的数据很少时，效率比Hashmap高。  
+
 
 > Java 8 中基本的数据类型  
 

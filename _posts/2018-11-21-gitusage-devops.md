@@ -5,7 +5,7 @@ category: devops
 date: 2018-11-21 15:17:55
 ---
 
-### [Usage link](http://rogerdudler.github.io/git-guide/ )
+### [Usage link](http://rogerdudler.github.io/git-guide/)
 
 ### 一台电脑配置多个git账户
 
@@ -87,7 +87,7 @@ git push --mirror origin
 
 ```
 
-### Git revert [Reference link]  (https://github.com/geeeeeeeeek/git-recipes/wiki/5.2-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A%EF%BC%9AReset%E3%80%81Checkout%E3%80%81Revert%E7%9A%84%E9%80%89%E6%8B%A9)
+### [Git revert](https://github.com/geeeeeeeeek/git-recipes/wiki/5.2-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A%EF%BC%9AReset%E3%80%81Checkout%E3%80%81Revert%E7%9A%84%E9%80%89%E6%8B%A9)  
 
 ```bash
 git revert 47900454c18cca36f66f7832fbb1617797b52708

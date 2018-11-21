@@ -6,12 +6,7 @@
 body {
     font-family: Helvetica, Arial, Sreif, Verdana;
     background: #FFF;
-}
-
-p {
-    font-size: 1.1em;
-    font-weight: 300;
-    line-height: 1.1em;
+    color: #373737;
 }
 
 a, a:hover, a:focus {
@@ -26,12 +21,6 @@ a, a:hover, a:focus {
     min-height: 64px;
     border-radius: 0;
     box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
-}
-
-.navbar-btn {
-    box-shadow: none;
-    outline: none !important;
-    border: none;
 }
 
 .line {
@@ -137,7 +126,7 @@ a.article, a.article:hover {
 ----------------------------------------------------- */
 #content {
     width: calc(100% - 250px);
-    padding: 0px 5%;
+    padding: 0px 1%;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;

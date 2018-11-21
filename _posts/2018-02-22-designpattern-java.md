@@ -7,6 +7,95 @@ date: 2018-06-15 11:03:55
 
 # Java design pattern
 
+## Observer pattern
+
+> 事件发生时，需要通知订阅该事件的对象  
+
+```java
+
+interface Observer {
+	void notify(String str);
+}
+
+class EventA implements Observer {
+	public void notify(String str) {
+		if(str == "EventA") {
+			//doSth
+		}
+	}
+}
+
+class EventB implements Observer {
+	public void notify(String str) {
+		if(str == "EventB") {
+			//doSth
+		}
+	}
+}
+
+interface Subject {
+	void registerObserver(Observer o);
+	void notifyObserver(String str);
+}
+
+class Feed implements Subject {
+	private final List<Observer> observers = new ArrayList<Observer>();
+
+	public void registerObserver(Observer o) {
+		this.observers.add(o);
+	}
+
+	public void notifyObserver(String str) {
+		observers.forEach(o -> o.notify(str));
+	}
+}
+
+```
+
+
+## Template pattern  
+
+> 将流程模板化  
+
+```java
+
+abstract class TransferMoney {
+	abstract void login();
+	abstract void transfer();
+	abstract void logout();
+}
+
+
+```
+
+## Strategy pattern 
+
+> 将用户的行为抽象化
+
+```java
+
+public interface ValidationStrategy {
+	boolean execute(String str);
+}
+
+public class isNumberic implements ValidationStrategy {
+	public boolean execute(String str) {
+		return str.matches("\\d+");
+	}
+}
+
+public class Validator {
+	private final ValidationStrategy validationStrategy;
+	public Validator (ValidationStrategy validationStrategy) {
+		this.validationStrategy = validationStrategy;
+	}
+	public boolean validate(String str) {
+		return validationStrategy.execute(str);
+	}
+}
+
+```
+
 ## Command pattern
 
 > 实现服务请求者与服务实现者之间的解耦  
@@ -64,14 +153,7 @@ public static void main(String[] args) {
 	requester.action();
 }
 
-
-
-
-
-
 ```
-
-
 
 ## Proxy pattern
 
@@ -80,7 +162,7 @@ public static void main(String[] args) {
 > 优点: 在不改变现有代码的基础上，可以增加额外的逻辑  
 缺点: 如果被代理对象实现好多接口，代理类比较难以维护，如果被代理类又任何接口的变更，代理类也要做相应的变更，具有耦合度  
 
-```
+```java
 package com.test;
 
 import java.lang.reflect.InvocationHandler;

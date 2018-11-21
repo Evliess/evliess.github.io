@@ -7,8 +7,21 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
-> Java 中的Clone
+> Synchronized原理  
+
+- 修饰普通方法  
+通过 ACC_SYNCHRONIZED标识，如果设置该标识，则需要先获取monitor，获取成功才执行方法。方法执行完了释放monitor。  
+- 修饰静态方法  
+- 修饰代码块  
+JVM的两个指令monitorenter和monitorexit. Synchronized的语义底层是通过一个monitor的对象来完成，其实wait/notify等方法也依赖于monitor对象，只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常. 
+
+> Java 中的Clone  
+
 克隆对象的时候如果需要深克隆，那么该对象中的引用类型也需要实现Cloneable接口。如果该类中的引用对象没有实现Cloneable接口，那么克隆的对象与原对象拥有相同的引用类型的字段。可以通过序列化的手段实现对象的深度克隆。   
+
+> LinkedHashMap的应用   
+
+可以保证遍历时取数据的顺序和插入顺序是一致的，一般情况下遍历的效率比Hashmap低。当Hashmap的容量很大，实际存放的数据很少时，效率比Hashmap高。  
 
 > Java 8 中基本的数据类型  
 
@@ -17,7 +30,7 @@ byte, char, int, float, double, long ,short, boolean
 > Arrays.sort 与 Collections.sort
 
 - Arrays.sort可以对基本类型的数组进行排序，也可以对实现Comparable接口的集合进行排序。  
-     - Arrays可以使用sort方法以及parallelSort方法对集合进行排序。使用DualPivotQuicksort(双轴双向)排序，基本思路是设置两个参考点pivot1，pivot2，其中pivot1一定要小于pivot2，然后将呆排序的数组分为4部分 [x<=pivot1], [pivot1<x<pivot2], [x>=pivot2], [未排序]，然后对前三个区间分别递归排序。  
+     - Arrays可以使用sort方法以及parallelSort方法对集合进行排序。使用DualPivotQuicksort(双轴双向)排序，基本思路是设置两个参考点pivot1，pivot2，其中pivot1一定要小于pivot2，然后将待排序的数组分为4部分 [x<=pivot1], [pivot1<x<pivot2], [x>=pivot2], [未排序]，然后对前三个区间分别递归排序。  
 - Collections.sort只能对实现Comparable接口的集合进行排序。  
 
 > Java的类加载机制  
@@ -291,7 +304,7 @@ public interface MyImpl {
 
 > notify()方法和notifyAll()方法的区别  
 
-- 锁池：假设线程A已经拥有某个对象的锁，而其他线程想调用该对象的某个synchronized方法，那么必须先获得该对象的锁可以，由于此时锁已经被线程A占有，所以这些线程会进入该对象的锁池中。  
+- 锁池：假设线程A已经拥有某个对象的锁，而其他线程想调用该对象的某个synchronized方法，那么必须先获得该对象的锁才可以，由于此时锁已经被线程A占有，所以这些线程会进入该对象的锁池中。  
 - 等待池: 假设线程A调用某个对象的wait()方法，线程A就会释放该对象的锁，进入对象的等待池。等待池中的线程不会参与竞争该对象的锁。  
 
 notify()方法只会唤醒一个线程进入锁池，假如有多个线程都在等待获取某个对象的锁，那么操作系统会根据实现挑选一个线程来唤醒。而notifyAll()会唤醒所有的等待线程进入锁池，这些线程之间彼此竞争去获取对象上的锁。notify()方法会导致死锁，而notifyAll()方法不会。

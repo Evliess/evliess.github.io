@@ -24,7 +24,8 @@ sections: [
     ['database', 'DataBase'],
     ['kubernetes', 'Kubernetes'],
     ['docker', 'Docker'],
-    ['linux', 'Linux']
+    ['linux', 'Linux'],
+    ['devops', 'DevOps'],
 ]
 
 plugins:

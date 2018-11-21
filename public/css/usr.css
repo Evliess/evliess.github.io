@@ -79,3 +79,7 @@ div.navbar-header .btn:hover, .btn:focus, .btn.focus {
     color: #BA8FF7 !important;
 }
 
+div.chapter {
+	padding-top: 1em;
+}
+

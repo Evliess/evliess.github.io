@@ -79,6 +79,11 @@ div.navbar-header .btn:hover, .btn:focus, .btn.focus {
     color: #BA8FF7 !important;
 }
 
+div.navbar-header .btn:focus, div.navbar-header .btn:active:focus, div.navbar-header .btn.active:focus, div.navbar-header 
+.btn.focus, div.navbar-header .btn:active.focus, div.navbar-header .btn.active.focus {
+    outline: 0px auto -webkit-focus-ring-color !important;
+}
+
 div.chapter {
 	padding-top: 0.6em;
 }

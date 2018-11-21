@@ -11,7 +11,24 @@ date: 2018-01-21 15:17:55
 ("#id").unbind();
 ```
 
+## Jquery DataTable  
 
+```javascript
+
+```
+
+
+## CodeMirror 获取实例
+
+```javascript
+//Get a reference to the CodeMirror editor
+var editor = $('.CodeMirror')[0].CodeMirror;
+
+//You can then use it as you wish
+editor.setValue('lorem ipsum yada yada');
+editor.replaceSelection('this is a test');
+
+```
 
 
 ## Checkbox widget

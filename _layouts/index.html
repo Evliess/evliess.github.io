@@ -79,6 +79,11 @@
                 });
 
                 $('#sidebarCollapse').on('click', function () {
+                    if($("#sidebarCollapse i").hasClass("glyphicon-align-left")) {
+                        $("#sidebarCollapse i").removeClass("glyphicon-align-left").addClass("glyphicon-align-right");
+                    } else {
+                        $("#sidebarCollapse i").addClass("glyphicon-align-left").removeClass("glyphicon-align-right");
+                    }
                     $('#sidebar, #content').toggleClass('active');
                     $('.collapse.in').toggleClass('in');
                     $('a[aria-expanded=true]').attr('aria-expanded', 'false');

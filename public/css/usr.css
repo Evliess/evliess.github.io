@@ -26,16 +26,12 @@ h1, h2 {
     border-bottom: 1px solid #cccccc;
 }
 nav#sidebar {
-    background: -webkit-linear-gradient(left bottom,#19B986,#970cf8);  
-    background: -o-linear-gradient(left bottom,#19B986,#970cf8);  
-    background: -mos-linear-gradient(left bottom,#19B986,#970cf8);  
-    background: -moz-linear-gradient(left bottom,#19B986,#970cf8);  
-    background: linear-gradient(left bottom,#19B986,#970cf8);
+    background: black;  
 }
 
 .sidebar-btn{
     color: #fff;
-    background-color: #970cf8;
+    background-color: black;
 }
 
 div.sidebar-header
@@ -77,5 +73,9 @@ div.sidebar-header h3 {
 span.nav-page-title {
 	padding: 1em;
 	color:#888;
+}
+
+div.navbar-header .btn:hover, .btn:focus, .btn.focus {
+    color: #BA8FF7 !important;
 }
 

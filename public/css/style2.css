@@ -45,7 +45,6 @@ a {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background: #412356;
     color: #fff;
     transition: all 0.3s;
 }
@@ -56,7 +55,6 @@ a {
 
 #sidebar .sidebar-header {
     padding: 10px 20px;
-    box-shadow: 1px 1px 3px #7E57C2;
 }
 
 #sidebar ul.components {

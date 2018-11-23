@@ -15,6 +15,19 @@ date: 2018-01-21 15:17:55
 
 ```javascript
 
+//Refresh sorting/filter information after dom change.
+//https://datatables.net/reference/api/cell().invalidate()
+table.column(3).invalidate('dom').draw(false);
+table.row(3).invalidate('dom').draw(false);
+table.cell(3, 3).invalidate('dom').draw(false);
+
+//fetch selected rows number
+table.rows('.selected').count();
+
+table.row(3).data();
+
+table.column(3).nodes();
+
 ```
 
 

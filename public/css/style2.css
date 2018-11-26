@@ -129,7 +129,7 @@ a.article, a.article:hover {
 ----------------------------------------------------- */
 #content {
     width: calc(100% - 250px);
-    padding: 0px 1%;
+    padding: 0px 2%;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;

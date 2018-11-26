@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "Using Migration Scripts in Database Deployments"
+title: "Migration Scripts Sample"
 category: database
 date: 2018-06-25 15:17:55
 ---

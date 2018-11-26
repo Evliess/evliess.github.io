@@ -21,9 +21,8 @@ a {
 }
 
 .navbar {
-    padding: 0.6em;
     background: #fff;
-    min-height: 64px;
+    min-height: 40px;
     border-radius: 0;
     box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.2);
 }
@@ -41,7 +40,7 @@ a {
 #sidebar {
     width: 250px;
     position: fixed;
-    top: 65px;
+    top: 52px;
     left: 0;
     height: 100vh;
     z-index: 999;

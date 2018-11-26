@@ -31,7 +31,8 @@ nav#sidebar {
 
 .sidebar-btn{
     color: #fff;
-    background-color:rgba(14,15,32,.8);
+	background-color:rgba(14,15,32,.8);
+	margin-left: 0.4em;
 }
 
 div.sidebar-header

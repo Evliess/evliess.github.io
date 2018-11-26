@@ -35,6 +35,26 @@ git remote rm origin
 # 再次添加remote信息，将hostName替换为.ssh/config中对应的值
 git remote add origin git@jiajia126.github.com:Evliess/evliess.github.io.git
 
+
+# config template
+
+#### start #### 
+## Host的名字可以自己定义
+
+#jiajia_yuwei@126.com
+Host jiajia126.github.com
+HostName github.com
+User jiajia_yuwei@126.com
+IdentityFile C:\\Users\\JiaJiaGui\\.ssh\\jiajia126
+
+#jiajia_yuwei@126.com - github.com
+Host github.com
+HostName github.com
+User jiajia_yuwei@126.com
+IdentityFile C:\\Users\\JiaJiaGui\\.ssh\\id_rsa
+
+#### end #### 
+
 ```
 
 ### Git proxy setting

@@ -26,12 +26,12 @@ h1, h2 {
     border-bottom: 1px solid #cccccc;
 }
 nav#sidebar {
-    background: black;  
+    background: rgba(21,78,96,.9);  
 }
 
 .sidebar-btn{
     color: #fff;
-    background-color: black;
+    background-color:rgba(21,78,96,.9);
 }
 
 div.sidebar-header

@@ -5,8 +5,6 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
-> I don't know what I should write here :)
-
 ## Dropzone
 
 ```javascript

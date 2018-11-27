@@ -5,6 +5,49 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
+> I don't know what I should write here :)
+
+## Dropzone
+
+```javascript
+
+$("#id").dropzone({
+	autoProcessQueue: false, //设置是否文件拖拽上去就执行上传
+	maxFiles: 1, //设置一次上传的最大文件数
+	...
+
+	init: function() {
+	  var uploadBtn = $("#uploadBtn");
+	  uploadBtn.on("click", function() {
+		  //执行文件上传
+		  this.processQueue();
+	  });
+	  
+	  //当文件数等于设置的maxFiles的事件
+	  //file 指的是当前刚添加的文件
+	  this.on("maxfilesexceeded", function(file) {
+		if(this.files.length > 1) {
+			//this.removeAllFiles();  //删除所有已上传的文件
+			//this.addFile(file);     //删除当前文件
+			this.removeFile(file);    //添加当前文件
+		};
+	  });
+	  //添加文件的事件
+	  this.on("addedfile", function(file) {
+
+	  });
+	  //文件上传成功的事件
+	  this.on("success", function(file, resp) {
+
+	  });
+
+
+	}
+});
+
+
+```
+
 ## Jquery Unbind 事件
 
 ```javascript

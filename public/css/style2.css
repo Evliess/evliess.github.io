@@ -132,7 +132,7 @@ a.article, a.article:hover {
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
-    top: 65px;
+    top: 40px;
     right: 0;
 }
 #content.active {

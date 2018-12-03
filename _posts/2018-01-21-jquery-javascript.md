@@ -54,6 +54,8 @@ $("#id").dropzone({
 
 ## Jquery DataTable  
 
+[1.Multiple checkbox select](https://jsfiddle.net/gyrocode/abhbs4x8/)
+
 ```javascript
 
 //Refresh sorting/filter information after dom change.
@@ -70,10 +72,7 @@ table.row(3).data();
 table.column(3).nodes();
 
 //fetch visible rows
-table.rows({{page: "current"}});
-
-//datatable with multiple checkbox 
-[Multiple checkbox select](https://jsfiddle.net/gyrocode/abhbs4x8/)
+table.rows({{page: "current"}});  
 
 ```
 

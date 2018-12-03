@@ -72,6 +72,9 @@ table.column(3).nodes();
 //fetch visible rows
 table.rows({{page: "current"}});
 
+//datatable with multiple checkbox 
+[Multiple checkbox select](https://jsfiddle.net/gyrocode/abhbs4x8/)
+
 ```
 
 

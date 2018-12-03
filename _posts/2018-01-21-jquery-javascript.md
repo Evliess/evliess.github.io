@@ -43,7 +43,6 @@ $("#id").dropzone({
 	}
 });
 
-
 ```
 
 ## Jquery Unbind 事件
@@ -72,7 +71,7 @@ table.row(3).data();
 table.column(3).nodes();
 
 //fetch visible rows
-table.rows({{page: "current"}});  
+table.rows({page: "current"});  
 
 ```
 

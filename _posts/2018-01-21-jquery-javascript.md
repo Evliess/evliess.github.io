@@ -202,3 +202,16 @@ var f = document.getElementById("#FrameId");
 f.contentDocument.getElementById("#ElementId").value;
 {% endhighlight%}
 
+## 阻止表单通过entry提交  
+
+```javascript
+
+$(document).on("keyup keypress", "form input", function(e) {
+          if(e.which == 13) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+```
+

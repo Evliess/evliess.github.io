@@ -7,6 +7,46 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> Interface VS Abstract Class
+
+An interface is similar to an abstract class, except that:
+
+- Methods are implicitly abstract(except default methods)
+- A class does not extend it, but implements it
+- A class may implement more than one interface
+
+All abstract methods from the interface must be implemented by the class.
+
+> Exception VS Error
+
+Exception are subclasses of Throwable. There are three main types of Throwable：
+
+- Error
+
+    - Typically an unrecoverable external error 
+    - Unchecked
+    
+- RuntimeException
+
+    - Typically caused by a programming mistake
+    - Unchecked
+    
+- Exception
+
+    - Recoverable error
+    - Checked (Must be caught or thrown)
+    
+
+#### Best Practices
+
+- Catch the actual exception thrown, not the superclass type. 
+- Examine the exception to find out the exact problem so you can recover cleanly.
+- You do not need to catch every exception.
+
+    - A programming mistake should not be handled. It must be fixed.
+    - Ask yourself, "Does this exception represent behavior I want the program to recover from?"
+
+
 > Synchronized原理  
 
 - 修饰普通方法  

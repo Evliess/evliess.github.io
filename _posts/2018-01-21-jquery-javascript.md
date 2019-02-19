@@ -5,6 +5,18 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
+## Jquery UI Autocomplete  
+
+```javascript
+// 在bootstrap modal 上不显示 autocomplete dropdown的内容
+
+$( "#company" ).autocomplete({       
+    source : availableTags ,
+    appendTo: "#exportOrder"  //这里需要指定modal元素
+});
+
+```
+
 ## Dropzone
 
 ```javascript

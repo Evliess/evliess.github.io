@@ -5,6 +5,19 @@ category: javascript
 date: 2018-01-21 15:17:55
 ---
 
+
+## Bootstrap 
+
+```javascript
+
+//禁止bootstrap carousel 自动播放
+
+$('.carousel').carousel({
+  interval: false
+})
+
+```
+
 ## Jquery UI Autocomplete  
 
 ```javascript

@@ -137,7 +137,7 @@ static final class NonfairSync extends Sync {
         }
 
 {% endhighlight %}
-**非公平锁:**  
+**公平锁:**  
 {% highlight Java %}
 static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;

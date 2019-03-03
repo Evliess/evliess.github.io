@@ -7,6 +7,45 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> Deque 类
+
+- As is a double-end Queue  FIFO (add() and remove())
+- As is a Stack LIFO (push() and pop())
+
+
+> Comparable 接口
+
+- 覆写compareTo方法
+- 只能包含一种比较策略
+
+> Comparator 接口
+
+- 使用compare来比较
+- 可以创建多个Comparator类
+- 创建多个排序的选项
+
+
+> 接口
+
+- 和抽象类类似，只包含public abstract 方法
+- 抽象的方法必须被实现
+- 可以包含constant 字段
+- 可以指向一个引用
+- 包含default 方法 （form java8）
+- 接口可以extends接口
+
+> default 方法 in 接口
+
+- 被default修饰
+- 具有方法体
+
+
+> static 方法 in 接口
+
+> functional 接口
+
+- 只包含一个抽象方法的接口
+
 > 抽象类
 
 - 抽象类不能被实例化

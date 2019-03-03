@@ -7,6 +7,36 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> 抽象类
+
+- 抽象类不能被实例化
+- 抽象类中的抽象方法不能有方法体
+- 抽象类的方法在子类中必须被覆盖
+- 抽象类中可以包含非抽象方法
+- 当一个类继承一个抽象类的时候，要么这个类也是一个抽象类，要么实现父类中的所有抽象方法
+
+> final 关键字
+
+- 可以修饰类，类不能被继承
+- 可以修饰方法， 方法不能被覆盖
+- 可以修饰本地变量，变量的引用不能被修改，但是变量的内容可以修改。
+- 可以修饰参数
+
+
+> public, default, protected, private
+
+- public - anywhere
+- protected - same class, package and subclass in other package
+- default - same class and package
+- private - same class
+
+
+> 如何将一个可变类转化为不可变的类
+
+- 去掉所有的setter方法
+- 所有的字段都用 private final 修饰
+- 类名用final修饰
+
 > Interface VS Abstract Class
 
 An interface is similar to an abstract class, except that:

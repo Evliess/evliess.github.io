@@ -5,6 +5,56 @@ category: java
 date: 2018-01-21 15:17:55
 ---
 
+## Springboot mockMvc 使用HttpSession
+
+```java
+MockHttpSession httpSession = new MockHttpSession();
+httpSession.setAttribute();
+
+MvcResult result = mockMvc.perform(
+        put("/aaa/bbb").contentType(MediaType.APPLICATION_JSON_UTF8).session(httpSession)
+            .content(json))
+        .andExpect(status().is2xxSuccessful()).andReturn();
+
+```
+
+## Springboot 使用 @RequestBody 接受 Ajax Body中的复杂类型参数
+
+```java
+
+//定义Controller中的@RequestBody的参数类型
+public class User {
+  private String name;
+  private List<String> cars;
+  ...
+}
+
+//Js中的Ajax
+var data = {
+  "cars": ["car1", "car2"]，
+  "name": "tom"
+};
+
+$.ajax({
+  url: "xxx",
+  dataType: "json",
+  data: JSON.stringify(data),
+  contentType: "application/json",
+  headers: {
+    Accept: "application/json"
+  },
+  success: function(){}
+});
+
+//3 Controller中取得Ajax Body中的数据
+
+public String test(HttpSession httpSession,
+      @RequestBody User payload) {
+        payload.getCars();
+}
+
+```
+
 ## Bootstrap Modal 遇到的问题  
 
 > 当关闭modal的时候，清除modal上的数据  

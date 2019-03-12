@@ -7,6 +7,15 @@ date: 2018-01-21 15:17:55
 
 # Springboot handbook
 
+## Spring Junit TestCase Clear Context after each test method
+
+```java
+
+//put the annotation to class level
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+
+```
+
 ## Springboot mockMvc 使用HttpSession
 
 ```java

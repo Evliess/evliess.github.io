@@ -21,20 +21,7 @@
                 <span class="mif-menu fg-white"></span>
             </button>
         </div>
-        <ul class="app-bar-menu text-upper">
-            {% for section in site.sections %}
-            {% assign attr = section[0] %}
-            {% assign label = section[1] %}
-            <li>
-                <a href="#" class="dropdown-toggle">{{ label }}</a>
-                <ul class="d-menu" data-role="dropdown">
-                    {% for page in site.categories[attr] %}
-                    <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
-            {% endfor %}
-        </ul>
+        <span>{{ page.title }}</span>
     </header>
     <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
         data-shift=".shifted-content">

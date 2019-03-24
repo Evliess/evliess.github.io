@@ -1,132 +1,110 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<html lang="en">
 
-        <title>Keep learning, Practice</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Learn & Practice</title>
+    <link rel="stylesheet" href="{{ site.baseurl }}/public/css/metro-v4.2.39.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/public/css/emacs.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/public/css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/public/css/usr.css">
+    <script src="{{ site.baseurl }}/public/js/jquery-v3.3.1.js"></script>
+    <script src="{{ site.baseurl }}/public/js/metro-v4.0.js"></script>
+</head>
 
-        <!-- Bootstrap CSS CDN -->
-        <link rel="stylesheet" href="{{ site.baseurl }}/public/css/bootstrap.min.css">
-        <!-- Our Custom CSS -->
-        <link rel="stylesheet" href="{{ site.baseurl }}/public/css/style2.css">
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="{{ site.baseurl }}/public/css/jquery.mCustomScrollbar.min.css">
-        <link rel="stylesheet" href="{{ site.baseurl }}/public/css/emacs.css">
-        <link rel="stylesheet" href="{{ site.baseurl }}/public/css/usr.css">
-    </head>
-    <body>
-        <div class="wrapper">
-        <p id="toTop"><a href="#content"><button class="glyphicon glyphicon-menu-up"></button></a></p>
-            <!-- Sidebar Holder -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Documentation</h3>
-                </div>
-                 <ul class="list-unstyled components">
-                    {% for section in site.sections %}
-                    {% assign attr = section[0] %}
-                    {% assign label = section[1] %}
-                    <li class="active">
-                    <a href="#{{ label }}" data-toggle="collapse" aria-expanded="false">{{ label }}</a>
-                    <ul class="collapse list-unstyled" id="{{ label }}">
-                    {% for page in site.categories[attr] %}
-                        <li ><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
-                    {% endfor %}
-                    </ul></li>
-                    {% endfor %}
-                </ul>
-                <ul class="list-unstyled CTAs">
-                     <!-- <li><a href="#" class="download">Download source</a></li>-->
-                    <!-- <li><a href="#" class="article">Back to article</a></li> -->
-                </ul>
-                <p class="copyright">&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
-            </nav>
-
-            <!-- Page Content Holder -->
-            <div id="content">
-                <nav class="navbar navbar-fixed-top">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn navbar-btn sidebar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                            </button><span class="nav-page-title">{{ page.title }}</span>
-                        </div>
-                    </div>
-                </nav>
-                <div class="chapter">
-                    {{ content }}
-                </div>
-            </div>
+<body>
+    <header class="app-bar bg-day0 fg-white app-bar-expand">
+        <div class="app-bar-menu text-upper" data-role="appbar">
+            <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
+                <span class="mif-menu fg-white"></span>
+            </button>
         </div>
+        <ul class="app-bar-menu text-upper collapsed">
+            {% for section in site.sections %}
+            {% assign attr = section[0] %}
+            {% assign label = section[1] %}
+            <li>
+                <a href="#" class="dropdown-toggle">{{ label }}</a>
+                <ul class="d-menu" data-role="dropdown">
+                    {% for page in site.categories[attr] %}
+                    <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </header>
+    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
+        data-shift=".shifted-content">
+        <ul class="sidebar-menu ">
+            {% for section in site.sections %}
+            {% assign attr = section[0] %}
+            {% assign label = section[1] %}
+            <li><a class="dropdown-toggle"><span>{{ label }}</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    {% for page in site.categories[attr] %}
+                    <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    <div class="shifted-content h-100 p-ab">
+        <div class="h-100 p-4">
+            {{ content }}
+        </div>
+    </div>
 
-       
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table").addClass("table table-hover");
+            $("table thead tr th").attr("scope", "col");
+            $("table tbody tr th").attr("scope", "row");
+
+            var day = new Date().getDay();
+            switch (day) {
+                case 1:
+                    $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #6a737d");
+                    break;
+                case 2:
+                    $("header").attr("class" ,"app-bar bg-day2 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #fdd600");
+                    break;
+                case 3:
+                    $("header").attr("class" ,"app-bar bg-day3 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #f77832");
+                    break;
+                case 4:
+                    $("header").attr("class" ,"app-bar bg-day4 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #008571");
+                    break;
+                case 5:
+                    $("header").attr("class" ,"app-bar bg-day5 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #7cc7ff");
+                    break;
+                case 6:
+                    $("header").attr("class" ,"app-bar bg-day6 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #030100");
+                    break;
+                case 0:
+                   $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #8c004a");
+                    break;
+            }
+
+        });
+    </script>
 
 
 
-        <!-- jQuery CDN -->
-        <script src="{{ site.baseurl }}/public/js/jquery-1.12.0.min.js"></script>
-        <!-- Bootstrap Js CDN -->
-        <script src="{{ site.baseurl }}/public/js/bootstrap.min.js"></script>
-        <!-- jQuery Custom Scroller CDN -->
-        <script src="{{ site.baseurl }}/public/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
 
-                $('#sidebarCollapse').on('click', function () {
-                    if($("#sidebarCollapse i").hasClass("glyphicon-align-left")) {
-                        $("#sidebarCollapse i").removeClass("glyphicon-align-left").addClass("glyphicon-align-right");
-                    } else {
-                        $("#sidebarCollapse i").addClass("glyphicon-align-left").removeClass("glyphicon-align-right");
-                    }
-                    $('#sidebar, #content').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
 
-                $("table").addClass("table table-hover");
-                $("table thead tr th").attr("scope","col");
-                $("table tbody tr th").attr("scope","row");
 
-                var day = new Date().getDay();
-                switch(day) {
-                	case 1:
-                		$("blockquote").css("border-left", "4px solid #6a737d");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #6a737d }</style>");
-                		break;
-                	case 2:
-                		$("blockquote").css("border-left", "4px solid #fdd600");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #fdd600 }</style>");
-                		break;
-                	case 3:
-                		$("blockquote").css("border-left", "4px solid #f77832");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #f77832 }</style>");
-                		break;
-                	case 4:
-                		$("blockquote").css("border-left", "4px solid #008571");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #008571 }</style>");
-                		break;
-                	case 5:
-                		$("blockquote").css("border-left", "4px solid #7cc7ff");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #7cc7ff }</style>");
-                		break;
-                	case 6:
-                		$("blockquote").css("border-left", "4px solid #030100");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #030100 }</style>");
-                		break;
-                	case 0:
-                		$("blockquote").css("border-left", "4px solid #ff9eee");
-                        $('head').append("<style>ul.timeline > li:before{ border:3px solid #ff9eee }</style>");
+</body>
 
-                		break;
-                }
-
-            });
-        </script>
-    </body>
 </html>

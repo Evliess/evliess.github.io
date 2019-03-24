@@ -1,58 +1,53 @@
-@media screen and (max-width: 600px) {
-	h1 {
-		font-size: 26px;
-	}
-	h2 {
-		font-size: 22px;
-	}
-	h3 {
-		font-size: 18px;
-	}
-	h4 {
-		font-size: 14px;
-	}
-	h5 {
-		font-size: 10px;
-	}
-	h6 {
-		font-size: 6px;
-	}
+container {width: 100%;}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
 }
 
-h1, h2 {
-    line-height: 1.1em;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #cccccc;
-}
-nav#sidebar {
-    background: rgba(14,15,32,.8);  
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
 }
 
-.sidebar-btn{
-    color: #fff;
-	background-color:rgba(14,15,32,.8);
-	margin-left: 0.4em;
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
 }
 
-div.sidebar-header
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
 
-.btn:hover, .btn:focus {
-    color: #fff;
+@media (min-width: 1452px) {
+    .container {
+        max-width: 1360px;
+    }
+}
+
+.sidebar-menu {
+    top: 52px;
+    height: 100vh;
+}
+
+.sidebar-menu > li > a {
+    padding-left: 16px;
+}
+
+.sidebar-menu > li > ul > li > a {
+    padding-left: 24px;
 }
 
 img {
-	border: solid #CCC 1px;
+    border: solid #CCC 1px;
     max-width: 100%;
     max-height: 100%;
     margin-bottom: 1em;
-}
-
-blockquote {
-    padding: 0px 8px;
-    margin: 0 0.1em 1em;
-    font-size: 16px;
-    border-left: 4px solid #FFF; 
 }
 
 pre {
@@ -61,60 +56,25 @@ pre {
     padding: 0.6em 1em;
 }
 
-p.copyright {
-	margin-left: 1.2em;
-	margin-bottom: 1.2em;
-	color:#9575CD;
+.bg-day0 {
+    background-color: #8c004a;
 }
 
-div.sidebar-header h3 {
-    color:#FFF;
+.bg-day1 {
+    background-color: #6a737d;
 }
-
-span.nav-page-title {
-	padding: 1em;
+.bg-day2 {
+    background-color: #fdd600;
 }
-
-div.navbar-header .btn:hover, .btn:focus, .btn.focus {
-    color: #BA8FF7 !important;
+.bg-day3 {
+    background-color: #f77832;
 }
-
-div.navbar-header .btn:focus, div.navbar-header .btn:active:focus, div.navbar-header .btn.active:focus, div.navbar-header 
-.btn.focus, div.navbar-header .btn:active.focus, div.navbar-header .btn.active.focus {
-    outline: 0px auto -webkit-focus-ring-color !important;
+.bg-day4 {
+    background-color: #008571;
 }
-
-div.chapter {
-	padding-top: 0.6em;
+.bg-day5 {
+    background-color: #7cc7ff;
 }
-
-ul.timeline {
-    list-style-type: none;
-    position: relative;
-  }
-ul.timeline:before {
-    content: ' ';
-    background: #d4d9df;
-    display: inline-block;
-    position: absolute;
-    left: 30px;
-    width: 2px;
-    height: 100%;
-    z-index: 400;
+.bg-day6 {
+    background-color: #030100;
 }
-ul.timeline > li {
-    margin: 20px 0;
-    padding-left: 20px;
-}
-ul.timeline > li:before {
-    content: ' ';
-    background: white;
-    display: inline-block;
-    position: absolute;
-    border-radius: 50%;
-    left: 20px;
-    width: 20px;
-    height: 20px;
-    z-index: 400;
-}
-

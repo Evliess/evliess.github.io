@@ -1,138 +1,455 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<html lang="en">
 
-        <title>Welcome to JackGui's world</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Learn & Practice</title>
+    <link rel="stylesheet" href="/public/css/metro-v4.2.39.min.css">
+    <link rel="stylesheet" href="/public/css/emacs.css">
+    <link rel="stylesheet" href="/public/css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="/public/css/usr.css">
+    <script src="/public/js/jquery-v3.3.1.js"></script>
+    <script src="/public/js/metro-v4.0.js"></script>
+</head>
 
-        <!-- Bootstrap CSS CDN -->
-        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-        <!-- Our Custom CSS -->
-        <link rel="stylesheet" href="/public/css/style2.css">
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="/public/css/jquery.mCustomScrollbar.min.css">
-
-        <link rel="stylesheet" href="/public/css/usr.css">
-
-    </head>
-    <body>
-
-
-
-        <div class="wrapper">
-            <!-- Sidebar Holder -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Documentation</h3>
-                </div>
-
-                 <ul class="list-unstyled components">
-                 <p>Categories</p>
-                    <div class="dynamic-sidebar">
-					    
-					        
-					        
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">Java</span></li>
-					            
-					            <li data-order=""><a href="/java/thread-java.html">Thread</a></li>
-					        
-					            
-					            <li data-order=""><a href="/java/themeleaf-java.html">Themeleaf</a></li>
-					        
-					            
-					            <li data-order=""><a href="/java/springwebsocket-java.html">Springboot Websocket Usage</a></li>
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">JavaScript</span></li>
-					            
-					            <li data-order=""><a href="/javascript/jquery-javascript.html">JQuery</a></li>
-					        
-						
-					        
-					        
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">Linux</span></li>
-					            
-					            <li data-order=""><a href="/linux/cmd-linux.html">Command</a></li>
-					        
-						
-					        
-					        
-					        
-						
-					</div></ul>
-                <ul class="list-unstyled CTAs">
-                    <li><a href="#" class="download">Download source</a></li>
-                    <!-- <li><a href="#" class="article">Back to article</a></li> -->
-                </ul>
-                <p class="copyright">&copy; 2018. All rights reserved.</p>
-            </nav>
-
-            <!-- Page Content Holder -->
-            <div id="content">
-
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
-
-                        <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn navbar-btn sidebar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                            </button>
-                        </div>
-
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-left">
-                                <li><a href="#">Themeleaf</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-
-               <h2 id="how-to-use-themeleaf">How to use Themeleaf</h2>
-
-            </div>
+<body>
+    <header class="app-bar bg-day0 fg-white app-bar-expand">
+        <div class="app-bar-menu text-upper" data-role="appbar">
+            <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
+                <span class="mif-menu fg-white"></span>
+            </button>
         </div>
+        <ul class="app-bar-menu text-upper collapsed">
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Java</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/java/designpattern-java.html">Java设计模式</a></li>
+                    
+                    <li><a href="/java/selenium-java.html">Selenium</a></li>
+                    
+                    <li><a href="/java/concurrent-java.html">Java Concurrent</a></li>
+                    
+                    <li><a href="/java/algorithm-java.html">Algorithm</a></li>
+                    
+                    <li><a href="/java/basicknowledge-java.html">Java基础知识</a></li>
+                    
+                    <li><a href="/java/themeleaf-java.html">Themeleaf</a></li>
+                    
+                    <li><a href="/java/springboot-java.html">Springboot Usage</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">JavaScript</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/javascript/objectmodel-javascript.html">Details of the object modal</a></li>
+                    
+                    <li><a href="/javascript/requirejs-javascript.html">RequireJs 用法</a></li>
+                    
+                    <li><a href="/javascript/jquery-javascript.html">Javascript常用的方法</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">DataBase</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/database/common_migration_script-database.html">Migration Scripts Sample</a></li>
+                    
+                    <li><a href="/database/redis-database.html">Redis</a></li>
+                    
+                    <li><a href="/database/basic-database.html">数据库基础</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Kubernetes</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/kubernetes/knowledge-kubernete.html">Basic of Kubernetes</a></li>
+                    
+                    <li><a href="/kubernetes/installation-kubernete.html">Minikube Installation</a></li>
+                    
+                    <li><a href="/kubernetes/installation-istio.html">Istio Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Docker</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/docker/docker-compose-docker.html">Docker Compose</a></li>
+                    
+                    <li><a href="/docker/storage-docker.html">Docker Storage</a></li>
+                    
+                    <li><a href="/docker/installation-docker.html">Docker Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Linux</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/linux/cmd-linux.html">常用的linux命令</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">DevOps</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/devops/ant-devops.html">Ant使用</a></li>
+                    
+                    <li><a href="/devops/gitusage-devops.html">Git使用</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+    </header>
+    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
+        data-shift=".shifted-content">
+        <ul class="sidebar-menu ">
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Java</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/java/designpattern-java.html">Java设计模式</a></li>
+                    
+                    <li><a href="/java/selenium-java.html">Selenium</a></li>
+                    
+                    <li><a href="/java/concurrent-java.html">Java Concurrent</a></li>
+                    
+                    <li><a href="/java/algorithm-java.html">Algorithm</a></li>
+                    
+                    <li><a href="/java/basicknowledge-java.html">Java基础知识</a></li>
+                    
+                    <li><a href="/java/themeleaf-java.html">Themeleaf</a></li>
+                    
+                    <li><a href="/java/springboot-java.html">Springboot Usage</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>JavaScript</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/javascript/objectmodel-javascript.html">Details of the object modal</a></li>
+                    
+                    <li><a href="/javascript/requirejs-javascript.html">RequireJs 用法</a></li>
+                    
+                    <li><a href="/javascript/jquery-javascript.html">Javascript常用的方法</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>DataBase</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/database/common_migration_script-database.html">Migration Scripts Sample</a></li>
+                    
+                    <li><a href="/database/redis-database.html">Redis</a></li>
+                    
+                    <li><a href="/database/basic-database.html">数据库基础</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Kubernetes</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/kubernetes/knowledge-kubernete.html">Basic of Kubernetes</a></li>
+                    
+                    <li><a href="/kubernetes/installation-kubernete.html">Minikube Installation</a></li>
+                    
+                    <li><a href="/kubernetes/installation-istio.html">Istio Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Docker</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/docker/docker-compose-docker.html">Docker Compose</a></li>
+                    
+                    <li><a href="/docker/storage-docker.html">Docker Storage</a></li>
+                    
+                    <li><a href="/docker/installation-docker.html">Docker Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Linux</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/linux/cmd-linux.html">常用的linux命令</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>DevOps</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/devops/ant-devops.html">Ant使用</a></li>
+                    
+                    <li><a href="/devops/gitusage-devops.html">Git使用</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+    </aside>
+    <div class="shifted-content h-100 p-ab">
+        <div class="h-100 p-4">
+            <h1 id="标准的表达式语法">标准的表达式语法</h1>
+
+<ul>
+  <li>简单的表达式
+    <ul>
+      <li>变量表达式：${…}</li>
+      <li>选择变量表达式: *{…}<br />
+  <em>*{…}用来取th:object=”${…}”中的变量</em></li>
+      <li>消息表达式: #{…}</li>
+      <li>URL表达式：@{…}</li>
+      <li>fragment表达式:~{…}</li>
+    </ul>
+  </li>
+  <li>字面值
+    <ul>
+      <li>文本: ‘one’, ‘two’, …</li>
+      <li>数字: 0, 34, 3.0, 12.3, …</li>
+      <li>布尔: true, false</li>
+      <li>Null: null</li>
+      <li>literal tokens one, sometext, main, …</li>
+    </ul>
+  </li>
+  <li>文本运算
+    <ul>
+      <li>+</li>
+      <li>|The name is ${name}|</li>
+    </ul>
+  </li>
+  <li>数学运算
+    <ul>
+      <li>二元操作符： +, -, *, /, %</li>
+      <li>一元操作符: -</li>
+    </ul>
+  </li>
+  <li>布尔运算
+    <ul>
+      <li>and, or, !, not</li>
+    </ul>
+  </li>
+  <li>比较运算
+    <ul>
+      <li>&lt;, &gt;, &gt;=, &lt;= (gt, lt, ge, le), ==, != (eq, ne)</li>
+    </ul>
+  </li>
+  <li>条件运算
+    <ul>
+      <li>if? then , (if)?(then):(else),</li>
+      <li>默认值: (value)?: (defaultvalur)</li>
+    </ul>
+  </li>
+  <li>Special tokens:
+    <ul>
+      <li>No-Operation: _</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="using-texts">Using Texts</h1>
+
+<ul>
+  <li>th:text</li>
+  <li>th:utext</li>
+</ul>
+
+<h1 id="常用对象的工具类">常用对象的工具类</h1>
+
+<ul>
+  <li>#execInfo: information about the template being processed.</li>
+  <li>#messages: methods for obtaining externalized messages inside variables expressions, in the same way as they would be obtained using #{…} syntax.</li>
+  <li>#uris: methods for escaping parts of URLs/URIs</li>
+  <li>#dates: methods for java.util.Date objects: formatting, component extraction, etc.</li>
+  <li>#calendars: analogous to #dates, but for java.util.Calendar objects.</li>
+  <li>#numbers: methods for formatting numeric objects.</li>
+  <li>#strings: methods for String objects: contains, startsWith, prepending/appending, etc.</li>
+  <li>#objects: methods for objects in general.</li>
+  <li>#bools: methods for boolean evaluation.</li>
+  <li>#arrays: methods for arrays.</li>
+  <li>#lists: methods for lists.</li>
+  <li>#sets: methods for sets.</li>
+  <li>#maps: methods for maps.</li>
+  <li>#aggregates: methods for creating aggregates on arrays or collections.</li>
+  <li>#ids: methods for dealing with id attributes that might be repeated (for example, as a result of an iteration).</li>
+</ul>
+
+<h1 id="fragment">Fragment</h1>
+
+<p>th:include, th:insert</p>
+
+<h1 id="条件表达式">条件表达式</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tr th:class="${row.even}? 'even' : 'odd'"&gt;
+  ...
+&lt;/tr&gt;
+</code></pre></div></div>
+
+<h1 id="迭代表达式-theach">迭代表达式 (th：each)</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tr th:each="prod : ${prods}"&gt;
+    &lt;td th:text="${prod.name}"&gt;Onions&lt;/td&gt;
+    &lt;td th:text="${prod.price}"&gt;2.41&lt;/td&gt;
+    &lt;td th:text="${prod.inStock}? #{true} : #{false}"&gt;yes&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre></div></div>
+<h2 id="可以获取迭代过程中的一些状态">可以获取迭代过程中的一些状态</h2>
+<ul>
+  <li>The current iteration index, starting with 0. This is the <strong>index</strong> property.</li>
+  <li>The current iteration index, starting with 1. This is the <strong>count</strong> property.</li>
+  <li>The total amount of elements in the iterated variable. This is the <strong>size</strong> property.</li>
+  <li>The iter variable for each iteration. This is the <strong>current</strong> property.</li>
+  <li>Whether the current iteration is even or odd. These are the <strong>even/odd</strong> boolean properties.</li>
+  <li>Whether the current iteration is the first one. This is the <strong>first</strong> boolean property.</li>
+  <li>Whether the current iteration is the last one. This is the <strong>last</strong> boolean property.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd}? 'odd'"&gt;
+    &lt;td th:text="${prod.name}"&gt;Onions&lt;/td&gt;
+    &lt;td th:text="${prod.price}"&gt;2.41&lt;/td&gt;
+    &lt;td th:text="${prod.inStock}? #{true} : #{false}"&gt;yes&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre></div></div>
+
+<h1 id="条件表达式-1">条件表达式</h1>
+<p>th:if, th:unless,th:switch</p>
+
+<p>对于th:switch语句，一旦其中的一个th:case满足条件，那么后续的所有th:case的值都将被计算为false,默认的语句用th:case=”*“表示。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div th:switch="${user.role}"&gt;
+  &lt;p th:case="'admin'"&gt;User is an administrator&lt;/p&gt;
+  &lt;p th:case="#{roles.manager}"&gt;User is a manager&lt;/p&gt;
+  &lt;p th:case="*"&gt;User is some other thing&lt;/p&gt;
+&lt;/div&gt;
+</code></pre></div></div>
+
+<h1 id="thymeleaf布局">Thymeleaf布局</h1>
+
+<h2 id="thinsert--threplacethinclude-从thymeleaf30开始不推荐使用">th:insert,  th:replace,th:include (从thymeleaf3.0开始，不推荐使用)</h2>
+<p>“{templatename::selector}” ：templatename指的是html的名字，selector指的是fragment的名字(th:fragment=”copy”)</p>
+<h2 id="可以通过selector选择器使用thfragment">可以通过selector选择器使用th:fragment</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div id="copy-section"&gt;
+  &amp;copy; 2011 The Good Thymes Virtual Grocery
+&lt;/div&gt;
+
+
+&lt;body&gt;
+
+  ...
+
+  &lt;div th:insert="~{footer :: #copy-section}"&gt;&lt;/div&gt;
+  
+&lt;/body&gt;
+</code></pre></div></div>
+
+<h2 id="thinsert和threplacethinclude的不同点">th:insert和th:replace,th:include的不同点</h2>
+<ul>
+  <li>th:insert is the simplest: it will simply insert the specified fragment as the body of its host tag.</li>
+  <li>th:replace actually replaces its host tag with the specified fragment.</li>
+  <li>th:include is similar to th:insert, but instead of inserting the fragment it only inserts the contents of this fragment.</li>
+</ul>
+
+<h1 id="参考">参考</h1>
+<p><a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#mixing-coupled-and-decoupled-logic">Thymeleaf Doc</a></p>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table").addClass("table table-hover");
+            $("table thead tr th").attr("scope", "col");
+            $("table tbody tr th").attr("scope", "row");
+
+            var day = new Date().getDay();
+            switch (day) {
+                case 1:
+                    $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #6a737d");
+                    break;
+                case 2:
+                    $("header").attr("class" ,"app-bar bg-day2 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #fdd600");
+                    break;
+                case 3:
+                    $("header").attr("class" ,"app-bar bg-day3 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #f77832");
+                    break;
+                case 4:
+                    $("header").attr("class" ,"app-bar bg-day4 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #008571");
+                    break;
+                case 5:
+                    $("header").attr("class" ,"app-bar bg-day5 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #7cc7ff");
+                    break;
+                case 6:
+                    $("header").attr("class" ,"app-bar bg-day6 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #030100");
+                    break;
+                case 0:
+                   $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #8c004a");
+                    break;
+            }
+
+        });
+    </script>
 
 
 
 
 
-        <!-- jQuery CDN -->
-        <script src="/public/js/jquery-1.12.0.min.js"></script>
-        <!-- Bootstrap Js CDN -->
-        <script src="/public/js/bootstrap.min.js"></script>
-        <!-- jQuery Custom Scroller CDN -->
-        <script src="/public/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar, #content').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
-            });
-        </script>
-    </body>
+</body>
+
 </html>

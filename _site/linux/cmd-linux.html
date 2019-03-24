@@ -1,138 +1,514 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<html lang="en">
 
-        <title>Welcome to JackGui's world</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Learn & Practice</title>
+    <link rel="stylesheet" href="/public/css/metro-v4.2.39.min.css">
+    <link rel="stylesheet" href="/public/css/emacs.css">
+    <link rel="stylesheet" href="/public/css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="/public/css/usr.css">
+    <script src="/public/js/jquery-v3.3.1.js"></script>
+    <script src="/public/js/metro-v4.0.js"></script>
+</head>
 
-        <!-- Bootstrap CSS CDN -->
-        <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-        <!-- Our Custom CSS -->
-        <link rel="stylesheet" href="/public/css/style2.css">
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="/public/css/jquery.mCustomScrollbar.min.css">
-
-        <link rel="stylesheet" href="/public/css/usr.css">
-
-    </head>
-    <body>
-
-
-
-        <div class="wrapper">
-            <!-- Sidebar Holder -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Documentation</h3>
-                </div>
-
-                 <ul class="list-unstyled components">
-                 <p>Categories</p>
-                    <div class="dynamic-sidebar">
-					    
-					        
-					        
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">Java</span></li>
-					            
-					            <li data-order=""><a href="/java/thread-java.html">Thread</a></li>
-					        
-					            
-					            <li data-order=""><a href="/java/themeleaf-java.html">Themeleaf</a></li>
-					        
-					            
-					            <li data-order=""><a href="/java/springwebsocket-java.html">Springboot Websocket Usage</a></li>
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">JavaScript</span></li>
-					            
-					            <li data-order=""><a href="/javascript/jquery-javascript.html">JQuery</a></li>
-					        
-						
-					        
-					        
-					        
-						
-					        
-					        
-					        
-					            
-					                <li class="nav-header"><span class="sidebar-title">Linux</span></li>
-					            
-					            <li data-order=""><a href="/linux/cmd-linux.html">Command</a></li>
-					        
-						
-					        
-					        
-					        
-						
-					</div></ul>
-                <ul class="list-unstyled CTAs">
-                    <li><a href="#" class="download">Download source</a></li>
-                    <!-- <li><a href="#" class="article">Back to article</a></li> -->
-                </ul>
-                <p class="copyright">&copy; 2018. All rights reserved.</p>
-            </nav>
-
-            <!-- Page Content Holder -->
-            <div id="content">
-
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
-
-                        <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn navbar-btn sidebar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                            </button>
-                        </div>
-
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-left">
-                                <li><a href="#">Command</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-
-               <h2 id="useful-linux-command">Useful Linux Command</h2>
-
-            </div>
+<body>
+    <header class="app-bar bg-day0 fg-white app-bar-expand">
+        <div class="app-bar-menu text-upper" data-role="appbar">
+            <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
+                <span class="mif-menu fg-white"></span>
+            </button>
         </div>
+        <ul class="app-bar-menu text-upper collapsed">
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Java</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/java/designpattern-java.html">Java设计模式</a></li>
+                    
+                    <li><a href="/java/selenium-java.html">Selenium</a></li>
+                    
+                    <li><a href="/java/concurrent-java.html">Java Concurrent</a></li>
+                    
+                    <li><a href="/java/algorithm-java.html">Algorithm</a></li>
+                    
+                    <li><a href="/java/basicknowledge-java.html">Java基础知识</a></li>
+                    
+                    <li><a href="/java/themeleaf-java.html">Themeleaf</a></li>
+                    
+                    <li><a href="/java/springboot-java.html">Springboot Usage</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">JavaScript</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/javascript/objectmodel-javascript.html">Details of the object modal</a></li>
+                    
+                    <li><a href="/javascript/requirejs-javascript.html">RequireJs 用法</a></li>
+                    
+                    <li><a href="/javascript/jquery-javascript.html">Javascript常用的方法</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">DataBase</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/database/common_migration_script-database.html">Migration Scripts Sample</a></li>
+                    
+                    <li><a href="/database/redis-database.html">Redis</a></li>
+                    
+                    <li><a href="/database/basic-database.html">数据库基础</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Kubernetes</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/kubernetes/knowledge-kubernete.html">Basic of Kubernetes</a></li>
+                    
+                    <li><a href="/kubernetes/installation-kubernete.html">Minikube Installation</a></li>
+                    
+                    <li><a href="/kubernetes/installation-istio.html">Istio Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Docker</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/docker/docker-compose-docker.html">Docker Compose</a></li>
+                    
+                    <li><a href="/docker/storage-docker.html">Docker Storage</a></li>
+                    
+                    <li><a href="/docker/installation-docker.html">Docker Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">Linux</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/linux/cmd-linux.html">常用的linux命令</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li>
+                <a href="#" class="dropdown-toggle">DevOps</a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/devops/ant-devops.html">Ant使用</a></li>
+                    
+                    <li><a href="/devops/gitusage-devops.html">Git使用</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+    </header>
+    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
+        data-shift=".shifted-content">
+        <ul class="sidebar-menu ">
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Java</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/java/designpattern-java.html">Java设计模式</a></li>
+                    
+                    <li><a href="/java/selenium-java.html">Selenium</a></li>
+                    
+                    <li><a href="/java/concurrent-java.html">Java Concurrent</a></li>
+                    
+                    <li><a href="/java/algorithm-java.html">Algorithm</a></li>
+                    
+                    <li><a href="/java/basicknowledge-java.html">Java基础知识</a></li>
+                    
+                    <li><a href="/java/themeleaf-java.html">Themeleaf</a></li>
+                    
+                    <li><a href="/java/springboot-java.html">Springboot Usage</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>JavaScript</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/javascript/objectmodel-javascript.html">Details of the object modal</a></li>
+                    
+                    <li><a href="/javascript/requirejs-javascript.html">RequireJs 用法</a></li>
+                    
+                    <li><a href="/javascript/jquery-javascript.html">Javascript常用的方法</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>DataBase</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/database/common_migration_script-database.html">Migration Scripts Sample</a></li>
+                    
+                    <li><a href="/database/redis-database.html">Redis</a></li>
+                    
+                    <li><a href="/database/basic-database.html">数据库基础</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Kubernetes</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/kubernetes/knowledge-kubernete.html">Basic of Kubernetes</a></li>
+                    
+                    <li><a href="/kubernetes/installation-kubernete.html">Minikube Installation</a></li>
+                    
+                    <li><a href="/kubernetes/installation-istio.html">Istio Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Docker</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/docker/docker-compose-docker.html">Docker Compose</a></li>
+                    
+                    <li><a href="/docker/storage-docker.html">Docker Storage</a></li>
+                    
+                    <li><a href="/docker/installation-docker.html">Docker Installation</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>Linux</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/linux/cmd-linux.html">常用的linux命令</a></li>
+                    
+                </ul>
+            </li>
+            
+            
+            
+            <li><a class="dropdown-toggle"><span>DevOps</span></a>
+                <ul class="d-menu" data-role="dropdown">
+                    
+                    <li><a href="/devops/ant-devops.html">Ant使用</a></li>
+                    
+                    <li><a href="/devops/gitusage-devops.html">Git使用</a></li>
+                    
+                </ul>
+            </li>
+            
+        </ul>
+    </aside>
+    <div class="shifted-content h-100 p-ab">
+        <div class="h-100 p-4">
+            <h1 id="1-vi命令">1. Vi命令</h1>
+<h2 id="11-移动光标">1.1 移动光标</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>按键</th>
+      <th>移动光标</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>h或者←</td>
+      <td>向左移动一个字符</td>
+    </tr>
+    <tr>
+      <td>j或者↓</td>
+      <td>向下移动一个字符</td>
+    </tr>
+    <tr>
+      <td>k或者↑</td>
+      <td>向上移动一个字符</td>
+    </tr>
+    <tr>
+      <td>l或者→</td>
+      <td>向右移动一个字符</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>移动到当前行的第一个非空字符</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>移动到当前行的末尾</td>
+    </tr>
+    <tr>
+      <td>Ctrl-f</td>
+      <td>向下翻一页</td>
+    </tr>
+    <tr>
+      <td>Ctrl-b</td>
+      <td>向上翻一页</td>
+    </tr>
+    <tr>
+      <td>numberG</td>
+      <td>移动到第 number 行</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="12-基本编辑">1.2 基本编辑</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>命令</th>
+      <th>执行的操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i</td>
+      <td>在光标所在字符的前面开始插入新字符</td>
+    </tr>
+    <tr>
+      <td>a</td>
+      <td>在光标所在字符的后面开始插入新字符</td>
+    </tr>
+    <tr>
+      <td>o</td>
+      <td>在光标所在行的下面插入新行</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>在光标所在行的上面插入新行</td>
+    </tr>
+    <tr>
+      <td>x</td>
+      <td>删除当前字符</td>
+    </tr>
+    <tr>
+      <td>3x</td>
+      <td>删除当前字符以及后面的两个字符</td>
+    </tr>
+    <tr>
+      <td>dd</td>
+      <td>删除当前行</td>
+    </tr>
+    <tr>
+      <td>3dd</td>
+      <td>删除当前行以及随后的两行</td>
+    </tr>
+    <tr>
+      <td>d$</td>
+      <td>删除从光标位置到行末的所有字符</td>
+    </tr>
+    <tr>
+      <td>d0(zero)</td>
+      <td>删除从光标位置到行首的所有字符</td>
+    </tr>
+    <tr>
+      <td>d^</td>
+      <td>删除从光标位置到行首的第一个非空字符</td>
+    </tr>
+    <tr>
+      <td>dG</td>
+      <td>删除当前行到文件的末尾</td>
+    </tr>
+    <tr>
+      <td>d3G</td>
+      <td>删除从当前行到文件的第3行</td>
+    </tr>
+    <tr>
+      <td>yy</td>
+      <td>复制当前行</td>
+    </tr>
+    <tr>
+      <td>3yy</td>
+      <td>复制当前行以及随后的2行</td>
+    </tr>
+    <tr>
+      <td>p</td>
+      <td>将复制的内容粘贴到当前行的下面</td>
+    </tr>
+    <tr>
+      <td>P</td>
+      <td>将复制的内容粘贴到当前行的上面</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="13-查找和替换">1.3 查找和替换</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>命令</th>
+      <th>执行的操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>:</td>
+      <td>冒号字符运行一个 ex 命令</td>
+    </tr>
+    <tr>
+      <td>%</td>
+      <td>% 是一个快捷方式，表示从第一行到最后一行, 或者用 1,$ 来代替，意思是从第一行到文件的最后一行</td>
+    </tr>
+    <tr>
+      <td>s</td>
+      <td>指定操作,在这种情况下是，替换(查找与替代)</td>
+    </tr>
+    <tr>
+      <td>/old char/new char</td>
+      <td>查找类型与替代文本</td>
+    </tr>
+    <tr>
+      <td>g</td>
+      <td>全局替换，如果省略，则只替换每个文本行中的第一个字符</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//将第1行到第5行中第一个的hello替换为hi
+1,5s/hello/hi
+
+//将文中所有的hello替换为hi
+%s/hello/hi/g
+</code></pre></div></div>
+
+<h1 id="2-搜索命令">2. 搜索命令</h1>
+<h2 id="21-locate-查找文件的简单方式">2.1 locate 查找文件的简单方式</h2>
+<p>locate 程序会执行一次快速的路径名数据库搜索，并且输出每个与给定子字符串相匹配的路径名</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>locate redis | <span class="nb">grep </span>download
+
+//将搜索的结果重定位输出到resut文件
+locate redis | <span class="nb">grep </span>download <span class="o">&gt;</span> result
+</code></pre></div></div>
+
+<h2 id="22-find-查找文件的复杂方式">2.2 find 查找文件的复杂方式</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/<span class="k">**</span>在home目录中查找以foo开头的文件
+<span class="k">*</span> <span class="nt">-type</span> 指定查找文件的类型  <span class="nt">-f</span>:普通文件 <span class="nt">-d</span>:目录 <span class="nt">-l</span>:符号链接 <span class="nt">-b</span>:块特殊设备文件 <span class="nt">-c</span>:字符特殊设备文件
+<span class="k">*</span>/
+find ~ <span class="nt">-type</span> f <span class="nt">-name</span> <span class="s1">'foo*'</span>
+</code></pre></div></div>
+
+<h1 id="3-归档与备份">3. 归档与备份</h1>
+
+<h2 id="31-gzip命令">3.1 gzip命令</h2>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//创建一个压缩文件
+<span class="nb">ls</span> <span class="nt">-l</span> <span class="nb">.</span> | <span class="nb">gzip</span> <span class="o">&gt;</span> test.txt.gz
+//解压缩一个文件
+<span class="nb">gzip</span> <span class="nt">-d</span> test.txt.gz
+</code></pre></div></div>
+
+<h2 id="32-tar命令">3.2 tar命令</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//创建一个tar文件
+<span class="nb">tar </span>cf xxx.tar playground
+//抽取一个tar文件
+<span class="nb">tar </span>xf ../playground.tar
+</code></pre></div></div>
+
+<h2 id="33-zip命令">3.3 zip命令</h2>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//创建一个压缩文件
+ zip <span class="nt">-r</span> xxx.zip testfolder
+//解压缩文件
+unzip xxx.zip <span class="nb">.</span>
+</code></pre></div></div>
+
+<h1 id="4-进程查看命令">4. 进程查看命令</h1>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//查看所有的java进程
+ps <span class="nt">-ef</span> |grep java
+</code></pre></div></div>
+
+<h1 id="5-引用">5. 引用</h1>
+<p><a href="http://billie66.github.io/TLCL/book">参考链接</a></p>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table").addClass("table table-hover");
+            $("table thead tr th").attr("scope", "col");
+            $("table tbody tr th").attr("scope", "row");
+
+            var day = new Date().getDay();
+            switch (day) {
+                case 1:
+                    $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #6a737d");
+                    break;
+                case 2:
+                    $("header").attr("class" ,"app-bar bg-day2 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #fdd600");
+                    break;
+                case 3:
+                    $("header").attr("class" ,"app-bar bg-day3 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #f77832");
+                    break;
+                case 4:
+                    $("header").attr("class" ,"app-bar bg-day4 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #008571");
+                    break;
+                case 5:
+                    $("header").attr("class" ,"app-bar bg-day5 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #7cc7ff");
+                    break;
+                case 6:
+                    $("header").attr("class" ,"app-bar bg-day6 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #030100");
+                    break;
+                case 0:
+                   $("header").attr("class" ,"app-bar bg-day0 fg-white app-bar-expand");
+                    $("blockquote").css("border-left", "4px solid #8c004a");
+                    break;
+            }
+
+        });
+    </script>
 
 
 
 
 
-        <!-- jQuery CDN -->
-        <script src="/public/js/jquery-1.12.0.min.js"></script>
-        <!-- Bootstrap Js CDN -->
-        <script src="/public/js/bootstrap.min.js"></script>
-        <!-- jQuery Custom Scroller CDN -->
-        <script src="/public/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar, #content').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
-            });
-        </script>
-    </body>
+</body>
+
 </html>

@@ -47,6 +47,8 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+
             $("table").addClass("table table-hover");
             $("table thead tr th").attr("scope", "col");
             $("table tbody tr th").attr("scope", "row");
@@ -82,6 +84,12 @@
                     $("blockquote").css("border-left", "4px solid #8c004a");
                     break;
             }
+
+            window.onload = function(){
+                setTimeout(function() {
+                    window.scrollTo(0, 1);
+                },0);
+            };
 
         });
     </script>

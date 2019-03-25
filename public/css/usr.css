@@ -15,9 +15,13 @@ h3 {
     font-weight: 400;
 }
 
+aside.sidebar {
+    position: fixed !important;
+}
+
 .sidebar-menu {
     top: 52px;
-    height: 100vh;
+    height: 100%;
 }
 
 .sidebar-menu > li > a {

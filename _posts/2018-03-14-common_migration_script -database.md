@@ -5,7 +5,7 @@ category: database
 date: 2018-06-25 15:17:55
 ---
 
-# To check that a table exists
+> To check that a table exists
 
 ```sql
 -- does a particular table exist
@@ -18,7 +18,7 @@ ELSE
 PRINT 'The table isn''t there'
 ```
 
-# To check that a function exists
+> To check that a function exists
 
 ```sql
 -- does a particular function exist
@@ -32,7 +32,7 @@ ELSE
 PRINT 'The function isn''t there'
 ```
 
-# To check that a procedure exists
+> To check that a procedure exists
 
 ```sql
 -- does a particular procedure  exist
@@ -46,7 +46,7 @@ ELSE
 PRINT 'The procedure isn''t there'
 ```
 
-# To check that a particular column exists in a table exists
+> To check that a particular column exists in a table exists
 
 ```sql
 -- does a particular column exist in a table
@@ -60,7 +60,7 @@ ELSE
 PRINT 'The column isn''t there'
 ```
 
-# To check whether a column has any sort of constraint
+> To check whether a column has any sort of constraint
 
 ```sql
 IF EXISTS ( SELECT  1
@@ -73,7 +73,7 @@ ELSE
 PRINT 'no constraint'
 ```
 
-# To check that a column has a check constraint
+> To check that a column has a check constraint
 
 ```sql
 IF EXISTS ( SELECT  1
@@ -87,7 +87,7 @@ ELSE
 PRINT 'no check constraint'
 ```
 
-# To check that a column has a foreign key constraint
+> To check that a column has a foreign key constraint
 
 ```sql
 --is there a foreign key constraint on the column	
@@ -102,7 +102,7 @@ ELSE
 PRINT 'no referential constraint'
 ```
 
-# To check that a column participates in a primary key
+> To check that a column participates in a primary key
 
 ```sql
 --is the column (part of ) a primary key?	
@@ -118,6 +118,6 @@ ELSE
 PRINT 'not involved in a primary key'
 ```
 
-# Reference Link  
+> Reference Link  
 
 - https://www.red-gate.com/simple-talk/sql/database-administration/using-migration-scripts-in-database-deployments/

@@ -25,7 +25,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">Java</a>
+                <a class="dropdown-toggle">Java</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/java/designpattern-java.html">Java design pattern</a></li>
@@ -48,7 +48,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">JavaScript</a>
+                <a class="dropdown-toggle">JavaScript</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/javascript/objectmodel-javascript.html">Details of the object model</a></li>
@@ -63,7 +63,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">DataBase</a>
+                <a class="dropdown-toggle">DataBase</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/database/common_migration_script-database.html">Migration Scripts Sample</a></li>
@@ -78,7 +78,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">Kubernetes</a>
+                <a class="dropdown-toggle">Kubernetes</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/kubernetes/knowledge-kubernete.html">Basic of Kubernetes</a></li>
@@ -93,7 +93,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">Docker</a>
+                <a class="dropdown-toggle">Docker</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/docker/docker-compose-docker.html">Docker Compose</a></li>
@@ -108,7 +108,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">Linux</a>
+                <a class="dropdown-toggle">Linux</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/linux/cmd-linux.html">常用的linux命令</a></li>
@@ -119,7 +119,7 @@
             
             
             <li>
-                <a href="javascript:void(0);" class="dropdown-toggle">DevOps</a>
+                <a class="dropdown-toggle">DevOps</a>
                 <ul class="d-menu" data-role="dropdown">
                 
                     <li><a href="/devops/gitusage-devops.html">Git使用</a></li>
@@ -446,40 +446,37 @@
 
         </div>
     </div>
+
     <script type="text/javascript">
         $(document).ready(function () {
-            $("table").addClass("table table-hover");
-            $("table thead tr th").attr("scope", "col");
-            $("table tbody tr th").attr("scope", "row");
-
             var day = new Date().getDay();
             switch (day) {
                 case 1:
-                    $("header").attr("class", "app-bar bg-day1 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day1 fg-white");
                     $("blockquote").css("border-left", "4px solid #6a737d");
                     break;
                 case 2:
-                    $("header").attr("class", "app-bar bg-day2 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day2 fg-white");
                     $("blockquote").css("border-left", "4px solid #fdd600");
                     break;
                 case 3:
-                    $("header").attr("class", "app-bar bg-day3 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day3 fg-white");
                     $("blockquote").css("border-left", "4px solid #f77832");
                     break;
                 case 4:
-                    $("header").attr("class", "app-bar bg-day4 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day4 fg-white");
                     $("blockquote").css("border-left", "4px solid #008571");
                     break;
                 case 5:
-                    $("header").attr("class", "app-bar bg-day5 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day5 fg-white");
                     $("blockquote").css("border-left", "4px solid #7cc7ff");
                     break;
                 case 6:
-                    $("header").attr("class", "app-bar bg-day6 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day6 fg-white");
                     $("blockquote").css("border-left", "4px solid #030100");
                     break;
                 case 0:
-                    $("header").attr("class", "app-bar bg-day0 fg-white app-bar-expand");
+                    $("header").attr("class", "app-bar bg-day0 fg-white");
                     $("blockquote").css("border-left", "4px solid #8c004a");
                     break;
             }

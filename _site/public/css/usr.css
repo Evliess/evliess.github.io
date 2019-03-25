@@ -67,3 +67,7 @@ pre {
 .bg-day6 {
     background-color: #030100;
 }
+
+.table tbody tr:nth-child(odd) {
+    background: #f8f8f8;
+}

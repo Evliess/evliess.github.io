@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <header class="app-bar bg-day0 fg-white" data-role="appbar" data-expand-point="md">
+    <header class="app-bar fg-white" data-role="appbar" data-expand-point="md">
         <div class="text-upper">
             <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
                 <span class="mif-menu fg-white"></span>
@@ -62,25 +62,31 @@
             switch (day) {
                 case 1:
                     $("blockquote").css("border-left", "4px solid #6a737d");
+                    $("header").addClass("bg-day1");
                     break;
                 case 2:
                     $("blockquote").css("border-left", "4px solid #fdd600");
+                    $("header").addClass("bg-day2");
                     break;
                 case 3:
                     $("blockquote").css("border-left", "4px solid #f77832");
+                    $("header").addClass("bg-day3");
                     break;
                 case 4:
                     $("blockquote").css("border-left", "4px solid #008571");
+                    $("header").addClass("bg-day4");
                     break;
                 case 5:
                     $("blockquote").css("border-left", "4px solid #7cc7ff");
+                    $("header").addClass("bg-day5");
                     break;
                 case 6:
                     $("blockquote").css("border-left", "4px solid #030100");
+                    $("header").addClass("bg-day6");
                     break;
                 case 0:
-                    $("header").attr("class", "app-bar bg-day0 fg-white");
                     $("blockquote").css("border-left", "4px solid #8c004a");
+                    $("header").addClass("bg-day0");
                     break;
             }
         });

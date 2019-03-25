@@ -1,3 +1,20 @@
+body {
+    font-size: 16px;
+}
+
+h1 {
+    font: 2.5rem sans-serif;
+}
+h2 {
+    font: 2rem sans-serif;
+}
+h3 {
+    font: 1.75rem sans-serif;
+}
+h4 {
+    font: 1.5rem sans-serif;
+}
+
 container {width: 100%;}
 .sidebar-menu {
     top: 52px;

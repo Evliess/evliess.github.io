@@ -14,18 +14,30 @@
     <script src="{{ site.baseurl }}/public/js/metro-v4.0.js"></script>
 </head>
 
-<body data-role="htmlcontainer">
-    <header class="app-bar fg-white" data-role="appbar" data-expand-point="xxl">
+<body>
+    <header class="app-bar fg-white" data-role="appbar" data-expand-point="md">
         <div class="text-upper">
             <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
                 <span class="mif-menu fg-white"></span>
             </button>
         </div>
-        <span>{{ page.title }}</span>
+        <ul class="app-bar-menu">
+            {% for section in site.sections %}
+            {% assign attr = section[0] %}
+            {% assign label = section[1] %}
+            <li>
+                <a href="javascript:void(0);" class="dropdown-toggle">{{ label }}</a>
+                <ul class="d-menu" data-role="dropdown">
+                {% for page in site.categories[attr] %}
+                    <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+                {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
     </header>
-    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
-        data-shift=".shifted-content">
-        <ul class="sidebar-menu ">
+    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1">
+        <ul class="sidebar-menu">
             {% for section in site.sections %}
             {% assign attr = section[0] %}
             {% assign label = section[1] %}

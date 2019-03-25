@@ -5,9 +5,11 @@ category: devops
 date: 2018-11-21 15:17:55
 ---
 
-### [Usage link](http://rogerdudler.github.io/git-guide/)
+# git handbook
 
-### 一台电脑配置多个git账户
+- [Usage link](http://rogerdudler.github.io/git-guide/)
+
+> 一台电脑配置多个git账户
 
 ```bash
 # 如果执行ssh-add命令报错： Could not open a connection to your authentication agent
@@ -57,7 +59,7 @@ IdentityFile C:\\Users\\JiaJiaGui\\.ssh\\id_rsa
 
 ```
 
-### Git proxy setting
+> Git proxy setting
 
 ```bash
 # 设置ss
@@ -77,7 +79,7 @@ git config --global --unset https.proxy
 ```
 
 
-### git 比较本地修改的文件与master差异
+> git 比较本地修改的文件与master差异
 
 ```bash
 git diff --cached file
@@ -85,7 +87,7 @@ git diff --staged file
 
 ```
 
-### git 撤销未push的commit
+> git 撤销未push的commit
 
 ```bash
 git log
@@ -97,7 +99,7 @@ git reset --hard commit_id
 git reset commit_id
 
 ```
-### Migrate reposityA to reposityB
+> Migrate reposityA to reposityB
 
 ```bash
 git clone --bare reposityA
@@ -107,7 +109,7 @@ git push --mirror origin
 
 ```
 
-### [Git revert](https://github.com/geeeeeeeeek/git-recipes/wiki/5.2-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A%EF%BC%9AReset%E3%80%81Checkout%E3%80%81Revert%E7%9A%84%E9%80%89%E6%8B%A9)  
+> [Git revert](https://github.com/geeeeeeeeek/git-recipes/wiki/5.2-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A%EF%BC%9AReset%E3%80%81Checkout%E3%80%81Revert%E7%9A%84%E9%80%89%E6%8B%A9)  
 
 ```bash
 git revert 47900454c18cca36f66f7832fbb1617797b52708
@@ -115,13 +117,13 @@ git commit
  
 ```
 
-### Switch branch
+> Switch branch
 
 ```bash
 git branch branch-name
 ```
 
-### Create branch from commit
+> Create branch from commit
 
 ```bash
 git branch branchName <sha1-of-commit>
@@ -130,7 +132,7 @@ git checkout -b branchName <sha1-of-commit>
 
 ```
 
-### Create branch from tag
+> Create branch from tag
 
 ```bash
 git tag v1.0
@@ -138,7 +140,7 @@ git checkout -b branch1 v1.0   <!-- branchName:branch1 tagName:v1.0 -->
 git push origin branch1
 
 ```
-### Replace the master branch with another branch
+> Replace the master branch with another branch
 
 ```bash
 git checkout another_branch
@@ -150,10 +152,10 @@ git push origin master
 
 ```
 
-### Jenkins + Ant + Java8
+> Jenkins + Ant + Java8
 ant version 1.10.X 否则会出现javac1.8 error 或者 ant script找不到系统配置的java_home  
 
-### Generate ssh-key
+> Generate ssh-key
 - **C:\Users\XXX\.ssh\id_rsa.pub**
 
 ```bash

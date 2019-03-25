@@ -1,11 +1,11 @@
 ---
 layout: index
-title: "Javascript常用的方法"
+title: "Javascript handbook"
 category: javascript
 date: 2018-01-21 15:17:55
 ---
 
-
+# Javascript handbook
 ## Bootstrap 
 
 ```javascript

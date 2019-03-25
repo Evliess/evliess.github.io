@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "Details of the object modal"
+title: "Details of the object model"
 category: javascript
 date: 2018-07-02 12:17:55
 ---

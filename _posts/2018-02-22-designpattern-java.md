@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "Java设计模式"
+title: "Java design pattern"
 category: java
 date: 2018-06-15 11:03:55
 ---

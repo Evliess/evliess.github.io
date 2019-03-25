@@ -14,40 +14,43 @@
     <script src="{{ site.baseurl }}/public/js/metro-v4.0.js"></script>
 </head>
 
-<body data-role="htmlcontainer" id="fullscreen">
-    <header class="app-bar fg-white" data-role="appbar" data-expand-point="xxl">
-        <div class="text-upper">
-            <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
-                <span class="mif-menu fg-white"></span>
-            </button>
-        </div>
-        <span>{{ page.title }}</span>
-    </header>
-    <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
-        data-shift=".shifted-content">
-        <ul class="sidebar-menu ">
-            {% for section in site.sections %}
-            {% assign attr = section[0] %}
-            {% assign label = section[1] %}
-            <li><a class="dropdown-toggle"><span>{{ label }}</span></a>
-                <ul class="d-menu" data-role="dropdown">
-                    {% for page in site.categories[attr] %}
-                    <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
-            {% endfor %}
-        </ul>
-    </aside>
-    <div class="shifted-content h-100 p-ab">
-        <div class="h-100 p-4">
-            {{ content }}
+<body data-role="htmlcontainer">
+    <div id="full">
+        <header class="app-bar fg-white" data-role="appbar" data-expand-point="xxl">
+            <div class="text-upper">
+                <button class="app-bar-item c-pointer" id="sidebar-toggle-1">
+                    <span class="mif-menu fg-white"></span>
+                </button>
+            </div>
+            <span>{{ page.title }}</span>
+        </header>
+        <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle-1"
+            data-shift=".shifted-content">
+            <ul class="sidebar-menu ">
+                {% for section in site.sections %}
+                {% assign attr = section[0] %}
+                {% assign label = section[1] %}
+                <li><a class="dropdown-toggle"><span>{{ label }}</span></a>
+                    <ul class="d-menu" data-role="dropdown">
+                        {% for page in site.categories[attr] %}
+                        <li><a href="{{ site.baseurl }}{{ page.url }}">{{ page.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+        <div class="shifted-content h-100 p-ab">
+            <div class="h-100 p-4">
+                {{ content }}
+            </div>
         </div>
     </div>
     <script type="text/javascript">
-        var elem = $("#fullscreen");
+        var elem = $("#full");
         $(window).scroll(function () {
             if ($(document).scrollTop() > 350) {
+                console.log("here");
                 if (elem.requestFullscreen) {
                     elem.requestFullscreen();
                 } else if (elem.mozRequestFullScreen) { /* Firefox */

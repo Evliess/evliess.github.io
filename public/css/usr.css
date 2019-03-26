@@ -33,7 +33,7 @@ aside.sidebar {
 }
 
 img {
-    border: solid #CCC 1px;
+    border: solid #c7c7c7 1px;
     max-width: 100%;
     max-height: 100%;
     margin-bottom: 1em;
@@ -46,26 +46,26 @@ pre {
 }
 
 .bg-day0 {
-    background-color: #8c004a;
+    background-color: #586262;
 }
 
 .bg-day1 {
-    background-color: #6a737d;
+    background-color: #2d660a;
 }
 .bg-day2 {
-    background-color: #fdd600;
+    background-color: #006d5d;
 }
 .bg-day3 {
-    background-color: #f77832;
+    background-color: #325c80;
 }
 .bg-day4 {
-    background-color: #008571;
+    background-color: #734098;
 }
 .bg-day5 {
-    background-color: #7cc7ff;
+    background-color: #a6266e;
 }
 .bg-day6 {
-    background-color: #030100;
+    background-color: #ad1625;
 }
 
 .table tbody tr:nth-child(odd) {

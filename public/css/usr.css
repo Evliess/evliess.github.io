@@ -71,3 +71,7 @@ pre {
 .table tbody tr:nth-child(odd) {
     background: #f8f8f8;
 }
+
+.hamburger.dark .line {
+    background-color: #FFF !important;
+}

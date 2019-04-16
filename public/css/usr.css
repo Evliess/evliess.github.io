@@ -5,7 +5,7 @@ html {
 h1 {
     font-size: 2rem;
     font-weight: 400;
-    color: #ff9b2f;
+    color: #000;
 }
 h2 {
     font-size: 1.75rem;
@@ -15,7 +15,7 @@ h2 {
 h3 {
     font-size: 1.5rem;
     font-weight: 400;
-    color: #5aa700;
+    color: #ff9b2f;
 }
 
 aside.sidebar {

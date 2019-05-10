@@ -1,17 +1,41 @@
 ---
 layout: index
-title: "Java基础知识"
+title: "Java基础知识 (jdk1.8)"
 category: java
 date: 2018-02-22 11:03:55
 ---
 
 # Java basic knowledge
 
+> Display curency NumberFormat Class
+
+```java
+
+//Format currency
+Locale loc = Locale.UK;
+NumberFormat nf = NumberFormat.getCurrencyInstance(loc);
+double money = 1_000_000.00d;
+nf.format(money);
+
+```
+
+> Deadlock, Livelock, Starvation
+
+- Deaklock: A situation where one thread is blocked while waiting for a conditon in a second thread that is waiting on the first thread
+- Livelock: A condition where a thread is locked because of an operation that is continuously failing
+- Starvation: A situation where a thread cann't access a resource because higher priority threads are continually accessing the resource
+
+
+> java.util.concurrent collections
+
+- ConcurrentHashMap -- HashMap
+- ConcurrentSkipListMap -- TreeMap
+- CopyOnWriteArrayList -- ArrayList
+
 > Deque 类
 
 - As is a double-end Queue  FIFO (add() and remove())
 - As is a Stack LIFO (push() and pop())
-
 
 > Comparable 接口
 
@@ -61,14 +85,12 @@ date: 2018-02-22 11:03:55
 - 可以修饰本地变量，变量的引用不能被修改，但是变量的内容可以修改。
 - 可以修饰参数
 
-
 > public, default, protected, private
 
 - public - anywhere
 - protected - same class, package and subclass in other package
 - default - same class and package
 - private - same class
-
 
 > 如何将一个可变类转化为不可变的类
 

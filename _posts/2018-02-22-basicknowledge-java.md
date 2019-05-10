@@ -7,7 +7,7 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
-> Display curency NumberFormat Class a
+> Display curency NumberFormat Class
 
 ```java
 

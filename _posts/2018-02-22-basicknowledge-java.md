@@ -7,6 +7,11 @@ date: 2018-02-22 11:03:55
 
 # Java basic knowledge
 
+> Java semaphores - Control and maintain the number of access the thread.
+
+> Java volatile 实现原理  
+缓存一致性协议(MESI)。当CPU在写数据时，如果发现操作的变量是共享变量，则会通知其他的CPU该变量的缓存已经无效。其他的CPU收到该通知后就会再次从主存同步改变量的值到自己的缓存。
+
 > Display curency NumberFormat Class
 
 ```java

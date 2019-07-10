@@ -1,12 +1,37 @@
 ---
 layout: index
-title: "Java基础知识 (jdk1.8)"
+title: "Java Common Knowledge"
 category: java
 date: 2018-02-22 11:03:55
 ---
 
-# Java basic knowledge
+# Java common knowledge
 
+## Java secure coding rules
+
+> Injection attacks
+
+![Secure Coding Rules](../public/images/java/secure-coding-rules-1.png) 
+
+> Leaking sensitive data
+
+- Sensitive data
+    - Credit Card or Payment Card Industry (PCI) Information
+    - Private Personal Information (PPI)
+    - Protected Healthy Information (HIPAA)
+
+- Private/Confidential data
+- Public data
+
+> Denial-of-service Attacks (DoS)
+
+- Resource-exhaustion attacks
+- Concurrency-related attacks that include thread deadlock, thread starvation, and race conditions.
+- Algorthmic attacks (such as hash function) inject values that force worst-case conditions to exit
+
+
+
+## Basic in small words 
 > Java semaphores - Control and maintain the number of access the thread.
 
 > Java volatile 实现原理  

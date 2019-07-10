@@ -26,9 +26,30 @@ date: 2018-02-22 11:03:55
 > Denial-of-service Attacks (DoS)
 
 - Resource-exhaustion attacks
-- Concurrency-related attacks that include thread deadlock, thread starvation, and race conditions.
-- Algorthmic attacks (such as hash function) inject values that force worst-case conditions to exit
+    - Remove temporary files before termination
+    - Release resources when they are no longer needed
+    - Don't let external processes block on IO buffers
+    - Perform proper cleanup at program termination
+    - Safely extract files from ZipInputStream
+    - Don't use finalizers
+    - Don't leak memory
+    - Don't exhaust heap space
+    - Avoid memory and resource leaks during serialization
+    - Use thread pool to enable graceful degradation of service during traffic bursts
+    - Don't execute interdependent tasks in a bounded thread pool
 
+- Concurrency-related attacks that include thread deadlock, thread starvation, and race conditions.
+    - Use private final lock objects to synchronize classes that may interact with untrusted code.
+    - Don't synchronize on objects that may be reused.
+    - Avoid deadlock by requesting and releasing locks in the same order
+    - Ensure actively held locks are released on exceptional conditions
+    - Don't perform operations that can block while holding a lock
+    - Avoid client-side locking when using classed that don't commit to their locking strategy
+    - Ensure that threads performing blocking operations can be terminated
+    - Ensure that tasks submitted to a thread pool are interruptible
+
+- Algorthmic attacks (such as hash function) inject values that force worst-case conditions to exit
+- Bandwith-consumption attacks that consume all available network bandwith.
 
 
 ## Basic in small words 

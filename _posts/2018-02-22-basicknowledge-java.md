@@ -32,6 +32,13 @@ date: 2018-02-22 11:03:55
 
 
 ## Basic in small words 
+
+> CountDownLatch, Semaphore VS CyclicBarrier 
+
+- CountDownLatch 维护一个原子的计数器，该计数器只能减，不能被重置。通过它可以使当前的线程处于await状态。直到其他的线程调用countDown方法使计数器变为0.此时被阻塞的方法会继续运行。  
+- CyclicBarrier 和 CountDownLatch类似，不同之处在于CyclicBarrier的值被获取之后可以释放，并不像CountDownLatch一样只能减。一般用于限制某些资源最多同时被多少个线程访问。  
+- CyclicBarrier 和 CountDownLatch类似，只是它的计数器可以被重置。  
+
 > Java semaphores - Control and maintain the number of access the thread.
 
 > Java volatile 实现原理  
@@ -40,7 +47,6 @@ date: 2018-02-22 11:03:55
 > Display curency NumberFormat Class
 
 ```java
-
 //Format currency
 Locale loc = Locale.UK;
 NumberFormat nf = NumberFormat.getCurrencyInstance(loc);

@@ -50,6 +50,8 @@ date: 2018-02-22 11:03:55
 
 - Algorthmic attacks (such as hash function) inject values that force worst-case conditions to exit
 - Bandwith-consumption attacks that consume all available network bandwith.
+- Prevent XML Injection
+
 
 
 ## Basic in small words 

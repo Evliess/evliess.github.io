@@ -2,8 +2,93 @@
 layout: index
 title: "Minikube Installation"
 category: kubernetes
-date: 2018-04-28 15:17:55
+date: 2019-07-16 15:17:55
 ---
+
+# k8s Single node installation with kubeadmin
+
+1. Install kubeadmin
+
+```
+apt-get update && apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+```
+2. Setup network and network policy
+
+- Installing with the Kubernetes API datastore—50 nodes or less
+
+```
+# Setup calico
+curl https://docs.projectcalico.org/v3.7/manifests/calico.yaml -O
+POD_CIDR="<your-pod-cidr>" \
+sed -i -e "s?192.168.0.0/16?$POD_CIDR?g" calico.yaml
+
+# Init master
+kubeadm init --cri-socket /var/run/dockershim.sock
+
+# As regular user
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# As root
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+# You should now deploy a pod network to the cluster.
+kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml
+
+# Enable schedule pods on the master
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+# Enbale K8s Dashboard
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+
+# Accessing the Dashboard UI
+
+https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
+
+# Get Token
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+
+http://9.30.246.163:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+
+
+```
+3. Reset 
+
+```
+kubectl drain aledo1.fyre.ibm.com --delete-local-data --force --ignore-daemonsets
+kubectl delete node aledo1.fyre.ibm.com
+kubeadm reset
+```
+
+
+### Install Istio
+
+```
+curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.7 sh -
+cd istio-1.1.7
+export PATH=$PWD/bin:$PATH
+
+for i in install/kubernetes/helm/istio-init/files/crd*yaml; do kubectl apply -f $i; done
+kubectl apply -f install/kubernetes/istio-demo.yaml
+
+```
+*Q&A*
+
+Q|A
+---|---
+kubeadm [ERROR Swap]: running with swap on is not supported. Please disable swap| ```swapoff -a```
+
 
 # Minikube Installation
 

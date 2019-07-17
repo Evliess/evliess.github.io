@@ -72,7 +72,7 @@ kubeadm reset
 ```
 
 
-### Install Istio
+# Install Istio on k8s
 
 ```
 curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.1.7 sh -

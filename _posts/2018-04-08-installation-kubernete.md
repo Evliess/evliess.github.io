@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "Minikube Installation"
+title: "kubernetes Installation"
 category: kubernetes
 date: 2019-07-16 15:17:55
 ---

@@ -8,6 +8,7 @@ date: 2019-07-16 15:17:55
 # k8s Single node installation with kubeadmin
 
 1. Install kubeadmin
+
 ```
 apt-get update && apt-get install -y apt-transport-https curl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
@@ -18,8 +19,11 @@ apt-get update
 apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
 ```
+
 2. Setup network and network policy
+
 - Installing with the Kubernetes API datastore—50 nodes or less
+
 ```
 # Setup calico
 curl https://docs.projectcalico.org/v3.7/manifests/calico.yaml -O
@@ -56,8 +60,11 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 
 http://9.30.246.163:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
 ```
+
 3. Enable Dashboard
+
 ```
 kubectl get svc -n kubernetes-dashboard
 type [ClusterIP --> NodePort]
@@ -66,12 +73,16 @@ type [ClusterIP --> NodePort]
 1. Create Service Account
 2. Create ClusterRoleBinding
 3. Bearer Token
+
 ```
+
 4. Reset 
+
 ```
 kubectl drain aledo1.fyre.ibm.com --delete-local-data --force --ignore-daemonsets
 kubectl delete node aledo1.fyre.ibm.com
 kubeadm reset
+
 ```
 
 # Install Istio on k8s

@@ -60,10 +60,21 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 http://9.30.246.163:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
-
+3. Enable Dashboard
 
 ```
-3. Reset 
+kubectl get svc -n kubernetes-dashboard
+type [ClusterIP --> NodePort]
+[Creating sample user] (https://github.com/kubernetes/dashboard/wiki/Creating-sample-user)
+
+1. Create Service Account
+2. Create ClusterRoleBinding
+3. Bearer Token
+
+```
+
+
+4. Reset 
 
 ```
 kubectl drain aledo1.fyre.ibm.com --delete-local-data --force --ignore-daemonsets

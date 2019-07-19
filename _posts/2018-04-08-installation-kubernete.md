@@ -19,6 +19,7 @@ apt-get update
 apt-get install -y kubelet kubeadm kubectl
 apt-mark hold kubelet kubeadm kubectl
 ```
+
 2. Setup network and network policy
 
 - Installing with the Kubernetes API datastore—50 nodes or less
@@ -59,6 +60,8 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 
 http://9.30.246.163:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+```
 
 3. Enable Dashboard
 

@@ -29,6 +29,36 @@ $( "#company" ).autocomplete({
 });
 
 ```
+## Jquery UI Custom tooltip
+
+```javascript
+
+var buildCustomTooltip = function() {
+  $("i.statistic-tooltip").each(function() {
+    $(this).tooltip({
+      items: $(this),
+      tooltipClass: "statistic-tooltip",
+      position: {
+        my: "left bottom",
+        at: "right top"
+      },
+      content: function() {
+        var total = $(this).attr("total");
+        return "<ul class=\"list-group\">" +
+                  "<li class=\"list-group-item\"><span class=\"badge\">" + total + "</span> Total of Executions: </li>" +
+                "</ul>";
+      }
+    });
+  });
+  $("i.statistic-tooltip").hover(function(){
+    $(this).tooltip('open');
+  }, function(){
+    $(this).tooltip('close');
+  });
+}
+
+```
+
 
 ## Dropzone
 

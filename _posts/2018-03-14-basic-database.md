@@ -7,6 +7,86 @@ date: 2018-03-14 15:17:55
 
 # Database basic knowledge
 
+## Oracle Common Commands
+
+### Install sqlplus instantclient to connect oracle.
+
+1. Download [instantclient-basic-windows.x64-19.3.0.0.0dbru.zip](https://download.oracle.com/otn_software/nt/instantclient/19300/instantclient-basic-windows.x64-19.3.0.0.0dbru.zip)
+2. Download [instantclient-sqlplus-windows.x64-19.3.0.0.0dbru.zip](https://download.oracle.com/otn_software/nt/instantclient/19300/instantclient-sqlplus-windows.x64-19.3.0.0.0dbru.zip)
+3. Extract them to current folder.
+4. Set Env Path C:\Users\<Your_Name>\Downloads\oracle\instantclient_19_3
+5. win + r cmd ```sqlplus idaDbAdmin/idaDbAdmin@127.0.0.1:32778/ORCLCDB.localdomain```
+
+
+### Common scripts
+```
+// login vm
+ssh <YOUR_IP>
+
+// open sqlplus client
+docker exec -it oracle12c bash -c "source /home/oracle/.bashrc; sqlplus /nolog"
+
+SQL> connect / as sysdba
+// search service names
+SQL> select value from v$parameter where name='service_names'
+SQL> grant create procedure to idaDbAdmin;
+SQL> grant execute on sys.dbms_crypto to idaDbAdmin;
+SQL> connect idaDbAdmin/idaDbAdmin
+SQL> set serveroutput on
+
+// md5
+// https://docs.oracle.com/database/121/DBSEG/data_encryption.htm#DBSEG335
+
+```
+
+### Create procedure with md5
+
+```
+create or replace procedure addUser (u_pass in varchar2, u_key in varchar2) is 
+org_id number;
+raw_input RAW(128) := UTL_RAW.CAST_TO_RAW(u_pass);
+raw_key RAW(128) := UTL_RAW.CAST_TO_RAW(u_key);
+encrypted_raw    RAW(2048);
+encrypted_pass varchar2(100);
+begin 
+    select id into org_id from organization where company_name = 'IDA';
+    dbms_output.put_line(org_id);
+    encrypted_raw := dbms_crypto.Mac(src => raw_input, typ => DBMS_CRYPTO.HMAC_MD5, key => raw_key);
+    dbms_output.put_line('> Result      : ' || rawtohex(encrypted_raw));
+end;
+/
+
+call addUser('idaAdmin', 'idaAdmin');
+
+```
+
+
+## DB2 Common Commands
+
+```
+db2start
+
+db2 force application all
+db2stop
+
+
+db2 create database YOUR_DB automatic storage yes using codeset UTF-8 territory US pagesize 32768
+db2 connect to YOUR_DB
+db2 CREATE BUFFERPOOL BP32K IMMEDIATE ALL DBPARTITIONNUMS SIZE AUTOMATIC NUMBLOCKPAGES 0 PAGESIZE 32 K
+
+db2 drop database
+
+db2 list db directory
+db2 list active databases
+
+db2 list tables 
+
+db2 -tvf scripts.sql
+
+db2 ? 22001 
+
+```
+
 
 > 数据库左连接和右连接的区别？  
 

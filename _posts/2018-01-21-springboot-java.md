@@ -7,6 +7,62 @@ date: 2018-01-21 15:17:55
 
 # Springboot handbook
 
+
+## How to add custom logic when login success
+
+```java
+
+// Implements the ApplicationListener
+public class MyApplicationListener implements ApplicationListener<AuthenticationSuccessEvent> {
+
+// Write your own logic
+@Override
+  public void onApplicationEvent(AuthenticationSuccessEvent event) {
+  //TODO
+  }
+
+}
+
+```
+
+## How to custom a AuthenticationProvider 
+
+```java
+
+@Component
+public class StaticAuthenticationProvider implements AuthenticationProvider {
+
+  private static final Logger logger = LoggerFactory.getLogger(StaticAuthenticationProvider.class);
+
+  @Autowired
+  private MyUserDetailService userDetailService;
+
+  // Override the authenticate function.
+  @Override
+  public Authentication authenticate(Authentication authentication)
+      throws AuthenticationException {
+    String name = authentication.getName();
+    UserDetails userDetails = userDetailService.loadUserByUsername(name);
+    if (Constants.IDA_ADMIN_USER_NAME.equals(name) && userDetails.isEnabled()) {
+      UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(
+          userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+      result.setDetails(authentication.getDetails());
+      return result;
+    } else {
+      return null;
+    }
+  }
+
+  // Override the supports function
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return authentication.equals(UsernamePasswordAuthenticationToken.class);
+  }
+}
+
+
+```
+
 ## Spring Junit TestCase Clear Context after each test method
 
 ```java

@@ -80,6 +80,19 @@ kubectl delete node aledo1.fyre.ibm.com
 kubeadm reset
 ```
 
+## Restart
+
+```
+//查看kubectl服务状态
+systemctl status kubelet
+//单节点安装，关闭swap
+swapoff -a
+//刷新服务
+systemctl daemon-reload
+systemctl restart kubelet
+
+```
+
 # Install Istio on k8s
 
 ```

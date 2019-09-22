@@ -14,7 +14,6 @@ date: 2019-09-20 12:17:55
 ```
 docker pull jenkins/jenkins:lts
 ```
-
 2. Custom dockerfile
 
 ```
@@ -25,23 +24,18 @@ RUN apt-get update -y && apt-get install -y libltdl-dev && rm -rf /var/lib/apt/l
 # drop back to the regular jenkins user - good practice
 USER jenkins
 ```
-
 3. Build a new image
 
 ```
 docker build -t waitplay/jenkins:lst .
 ```
-
 4. Start a contain to run jenkins
 
 ```
 docker run -u root --rm -d -p 32772:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v /etc/localtime:/etc/localtime  -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:lst
 ```
-
 5. Download jdk-8u221-linux-x64.tar.gz
-
 6. Download [maven](http://us.mirrors.quenda.co/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz)
-
 7. unzip
 
 ```
@@ -52,7 +46,6 @@ cd /var/jenkins_home/globalEnvi
 tar -zxvf jdk-8u221-linux-x64.tar.gz
 tar -zxvf apache-maven-3.6.2-bin.tar.gz
 ```
-
 8. Set Jenkins -> configuration -> add Environment variables
 
 ```
@@ -61,15 +54,12 @@ CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
 M2_HOME=/var/jenkins_home/globalEnvi/apache-maven-3.6.2
 PATH=$JAVA_HOME/bin:$PATH
 ```
-
-
 9. Global Tool Configuration
 
 - Maven Configuration
   xxx/conf/setting.xml
 - JDK
 - MAVEN
-
 10. Test shell script
 
 ```

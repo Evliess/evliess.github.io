@@ -1,0 +1,43 @@
+# Project information
+site_name: 'Memo for Work'
+site_description: 'Some fucking useful thinks in work'
+site_author: 'JiaJia Gui'
+site_url: 'https://www.jackgui.top'
+
+# Repository
+repo_name: 'Evliess/evliess.github.io'
+# repo_url: 'https://github.com/Evliess/evliess.github.io'
+
+# Copyright
+copyright: 'Copyright &copy; 2018 - 2019 Jiajia Gui'
+
+# Configuration
+theme:
+  name: 'material'
+  language: 'en'
+  palette:
+    primary: 'Cyan'
+    accent: 'Cyan'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Customization
+extra:
+  manifest: 'manifest.webmanifest'
+  social:
+    - type: 'github'
+      link: 'https://github.com/Evliess'
+
+# Google Analytics
+google_analytics:
+  - 'UA-XXXXXXXX-X'
+  - 'auto'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true

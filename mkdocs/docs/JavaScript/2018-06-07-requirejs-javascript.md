@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "RequireJs 用法"
+title: "RequireJs Usage"
 category: javascript
 date: 2018-06-07 15:17:55
 ---

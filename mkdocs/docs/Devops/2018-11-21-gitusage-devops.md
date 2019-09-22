@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "Git使用"
+title: "Git Usage"
 category: devops
 date: 2018-11-21 15:17:55
 ---

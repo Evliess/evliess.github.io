@@ -1,6 +1,6 @@
 ---
 layout: index
-title: "数据库基础"
+title: "Database basic usage"
 category: database
 date: 2018-03-14 15:17:55
 ---

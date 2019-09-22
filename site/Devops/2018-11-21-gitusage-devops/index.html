@@ -1,0 +1,950 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Some fucking useful thinks in work">
+      
+      
+        <link rel="canonical" href="https://www.jackgui.top/Devops/2018-11-21-gitusage-devops/">
+      
+      
+        <meta name="author" content="JiaJia Gui">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Git使用</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#00bcd4">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+      <link rel="manifest" href="../../manifest.webmanifest">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-XXXXXXXX-X", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="cyan" data-md-color-accent="cyan">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#git-handbook" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Memo for Work
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Git使用
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://www.jackgui.top" title="Memo for Work" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Memo for Work
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Hello! Welcome to my world!" class="md-nav__link">
+      Hello! Welcome to my world!
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Database
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Database
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-03-14-basic-database/" title="数据库基础" class="md-nav__link">
+      数据库基础
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-03-14-common_migration_script -database/" title="Migration Scripts Sample" class="md-nav__link">
+      Migration Scripts Sample
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-04-06-redis-database/" title="Redis" class="md-nav__link">
+      Redis
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Devops
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Devops
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Git使用" class="md-nav__link md-nav__link--active">
+      Git使用
+    </a>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-nav__link">
+      Setup Jenkins in docker
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Docker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Docker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-docker-compose-docker/" title="Docker Compose" class="md-nav__link">
+      Docker Compose
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-installation-docker/" title="Docker Installation" class="md-nav__link">
+      Docker Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-05-23-storage-docker/" title="Docker Storage" class="md-nav__link">
+      Docker Storage
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Java
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Java
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-01-21-springboot-java/" title="Springboot Usage" class="md-nav__link">
+      Springboot Usage
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-01-21-themeleaf-java/" title="Themeleaf" class="md-nav__link">
+      Themeleaf
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-02-22-basicknowledge-java/" title="Java Common Knowledge" class="md-nav__link">
+      Java Common Knowledge
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-02-22-designpattern-java/" title="Java design pattern" class="md-nav__link">
+      Java design pattern
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-03-22-concurrent-java/" title="Java Concurrent" class="md-nav__link">
+      Java Concurrent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-04-02-selenium-java/" title="Selenium" class="md-nav__link">
+      Selenium
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2019-02-22-algorithm-java/" title="Algorithm" class="md-nav__link">
+      Algorithm
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2019-05-10-JEE-java/" title="JEE Basic" class="md-nav__link">
+      JEE Basic
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      JavaScript
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        JavaScript
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-01-21-jquery-javascript/" title="Javascript handbook" class="md-nav__link">
+      Javascript handbook
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-06-07-requirejs-javascript/" title="RequireJs 用法" class="md-nav__link">
+      RequireJs 用法
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-07-02-objectmodel-javascript/" title="Details of the object model" class="md-nav__link">
+      Details of the object model
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Kubernetes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Kubernetes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-istio/" title="Istio Installation" class="md-nav__link">
+      Istio Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-kubernete/" title="kubernetes Installation" class="md-nav__link">
+      kubernetes Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-knowledge-kubernete/" title="Basic of Kubernetes" class="md-nav__link">
+      Basic of Kubernetes
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Linux
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Linux
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Linux/2018-01-21-cmd-linux/" title="常用的linux命令" class="md-nav__link">
+      常用的linux命令
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="git-handbook">git handbook<a class="headerlink" href="#git-handbook" title="Permanent link">&para;</a></h1>
+<ul>
+<li><a href="http://rogerdudler.github.io/git-guide/">Usage link</a></li>
+</ul>
+<blockquote>
+<p>一台电脑配置多个git账户</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><span class="c1"># 如果执行ssh-add命令报错： Could not open a connection to your authentication agent</span>
+ssh-agent bash
+
+<span class="c1"># 删除现在的agent列表</span>
+ssh-add -D
+
+<span class="c1"># 向agent添加认证</span>
+ssh-add id_rsa
+
+<span class="c1"># 查看agent列表</span>
+ssh-add -l
+
+<span class="c1"># 测试账号是否连接到仓库</span>
+ssh -T git@github.com
+
+<span class="c1"># 查看现在的remote信息</span>
+git remote -v
+
+git@github.com:Evliess/evliess.github.io.git
+<span class="c1"># 删除现在的remote信息</span>
+git remote rm origin
+
+<span class="c1"># 再次添加remote信息，将hostName替换为.ssh/config中对应的值</span>
+git remote add origin git@jiajia126.github.com:Evliess/evliess.github.io.git
+
+
+<span class="c1"># config template</span>
+
+<span class="c1">#### start #### </span>
+<span class="c1">## Host的名字可以自己定义</span>
+
+<span class="c1">#jiajia_yuwei@126.com</span>
+Host jiajia126.github.com
+HostName github.com
+User jiajia_yuwei@126.com
+IdentityFile C:<span class="se">\\</span>Users<span class="se">\\</span>JiaJiaGui<span class="se">\\</span>.ssh<span class="se">\\</span>jiajia126
+
+<span class="c1">#jiajia_yuwei@126.com - github.com</span>
+Host github.com
+HostName github.com
+User jiajia_yuwei@126.com
+IdentityFile C:<span class="se">\\</span>Users<span class="se">\\</span>JiaJiaGui<span class="se">\\</span>.ssh<span class="se">\\</span>id_rsa
+
+<span class="c1">#### end #### </span>
+</pre></div>
+
+
+<blockquote>
+<p>Git proxy setting</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><span class="c1"># 设置ss</span>
+git config --global http.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
+
+git config --global https.proxy <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
+
+<span class="c1"># 设置代理</span>
+git config --global https.proxy http://127.0.0.1:1080
+
+git config --global https.proxy https://127.0.0.1:1080
+
+<span class="c1"># 取消代理</span>
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+</pre></div>
+
+
+<blockquote>
+<p>git 比较本地修改的文件与master差异</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git diff --cached file
+git diff --staged file
+</pre></div>
+
+
+<blockquote>
+<p>git 撤销未push的commit</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git log
+
+<span class="c1"># 完成撤销, 同时将代码恢复到前一个commit_id 对应的版本</span>
+git reset --hard commit_id
+
+<span class="c1"># 完成Commit命令的撤销，但是不对代码修改进行撤销</span>
+git reset commit_id
+</pre></div>
+
+
+<blockquote>
+<p>Migrate reposityA to reposityB</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git clone --bare reposityA
+git remote rm origin &lt;!--optional --&gt;
+git remote add origin reposityB
+git push --mirror origin
+</pre></div>
+
+
+<blockquote>
+<p><a href="https://github.com/geeeeeeeeek/git-recipes/wiki/5.2-%E4%BB%A3%E7%A0%81%E5%9B%9E%E6%BB%9A%EF%BC%9AReset%E3%80%81Checkout%E3%80%81Revert%E7%9A%84%E9%80%89%E6%8B%A9">Git revert</a>  </p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git revert 47900454c18cca36f66f7832fbb1617797b52708
+git commit
+</pre></div>
+
+
+<blockquote>
+<p>Switch branch</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git branch branch-name
+</pre></div>
+
+
+<blockquote>
+<p>Create branch from commit</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git branch branchName &lt;sha1-of-commit&gt;
+or
+git checkout -b branchName &lt;sha1-of-commit&gt;
+</pre></div>
+
+
+<blockquote>
+<p>Create branch from tag</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git tag v1.0
+git checkout -b branch1 v1.0   &lt;!-- branchName:branch1 tagName:v1.0 --&gt;
+git push origin branch1
+</pre></div>
+
+
+<blockquote>
+<p>Replace the master branch with another branch</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>git checkout another_branch
+git merge -s ours --no-commit master
+git commit
+git checkout master
+git merge another_branch
+git push origin master
+</pre></div>
+
+
+<blockquote>
+<p>Jenkins + Ant + Java8
+ant version 1.10.X 否则会出现javac1.8 error 或者 ant script找不到系统配置的java_home  </p>
+<p>Generate ssh-key
+- <strong>C:\Users\XXX.ssh\id_rsa.pub</strong></p>
+</blockquote>
+<div class="codehilite"><pre><span></span>ssh-keygen -t rsa -b <span class="m">4096</span> -C <span class="s2">&quot;your_email@example.com&quot;</span> 
+git add 
+git commit -m <span class="s2">&quot;comment&quot;</span>
+git pull
+git push origin master 
+</pre></div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../Database/2018-04-06-redis-database/" title="Redis" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Redis
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Setup Jenkins in docker
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 - 2019 Jiajia Gui
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

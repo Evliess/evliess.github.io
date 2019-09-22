@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#redis" tabindex="1" class="md-skip">
+      <a href="#redis-overriew" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -244,8 +244,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../2018-03-14-basic-database/" title="数据库基础" class="md-nav__link">
-      数据库基础
+    <a href="../2018-03-14-basic-database/" title="Database basic usage" class="md-nav__link">
+      Database basic usage
     </a>
   </li>
 
@@ -313,8 +313,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git使用" class="md-nav__link">
-      Git使用
+    <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git Usage" class="md-nav__link">
+      Git Usage
     </a>
   </li>
 
@@ -553,8 +553,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../JavaScript/2018-06-07-requirejs-javascript/" title="RequireJs 用法" class="md-nav__link">
-      RequireJs 用法
+    <a href="../../JavaScript/2018-06-07-requirejs-javascript/" title="RequireJs Usage" class="md-nav__link">
+      RequireJs Usage
     </a>
   </li>
 
@@ -661,8 +661,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Linux/2018-01-21-cmd-linux/" title="常用的linux命令" class="md-nav__link">
-      常用的linux命令
+    <a href="../../Linux/2018-01-21-cmd-linux/" title="Useful linux Commands" class="md-nav__link">
+      Useful linux Commands
     </a>
   </li>
 
@@ -700,7 +700,7 @@
               
                 
                 
-                <h1 id="redis">Redis 概览<a class="headerlink" href="#redis" title="Permanent link">&para;</a></h1>
+                <h1 id="redis-overriew">Redis overriew<a class="headerlink" href="#redis-overriew" title="Permanent link">&para;</a></h1>
 <p>Redis与其他内存数据库与众不同，是因为以下三个原因：<br />
 - Redis将数据库中所有的数据都加载到内存中，磁盘只是用来存储数据。<br />
 - Redis支持更加丰富的数据结构。<br />
@@ -710,7 +710,7 @@
 - <strong>支持丰富的数据类型</strong> list, set, sorted set, and hashes 。<br />
 - <strong>所有的操作都是原子性</strong> <br />
 - <strong>用途广泛</strong> 可以用作缓存，消息队列（Redis天生支持Publish/Subscribe），存储Web应用中的session，网页命中计数等。</p>
-<h1 id="redis_1">Redis 安装<a class="headerlink" href="#redis_1" title="Permanent link">&para;</a></h1>
+<h1 id="redis-installation">Redis Installation<a class="headerlink" href="#redis-installation" title="Permanent link">&para;</a></h1>
 <div class="codehilite"><pre><span></span>$ wget http://download.redis.io/releases/redis-4.0.9.tar.gz
 $ tar xzf redis-4.0.9.tar.gz
 $ <span class="nb">cd</span> redis-4.0.9
@@ -718,12 +718,12 @@ $ make
 </pre></div>
 
 
-<h2 id="redis_2">启动Redis<a class="headerlink" href="#redis_2" title="Permanent link">&para;</a></h2>
+<h2 id="startup-redis">Startup Redis<a class="headerlink" href="#startup-redis" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>. src/redis-server
 </pre></div>
 
 
-<h2 id="redis_3">使用命令行与Redis交互<a class="headerlink" href="#redis_3" title="Permanent link">&para;</a></h2>
+<h2 id="use-cmd-line">Use CMD Line<a class="headerlink" href="#use-cmd-line" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>./redis-cli
 <span class="m">127</span>.0.0.1:6379&gt;
 
@@ -736,7 +736,7 @@ $ redis-cli -h host -p port -a password
 </pre></div>
 
 
-<h2 id="redis_4">关闭Redis服务器<a class="headerlink" href="#redis_4" title="Permanent link">&para;</a></h2>
+<h2 id="stop-redis">Stop redis<a class="headerlink" href="#stop-redis" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>//查找正在运行redis的进程以及端口号
 ps -ef <span class="p">|</span>grep redis
 
@@ -745,7 +745,7 @@ ps -ef <span class="p">|</span>grep redis
 </pre></div>
 
 
-<h1 id="redis_5">Redis命令<a class="headerlink" href="#redis_5" title="Permanent link">&para;</a></h1>
+<h1 id="redis-commands">Redis Commands<a class="headerlink" href="#redis-commands" title="Permanent link">&para;</a></h1>
 <h2 id="keys">Keys<a class="headerlink" href="#keys" title="Permanent link">&para;</a></h2>
 <ul>
 <li>DEL key [key ...]<br />
@@ -1324,13 +1324,13 @@ ps -ef <span class="p">|</span>grep redis
           </a>
         
         
-          <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git使用" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git Usage" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Git使用
+                Git Usage
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

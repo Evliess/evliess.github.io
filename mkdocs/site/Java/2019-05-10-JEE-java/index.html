@@ -1,0 +1,1166 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Some fucking useful thinks in work">
+      
+      
+        <link rel="canonical" href="https://www.jackgui.top/Java/2019-05-10-JEE-java/">
+      
+      
+        <meta name="author" content="JiaJia Gui">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>JEE Basic</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#00bcd4">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+      <link rel="manifest" href="../../manifest.webmanifest">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-XXXXXXXX-X", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="cyan" data-md-color-accent="cyan">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#jee-basic-knowledge" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Memo for Work
+            </span>
+            <span class="md-header-nav__topic">
+              
+                JEE Basic
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://www.jackgui.top" title="Memo for Work" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Memo for Work
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Hello! Welcome to my world!" class="md-nav__link">
+      Hello! Welcome to my world!
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Database
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Database
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-03-14-basic-database/" title="数据库基础" class="md-nav__link">
+      数据库基础
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-03-14-common_migration_script -database/" title="Migration Scripts Sample" class="md-nav__link">
+      Migration Scripts Sample
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Database/2018-04-06-redis-database/" title="Redis" class="md-nav__link">
+      Redis
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Devops
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Devops
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git使用" class="md-nav__link">
+      Git使用
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Devops/2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-nav__link">
+      Setup Jenkins in docker
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Docker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Docker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-docker-compose-docker/" title="Docker Compose" class="md-nav__link">
+      Docker Compose
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-installation-docker/" title="Docker Installation" class="md-nav__link">
+      Docker Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-05-23-storage-docker/" title="Docker Storage" class="md-nav__link">
+      Docker Storage
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      Java
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Java
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-01-21-springboot-java/" title="Springboot Usage" class="md-nav__link">
+      Springboot Usage
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-01-21-themeleaf-java/" title="Themeleaf" class="md-nav__link">
+      Themeleaf
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-02-22-basicknowledge-java/" title="Java Common Knowledge" class="md-nav__link">
+      Java Common Knowledge
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-02-22-designpattern-java/" title="Java design pattern" class="md-nav__link">
+      Java design pattern
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-03-22-concurrent-java/" title="Java Concurrent" class="md-nav__link">
+      Java Concurrent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-04-02-selenium-java/" title="Selenium" class="md-nav__link">
+      Selenium
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2019-02-22-algorithm-java/" title="Algorithm" class="md-nav__link">
+      Algorithm
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="JEE Basic" class="md-nav__link md-nav__link--active">
+      JEE Basic
+    </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      JavaScript
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        JavaScript
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-01-21-jquery-javascript/" title="Javascript handbook" class="md-nav__link">
+      Javascript handbook
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-06-07-requirejs-javascript/" title="RequireJs 用法" class="md-nav__link">
+      RequireJs 用法
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-07-02-objectmodel-javascript/" title="Details of the object model" class="md-nav__link">
+      Details of the object model
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Kubernetes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Kubernetes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-istio/" title="Istio Installation" class="md-nav__link">
+      Istio Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-kubernete/" title="kubernetes Installation" class="md-nav__link">
+      kubernetes Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-knowledge-kubernete/" title="Basic of Kubernetes" class="md-nav__link">
+      Basic of Kubernetes
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Linux
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Linux
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Linux/2018-01-21-cmd-linux/" title="常用的linux命令" class="md-nav__link">
+      常用的linux命令
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="jee-basic-knowledge">JEE basic knowledge<a class="headerlink" href="#jee-basic-knowledge" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>JPA</p>
+<p>Entity Class Requirement</p>
+</blockquote>
+<ul>
+<li>Must be annotated with <strong>@Entity</strong></li>
+<li>Must have a public or protected no-arg constructor</li>
+<li>Must be a top-level class</li>
+<li>The persistent state of an entity is represented by instance fields.</li>
+<li>Entities support inheritance and must not be final.</li>
+<li>If an entity instance is to be passed by value as a detached object, the entity class must implement the <strong>java.io.Serializable</strong> interface</li>
+</ul>
+<blockquote>
+<p>Why would you choose persistent properties over persistent filed?</p>
+</blockquote>
+<ul>
+<li>If you want to do additional processing in a getter/setter method.</li>
+</ul>
+<blockquote>
+<p>Elements belong to persistence unit in persistence.xml</p>
+</blockquote>
+<ul>
+<li>provider, jta-data-source</li>
+</ul>
+<blockquote>
+<p>DAO methos always throws <strong>SQLException</strong></p>
+<p>Transaction Models - Nested</p>
+</blockquote>
+<ul>
+<li>If the main transaction failed, the nested transactions are also rolled back.</li>
+<li>A failure in a nested transaction doesn't necessarily roll back other nested transactions</li>
+</ul>
+<blockquote>
+<p>Transaction Models - Chained</p>
+</blockquote>
+<ul>
+<li>If the main transaction failed, the nested transactions are also rolled back.</li>
+<li>However, a failure in a nested transaction roll back only that transaction.</li>
+</ul>
+<blockquote>
+<p>Comparison of Programmatic and Declarative Transactions</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>N/A</th>
+<th>Programmatic(BMT)</th>
+<th>Declarative(CMT)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operation</td>
+<td>Use JTA calls to specify which operations form a single transaction (bean-managed)</td>
+<td>Specify the transaction properties in the deployment descriptor(container-managed)</td>
+</tr>
+<tr>
+<td>Available in</td>
+<td>Sevlets, JSP components, session beans, CDI beans, and messaging-driven bean</td>
+<td>Session bean, CDI beans, and messaging-driven bean</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Bean-managed transaction usage</p>
+</blockquote>
+<ol>
+<li>Add <strong>TransactionManagement(BEAN)</strong> on class level.</li>
+<li>Inject <strong>UserTransaction</strong> resource</li>
+<li><code>ut.begin()  ut.commit() ut.rollback()</code></li>
+</ol>
+<blockquote>
+<p>EJB Container-managed transaction usage</p>
+</blockquote>
+<ol>
+<li>Add <strong>@TransactionAttribute(TransactionAttributeType.REQUIRED)</strong></li>
+</ol>
+<blockquote>
+<p>Transaction Attributes</p>
+</blockquote>
+<ul>
+<li>REQUIRED <em>The method becomes part of the caller's transaction. If the caller does not have a transaction, the method runs in its own transaction.</em></li>
+<li>REQUIRED_NEW <em>The method always runs in its own transaction. Any existing transaction is suspended.</em></li>
+<li>NOT_SUPPORTED <em>The method never runs in a transaction. Any existing transaction is suspended.</em></li>
+<li>SUPPORTS <em>The method becomes part of the caller's transaction. If the caller does not have a transaction, the method doesn't runs in a transaction.</em></li>
+<li>MANDATORY <em>It is an error to call this method outside of a transaction.</em></li>
+<li>NEVER <em>It is an error to call this method in a transaction.</em></li>
+</ul>
+<blockquote>
+<p>JEE Concurrency Mechanisms</p>
+</blockquote>
+<ul>
+<li>Message-Driven Bean</li>
+<li>Get a <strong>ManagedExecutorService</strong> instance</li>
+</ul>
+<blockquote>
+<p>which Alternative Should You Use?</p>
+</blockquote>
+<ul>
+<li>Message-Driven Bean<ul>
+<li>Don't require a reference to the actual EJB</li>
+<li>Support fire and forget methods(not return value)</li>
+<li>Require server administration</li>
+</ul>
+</li>
+<li>Asynchronous EJBs<ul>
+<li>Require a reference to the actual EJB that can be injected by using CDI</li>
+<li>Support return values in methods</li>
+<li>Don't require server administration</li>
+</ul>
+</li>
+<li>Managed Executors<ul>
+<li>Provide maximum control over threads, and are the most native way of executing tasks</li>
+<li>Require server administration</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>ManageTaskListener</strong> events: <em>taskAborted, taskStarting</em></p>
+<p>JSR-250 <strong>javax.annotaion.security</strong></p>
+</blockquote>
+<ul>
+<li>@RunAs("admin"), @RolesAllowed({"user", "admin"}), @PermitAll, @RolesAllowed, @DenyAll and they are only supported for <strong>JAX-WS EJB endpoints, JAX-RS EJB endpoints, JAX-RS POJO endpoints</strong>.   <em>JAX-WS POJO</em> is not supported.</li>
+<li>Security annotations can be placed <em>session bean class and method</em></li>
+<li>Web service security extensions contains <em>WS-Addressing, WS-Security</em></li>
+<li><em>ejb-jar.xml, @RolesAllowed</em> can restrict resource access by user role.</li>
+<li><em>login-config</em> section in XML is used to configured to allow user authentication with the application. </li>
+</ul>
+<blockquote>
+<p>JSR-352: Batch Applications</p>
+</blockquote>
+<ul>
+<li>API for defining long-running jobs</li>
+<li>Running batch processes on an Enterprise Server</li>
+<li>Execution controlled by application server</li>
+</ul>
+<blockquote>
+<p>A batch contains the following:</p>
+</blockquote>
+<ul>
+<li>Job, Step, JobOperator, JobRepository, Item Reader, Item Writer, Item Processor</li>
+</ul>
+<blockquote>
+<p>Timer Service</p>
+</blockquote>
+<ul>
+<li>The EJB timer service is a container-managed service that provides a way to allow method to be invoked at specific times or time intervals.</li>
+<li>The EJB timer may be set to invoke certain EJB method at a specific time, after a specific duration, or at specific recurring intervals.</li>
+<li>Timers can be created programmatically by interacting with <strong>TimerService</strong> or automatically through annotations.</li>
+<li>These Timer tasks apply to the following types of enterprise beans:<ul>
+<li>Stateless and singleton session beans</li>
+<li>Message-driven beans</li>
+</ul>
+</li>
+<li>Timers are intended for long-lived business processes and are by default persistent.</li>
+</ul>
+<blockquote>
+<p>Types of Timer</p>
+</blockquote>
+<ul>
+<li>Programmatic timers : Created by <strong>TimerService</strong></li>
+<li>AUtomatic timers: created by <strong>java.ejb.Schedule and java.ejb.Schedules</strong> annotations.</li>
+</ul>
+<blockquote>
+<p>Calendar-Based Schedule Timers</p>
+</blockquote>
+<ul>
+<li>Seven attributes  can be used to define a <strong>Schedule</strong><ul>
+<li>second</li>
+<li>minute</li>
+<li>hour</li>
+<li>dayOfMonth</li>
+<li>dayOfWeek</li>
+<li>month</li>
+<li>year</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>MDB (Messaging Driven Bean)</p>
+<p>Configuring the Message-Driven Bean</p>
+</blockquote>
+<ul>
+<li>Message-Driven Bean support configuration by:<ul>
+<li>Annotations</li>
+<li>Deployment descriptors</li>
+</ul>
+</li>
+<li>Annotaion-based configuration is performed by specifying a set of <strong>ActivationConfigProperty</strong> annotations for the <strong>activationConfig</strong> property of the <strong>@MessageDriven</strong> annotation.</li>
+<li>Every message-driven bean must be configured with a destination.</li>
+<li>Common configurations are:<ul>
+<li>Destination type</li>
+<li>Message acknowledgement</li>
+<li>Message selection</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>API for Topic Subscriptions</p>
+</blockquote>
+<ul>
+<li>For unshared durable subscriptions, the clientId must be set and is used to identify the subscription.</li>
+<li>For shared subscriptions, the clientID is optional. If it is set, it is used to identify the subscription.</li>
+</ul>
+<blockquote>
+<p>JMS support two types of messaging</p>
+</blockquote>
+<ul>
+<li>PTP (Point-to-point): Messaging by using queues</li>
+<li>Publish/sunscribe: Messaging by using topics</li>
+</ul>
+<blockquote>
+<p>Two types of Administered objects</p>
+</blockquote>
+<ul>
+<li>ConnectionFactory</li>
+<li>Destionation</li>
+</ul>
+<blockquote>
+<p>JMS Application is composed of the following parts</p>
+</blockquote>
+<ul>
+<li>JMS provider</li>
+<li>JMS clients</li>
+<li>Messages</li>
+<li>Administered objects</li>
+</ul>
+<blockquote>
+<p>JMS 2.0 New Features</p>
+</blockquote>
+<ul>
+<li>
+<p>Simplified API</p>
+<ul>
+<li>Injection of JMSContext object</li>
+<li>Creating JMS Desination using annotation</li>
+</ul>
+</li>
+<li>
+<p>Delivery Delay</p>
+</li>
+<li>Asynchronous Send</li>
+<li>Standardized Configurations</li>
+</ul>
+<blockquote>
+<p>CDI Interceptor can be used bellow lifecycle</p>
+</blockquote>
+<ul>
+<li>@AroundInvoke</li>
+<li>@PostConstruct</li>
+<li>@PreDestory</li>
+<li>@PrePassivate</li>
+<li>@PostActivate</li>
+</ul>
+<blockquote>
+<p>Create a qualifier</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><span class="nd">@Qualifier</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="n">METHOD</span><span class="o">,</span> <span class="n">FIELD</span><span class="o">,</span> <span class="n">PARAMETER</span><span class="o">,</span> <span class="n">TYPE</span><span class="o">})</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">YourQualifierName</span> <span class="o">{}</span>
+</pre></div>
+
+
+<blockquote>
+<p>CDI Context and Dependency Injection</p>
+<p>Limitations on CDI Beans</p>
+</blockquote>
+<ul>
+<li>
+<p>A bean cannot be:</p>
+<ul>
+<li>A non-static inner class</li>
+<li>Annotated with an EJB component-defining annotation or declared as an EJB bean class in ejb-jar.xml</li>
+</ul>
+</li>
+<li>
+<p>A bean must have an appropriate constructor</p>
+<ul>
+<li>The class has a constructor with no parameters</li>
+<li>The class declares a constructor annotated with @Inject</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>EJB 3.0</p>
+</blockquote>
+<ul>
+<li>Annotations</li>
+<li>Simplification of enterprise bean types</li>
+<li>Entity persistence through JPA</li>
+</ul>
+<blockquote>
+<p>EJB 3.1</p>
+</blockquote>
+<ul>
+<li>Singleton session bean</li>
+<li>Asynchronous session bean invocations</li>
+<li>EJB Timer Service</li>
+<li>Portable global JNDI names</li>
+<li>Embeddable EJB Container</li>
+<li>EJB 3.1 Lite</li>
+<li>Packaging and deployment of EJBs directory in a WAR file</li>
+</ul>
+<blockquote>
+<p>JSR-345 EJB 3.2 New Features</p>
+</blockquote>
+<ul>
+<li>Enhanced message-driven bean contract with no-method message listener interface</li>
+<li>Container-provide security role names "**"</li>
+<li>Local asynchronous session bean invocations and no-persistent EJB Timer Service included</li>
+<li>Support for transactions in SFSB lifecycle callbacks</li>
+<li>Ability to disable passivation of stateful session beans:</li>
+<li>Enhanced TimerService API to access all active timer in the EJB module with getAllTimer()</li>
+<li>Embeddable EJB Container to implement the AutoCloseable interface</li>
+<li>Removal of restrictions on the javax.ejb.Timer and javax.ejb.TimerHanlder references</li>
+<li>Relaxed default rules for a session bean to designate its implemented interfaces</li>
+</ul>
+<blockquote>
+<p>EJB Components</p>
+</blockquote>
+<ul>
+<li>Are managed by an EJB container</li>
+<li>Provide business and messaging function</li>
+<li>Are scalable, transactional, multiuser and secure</li>
+</ul>
+<blockquote>
+<p>EJB components types</p>
+</blockquote>
+<ul>
+<li>
+<p>Session Beans</p>
+<ul>
+<li>Stateless</li>
+<li>Stateful</li>
+<li>Singleton</li>
+</ul>
+</li>
+<li>
+<p>Message Driven Bean</p>
+</li>
+</ul>
+<blockquote>
+<p>JNDI -&gt; The Java Naming and Directory Interface is an API that provides naming and directory functionality to applications.</p>
+</blockquote>
+<ul>
+<li>Independent of any implementation</li>
+<li>Build on a service provider interface (SPI) </li>
+</ul>
+<blockquote>
+<p>JAX-WS JAVA API for XML Web Service</p>
+<p>WSDL Structure</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;definitions&gt;</span>
+    <span class="nt">&lt;types/&gt;</span>
+    <span class="nt">&lt;message/&gt;</span>
+    <span class="nt">&lt;portType/&gt;</span>
+    <span class="nt">&lt;binding/&gt;</span>
+    <span class="nt">&lt;service/&gt;</span>
+<span class="nt">&lt;/definitions&gt;</span>
+</pre></div>
+
+
+<blockquote>
+<p>Vendor neutral and Component based </p>
+<p>[JCP] https://www.jcp.org/en/home/index</p>
+<p>A EAR file could contains JAR, WAR, RAR and so on.</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><span class="n">jar</span> <span class="n">cvf</span> <span class="n">myWebApp</span><span class="o">.</span><span class="na">war</span>
+</pre></div>
+
+
+<blockquote>
+<p>A java bean implements java.io.Serializable or java.io.Externalizable and using XMLEncoder and XMLDecoder make your application portable.</p>
+</blockquote>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../2019-02-22-algorithm-java/" title="Algorithm" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Algorithm
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../JavaScript/2018-01-21-jquery-javascript/" title="Javascript handbook" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Javascript handbook
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 - 2019 Jiajia Gui
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

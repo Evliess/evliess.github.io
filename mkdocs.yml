@@ -1,4 +1,6 @@
 # Project information
+docs_dir: 'mydocs'
+site_dir: 'docs'
 site_name: 'Memo for Work'
 site_description: 'Some fucking useful thinks in work'
 site_author: 'JiaJia Gui'

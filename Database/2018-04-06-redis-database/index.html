@@ -1,0 +1,1378 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Some fucking useful thinks in work">
+      
+      
+        <link rel="canonical" href="https://www.jackgui.top/Database/2018-04-06-redis-database/">
+      
+      
+        <meta name="author" content="JiaJia Gui">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+    
+    
+      
+        <title>Redis</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#00bcd4">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+      <link rel="manifest" href="../../manifest.webmanifest">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-XXXXXXXX-X", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="cyan" data-md-color-accent="cyan">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#redis" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Memo for Work
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Redis
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://www.jackgui.top" title="Memo for Work" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Memo for Work
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Hello! Welcome to my world!" class="md-nav__link">
+      Hello! Welcome to my world!
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Database
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Database
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-03-14-basic-database/" title="数据库基础" class="md-nav__link">
+      数据库基础
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2018-03-14-common_migration_script -database/" title="Migration Scripts Sample" class="md-nav__link">
+      Migration Scripts Sample
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+    <a href="./" title="Redis" class="md-nav__link md-nav__link--active">
+      Redis
+    </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Devops
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Devops
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git使用" class="md-nav__link">
+      Git使用
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Devops/2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-nav__link">
+      Setup Jenkins in docker
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Docker
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        Docker
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-docker-compose-docker/" title="Docker Compose" class="md-nav__link">
+      Docker Compose
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-04-08-installation-docker/" title="Docker Installation" class="md-nav__link">
+      Docker Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Docker/2018-05-23-storage-docker/" title="Docker Storage" class="md-nav__link">
+      Docker Storage
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Java
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Java
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-01-21-springboot-java/" title="Springboot Usage" class="md-nav__link">
+      Springboot Usage
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-01-21-themeleaf-java/" title="Themeleaf" class="md-nav__link">
+      Themeleaf
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-02-22-basicknowledge-java/" title="Java Common Knowledge" class="md-nav__link">
+      Java Common Knowledge
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-02-22-designpattern-java/" title="Java design pattern" class="md-nav__link">
+      Java design pattern
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-03-22-concurrent-java/" title="Java Concurrent" class="md-nav__link">
+      Java Concurrent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2018-04-02-selenium-java/" title="Selenium" class="md-nav__link">
+      Selenium
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2019-02-22-algorithm-java/" title="Algorithm" class="md-nav__link">
+      Algorithm
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Java/2019-05-10-JEE-java/" title="JEE Basic" class="md-nav__link">
+      JEE Basic
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      JavaScript
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        JavaScript
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-01-21-jquery-javascript/" title="Javascript handbook" class="md-nav__link">
+      Javascript handbook
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-06-07-requirejs-javascript/" title="RequireJs 用法" class="md-nav__link">
+      RequireJs 用法
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../JavaScript/2018-07-02-objectmodel-javascript/" title="Details of the object model" class="md-nav__link">
+      Details of the object model
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Kubernetes
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Kubernetes
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-istio/" title="Istio Installation" class="md-nav__link">
+      Istio Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-installation-kubernete/" title="kubernetes Installation" class="md-nav__link">
+      kubernetes Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Kubernetes/2018-04-08-knowledge-kubernete/" title="Basic of Kubernetes" class="md-nav__link">
+      Basic of Kubernetes
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Linux
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Linux
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../Linux/2018-01-21-cmd-linux/" title="常用的linux命令" class="md-nav__link">
+      常用的linux命令
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="redis">Redis 概览<a class="headerlink" href="#redis" title="Permanent link">&para;</a></h1>
+<p>Redis与其他内存数据库与众不同，是因为以下三个原因：<br />
+- Redis将数据库中所有的数据都加载到内存中，磁盘只是用来存储数据。<br />
+- Redis支持更加丰富的数据结构。<br />
+- Redis可以将数据备份到任意多个slave上。</p>
+<p>Redis的优势<br />
+- <strong>非常快</strong> 可以每秒执行110000次SET操作，81000次GET操作。<br />
+- <strong>支持丰富的数据类型</strong> list, set, sorted set, and hashes 。<br />
+- <strong>所有的操作都是原子性</strong> <br />
+- <strong>用途广泛</strong> 可以用作缓存，消息队列（Redis天生支持Publish/Subscribe），存储Web应用中的session，网页命中计数等。</p>
+<h1 id="redis_1">Redis 安装<a class="headerlink" href="#redis_1" title="Permanent link">&para;</a></h1>
+<div class="codehilite"><pre><span></span>$ wget http://download.redis.io/releases/redis-4.0.9.tar.gz
+$ tar xzf redis-4.0.9.tar.gz
+$ <span class="nb">cd</span> redis-4.0.9
+$ make
+</pre></div>
+
+
+<h2 id="redis_2">启动Redis<a class="headerlink" href="#redis_2" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>. src/redis-server
+</pre></div>
+
+
+<h2 id="redis_3">使用命令行与Redis交互<a class="headerlink" href="#redis_3" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>./redis-cli
+<span class="m">127</span>.0.0.1:6379&gt;
+
+/**在远程Redis Server上运行redis命令
+* -h 后面指定远程server的地址
+* -p 后面指定远程Redis server的端口
+* -a 指定访问所需的密码
+*/
+$ redis-cli -h host -p port -a password
+</pre></div>
+
+
+<h2 id="redis_4">关闭Redis服务器<a class="headerlink" href="#redis_4" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>//查找正在运行redis的进程以及端口号
+ps -ef <span class="p">|</span>grep redis
+
+//使用redis-cli关闭redis服务
+./redis-cli -p <span class="m">6379</span> shutdown
+</pre></div>
+
+
+<h1 id="redis_5">Redis命令<a class="headerlink" href="#redis_5" title="Permanent link">&para;</a></h1>
+<h2 id="keys">Keys<a class="headerlink" href="#keys" title="Permanent link">&para;</a></h2>
+<ul>
+<li>DEL key [key ...]<br />
+删除一个或者多个key</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">key1</span> <span class="ss">&quot;Hello&quot;</span> 
+<span class="k">set</span> <span class="n">key2</span> <span class="ss">&quot;World&quot;</span> 
+<span class="o">//</span><span class="err">删除成功返回</span><span class="mi">1</span><span class="err">，否则返回</span><span class="mi">0</span><span class="err">，</span> <span class="err">删除多个</span><span class="n">key返回结果的总数</span>
+<span class="n">del</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span>
+</pre></div>
+
+
+<ul>
+<li>EXISTS key [key ...]<br />
+判断一个key或者多个key是否存在</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">key1</span> <span class="ss">&quot;Hello&quot;</span> 
+<span class="k">set</span> <span class="n">key2</span> <span class="ss">&quot;World&quot;</span> 
+<span class="o">//</span><span class="err">成功返回</span><span class="mi">1</span><span class="err">，否则返回</span><span class="mi">0</span><span class="err">，</span> <span class="err">判断多个</span><span class="n">key返回结果的总数</span>
+<span class="k">exists</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span>
+</pre></div>
+
+
+<ul>
+<li>EXPIRE key seconds<br />
+设置一个key过期的时间</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">key1</span> <span class="ss">&quot;Hello&quot;</span> 
+<span class="o">//</span><span class="err">设置</span><span class="n">key1</span> <span class="mi">10</span><span class="err">秒过期</span>
+<span class="n">expire</span> <span class="n">key1</span> <span class="mi">10</span> 
+</pre></div>
+
+
+<ul>
+<li>KEYS pattern<br />
+返回满足模式的key  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">key1</span> <span class="ss">&quot;Hello&quot;</span> 
+<span class="k">set</span> <span class="n">key2</span> <span class="ss">&quot;World&quot;</span> 
+<span class="o">//</span><span class="err">返回以</span><span class="n">key开头的所有的keys</span>
+<span class="n">keys</span> <span class="k">key</span><span class="o">*</span>
+</pre></div>
+
+
+<ul>
+<li>OBJECT subcommand [arguments [arguments ...]]<br />
+根据redis数据中的key来查看保存这个key的Redis对象的信息  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">lpush</span> <span class="n">mylist</span> <span class="ss">&quot;Hello World&quot;</span>
+<span class="k">object</span> <span class="n">refcount</span> <span class="n">mylist</span>
+<span class="k">object</span> <span class="k">encoding</span> <span class="n">mylist</span>
+<span class="k">object</span> <span class="n">idletime</span> <span class="n">mylist</span>
+</pre></div>
+
+
+<ul>
+<li>PERSIST key<br />
+移除一个key上设置的过期时间，使之永远不过期</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">SET</span> <span class="n">mykey</span> <span class="ss">&quot;Hello&quot;</span>
+<span class="o">//</span><span class="err">设置</span><span class="mi">10</span><span class="err">秒过期</span>
+<span class="n">EXPIRE</span> <span class="n">mykey</span> <span class="mi">10</span>
+<span class="o">//</span><span class="err">移除</span><span class="mi">10</span><span class="err">秒过期的设置</span>
+<span class="n">PERSIST</span> <span class="n">mykey</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>TTL<br />
+查看一个key还有多久过期</p>
+</li>
+<li>
+<p>RENAME key newkey
+重命名一个key</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">mykey1</span> <span class="ss">&quot;Hello&quot;</span>
+<span class="k">rename</span> <span class="n">mykey1</span> <span class="n">mykey</span>
+<span class="k">get</span> <span class="n">mykey</span>
+</pre></div>
+
+
+<ul>
+<li>SORT key [BY pattern] [LIMIT offset count] [GET pattern [GET pattern ...]] [ASC|DESC] [ALPHA] [STORE destination]<br />
+对获取的结果进行排序  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">SORT</span> <span class="n">mylist</span> <span class="k">LIMIT</span> <span class="mi">0</span> <span class="mi">5</span> <span class="n">ALPHA</span> <span class="k">DESC</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>TYPE key<br />
+返回key的类型  </p>
+</li>
+<li>
+<p>RESTORE key ttl serialized-value [REPLACE]
+反序列化给定的序列化的序列化值，并将该值与给定的key关联</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">set</span> <span class="n">mykey0</span> <span class="ss">&quot;Hello&quot;</span>
+<span class="n">dump</span> <span class="n">mykey0</span> 
+<span class="n">restore</span> <span class="n">mykey</span> <span class="mi">0</span> <span class="ss">&quot;\x00\x05Hello\b\x00\x05\xe4\x1bW\x94\x1cu\xbb&quot;</span>
+<span class="k">get</span> <span class="n">mykey</span>
+</pre></div>
+
+
+<h2 id="strings">Strings<a class="headerlink" href="#strings" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>APPEND key value
+如果key已经存在并且它的value是String类型，那么将value追加到value的结尾。<br />
+如果key不存在，相当于执行set命令。  </p>
+</li>
+<li>
+<p>SET key value [EX seconds] [PX milliseconds] [NX|XX]
+设置key和value，同时设置该key的过期时间。  </p>
+</li>
+<li>
+<p>GET key<br />
+获取key对应的value  </p>
+</li>
+<li>
+<p>MGET key [key ...]<br />
+获取多个key的值，如果不存在则返回nil  </p>
+</li>
+<li>
+<p>MSET key value [key value ...]<br />
+设置多个key的值  </p>
+</li>
+<li>
+<p>SETRANGE key offset value 
+从offset位置替换对应的key的value部分，替换的长度为value的长度</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="k">SET</span> <span class="n">key1</span> <span class="ss">&quot;Hello World&quot;</span>
+<span class="o">//</span><span class="s1">&#39;W&#39;</span><span class="err">处开始开始替换</span>
+<span class="n">SETRANGE</span> <span class="n">key1</span> <span class="mi">6</span> <span class="ss">&quot;Redis&quot;</span>
+<span class="o">//</span><span class="err">返回</span> <span class="ss">&quot;Hello Redis&quot;</span>
+<span class="k">GET</span> <span class="n">key1</span>
+</pre></div>
+
+
+<ul>
+<li>STRLEN key<br />
+返回key的value的长度  </li>
+</ul>
+<h2 id="hashes">Hashes<a class="headerlink" href="#hashes" title="Permanent link">&para;</a></h2>
+<p>数据结构和map类似，key和value都是string类型。  </p>
+<ul>
+<li>HSET key field value
+在名字为key的map中添加一条key为field，值为value的记录</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">hset</span> <span class="n">people</span> <span class="n">name</span> <span class="n">zhangsan</span>
+<span class="n">hset</span> <span class="n">people</span> <span class="n">age</span> <span class="mi">12</span>
+</pre></div>
+
+
+<ul>
+<li>HGET key field
+在名字为key的map中获取field的值</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">hget</span> <span class="n">people</span> <span class="n">name</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>HLEN key
+返回map的长度  </p>
+</li>
+<li>
+<p>HMGET key field [field ...] <br />
+返回map中多个key的value  </p>
+</li>
+<li>
+<p>HMSET key field value [field value ...]<br />
+设置map中的多个字段  </p>
+</li>
+<li>
+<p>HKEYS key<br />
+返回map中所有的field  </p>
+</li>
+<li>
+<p>HVALS key<br />
+返回map中所有的value  </p>
+</li>
+</ul>
+<h2 id="lists">Lists<a class="headerlink" href="#lists" title="Permanent link">&para;</a></h2>
+<ul>
+<li>LPUSH key value [value ...]<br />
+在list中添加一个元素  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">lpush</span> <span class="n">mylist</span> <span class="n">zhangsan</span>
+</pre></div>
+
+
+<ul>
+<li>LINDEX key index<br />
+返回下标为index的元素  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">lindex</span> <span class="n">mylist</span> <span class="mi">0</span>
+</pre></div>
+
+
+<ul>
+<li>LINSERT key BEFORE|AFTER pivot value<br />
+在指定的元素位置前或者后面插入元素  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="o">//</span><span class="err">在</span><span class="n">zhangsan前面插入lisi</span>
+<span class="n">LINSERT</span> <span class="n">mylist</span> <span class="k">BEFORE</span> <span class="ss">&quot;zhangsan&quot;</span> <span class="ss">&quot;lisi&quot;</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>LLEN key<br />
+返回list的长度  </p>
+</li>
+<li>
+<p>LPOP key<br />
+删除并返回第一个元素  </p>
+</li>
+<li>
+<p>LRANGE key start stop<br />
+返回列表 key 中指定区间内的元素，区间以偏移量 start 和 stop 指定。start和stop都是以0为基准，也可以为负值，表示从list的尾部开始算起。
+如果start &gt; stop ,返回一个空列表。如果stop下表大于end，则Redis会把end的值赋给stop。</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="o">//</span><span class="n">pis</span><span class="err">：此时返回</span><span class="mi">6</span><span class="err">个元素，和编程中的界限不一样</span>
+<span class="n">lrange</span> <span class="n">mylist</span> <span class="mi">0</span> <span class="mi">5</span>
+</pre></div>
+
+
+<ul>
+<li>LREM key count value<br />
+删除list中count个数的等于value的元素  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">lrem</span> <span class="n">mylist</span> <span class="mi">1</span> <span class="n">zhangsan</span>
+</pre></div>
+
+
+<ul>
+<li>LSET key index value
+将列表 key下标为index的元素的值设置为value</li>
+</ul>
+<div class="codehilite"><pre><span></span>lset mylist 0 wangwu
+</pre></div>
+
+
+<ul>
+<li>
+<p>RPUSH key value [value ...]<br />
+将一个或者多个值插入list的末尾  </p>
+</li>
+<li>
+<p>RPOP key<br />
+移除并返回list的尾元素  </p>
+</li>
+</ul>
+<h2 id="sets">Sets<a class="headerlink" href="#sets" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>SADD key member [member ...]<br />
+在set中添加一条或者多条记录，set中的元素不重复  </p>
+</li>
+<li>
+<p>SCARD key<br />
+返回set的长度  </p>
+</li>
+<li>
+<p>SDIFF key [key ...]<br />
+计算集合之间的差集</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+<span class="n">SDIFF</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SDIFFSTORE destination key [key ...]<br />
+将集合的差集保存在键为key的集合中  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">SDIFFSTORE</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span>
+<span class="n">keys</span> <span class="o">=</span> <span class="err">{</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SINTER key [key ...]<br />
+计算集合的交集  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+<span class="n">SINTER</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SINTERSTORE destination key [key ...]
+将集合的交集保存在键为key的集合中  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+<span class="n">SINTERSTORE</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span> <span class="n">key4</span>
+<span class="n">key4</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SUNION key [key ...]
+计算集合的并集  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+<span class="n">SUNION</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SUNIONSTORE destination key [key ...]<br />
+计算集合的并集并返回一个新的集合  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">key1</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="err">}</span>
+<span class="n">key2</span> <span class="o">=</span> <span class="err">{</span><span class="k">c</span><span class="err">}</span>
+<span class="n">key3</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+<span class="n">SUNION</span> <span class="n">key1</span> <span class="n">key2</span> <span class="n">key3</span> <span class="n">key4</span>
+<span class="n">key4</span> <span class="o">=</span> <span class="err">{</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="k">c</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="err">}</span>
+</pre></div>
+
+
+<ul>
+<li>SISMEMBER key member<br />
+判断set中是否包含member,包含返回1，不包含返回0  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">SADD</span> <span class="n">myset</span> <span class="ss">&quot;one&quot;</span>
+<span class="o">//</span><span class="err">返回</span><span class="mi">1</span>
+<span class="n">SISMEMBER</span> <span class="n">myset</span> <span class="ss">&quot;one&quot;</span>
+<span class="o">//</span><span class="err">返回</span><span class="mi">0</span>
+<span class="n">SISMEMBER</span> <span class="n">myset</span> <span class="ss">&quot;two&quot;</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>SMEMBERS key<br />
+返回set中所有的value  </p>
+</li>
+<li>
+<p>SMOVE source destination member<br />
+将元素从源set移动到目的地set，是一个原子操作  </p>
+</li>
+<li>
+<p>SPOP key [count]<br />
+随机移除并返回集合中的一个或者多个元素  </p>
+</li>
+<li>
+<p>SRANDMEMBER key [count]<br />
+随机获得集合中一个或者多个元素  </p>
+</li>
+<li>
+<p>SREM key member [member ...]<br />
+删除集合中的一个或者多个元素  </p>
+</li>
+</ul>
+<h2 id="sorted-sets">Sorted Sets<a class="headerlink" href="#sorted-sets" title="Permanent link">&para;</a></h2>
+<p>有序集合里面的成员是不能重复的都是唯一的，但是，不同成员间有可能有相同的分数  </p>
+<ul>
+<li>ZADD key [NX|XX] [CH] [INCR] score member [score member ...]  </li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="cm">/**</span>
+<span class="cm">*ZADD options (Redis 3.0.2 及以上版本支持)</span>
+<span class="cm">*NX : 不更新已经存在的元素，只增加新的元素。  </span>
+<span class="cm">*XX ：只更新已经存在的元素，不增加元素。  </span>
+<span class="cm">*CH ：修改返回值为发生变化的成员总数，原始是返回新添加成员的总数 (CH 是 changed 的意思)。更改的元素是新添加的成员，已经存在的成员更新分数。 所以在命令中指定的成员有相同的分数将不被计算在内。注：在通常情况下，ZADD返回值只计算新添加成员的数量。  </span>
+<span class="cm">*INCH ：当ZADD指定这个选项时，成员的操作就等同ZINCRBY命令，对成员的分数进行递增操作  </span>
+<span class="cm">*/</span>
+<span class="n">ZADD</span> <span class="n">myzset</span> <span class="mi">1</span> <span class="ss">&quot;one&quot;</span>
+<span class="n">ZADD</span> <span class="n">myzset</span> <span class="mi">2</span> <span class="ss">&quot;two&quot;</span> <span class="mi">3</span> <span class="ss">&quot;three&quot;</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>ZCARD key<br />
+返回集合的长度  </p>
+</li>
+<li>
+<p>ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]<br />
+返回有序集合中分数在min和max之间的所有元素  </p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="cm">/**</span>
+<span class="cm">*min和max可以是-inf和+inf  </span>
+<span class="cm">*min 表示 大于等于;  (min 表示大于  </span>
+<span class="cm">*max 表示 小于等于;  (max 表示小于  </span>
+<span class="cm">*/</span>
+<span class="n">ZRANGEBYSCORE</span> <span class="n">myzset</span> <span class="o">-</span><span class="n">inf</span> <span class="o">+</span><span class="n">inf</span>
+<span class="n">ZRANGEBYSCORE</span> <span class="n">myzset</span> <span class="p">(</span><span class="mi">1</span> <span class="mi">2</span>
+<span class="n">ZRANGEBYSCORE</span> <span class="n">myzset</span> <span class="p">(</span><span class="mi">1</span> <span class="p">(</span><span class="mi">2</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>ZRANGE key start stop [WITHSCORES] <br />
+返回有序集合中指定范围(start,stop)内的元素  </p>
+</li>
+<li>
+<p>ZCOUNT key min max<br />
+返回有序集合中score在min和max之间元素的个数  </p>
+</li>
+<li>
+<p>ZINCRBY key increment member<br />
+将有序集合中member的score增加increment；如果member不存在，就增加一个member；score是increment，如果key不存在，则创建一个只包含member的有序集合。  </p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">ZADD</span> <span class="n">myzset</span> <span class="mi">1</span> <span class="ss">&quot;one&quot;</span>
+<span class="n">ZADD</span> <span class="n">myzset</span> <span class="mi">2</span> <span class="ss">&quot;two&quot;</span>
+<span class="o">//</span><span class="ss">&quot;one&quot;</span><span class="err">的</span><span class="n">score变为3</span>  
+<span class="n">ZINCRBY</span> <span class="n">myzset</span> <span class="mi">2</span> <span class="ss">&quot;one&quot;</span>
+<span class="n">ZRANGE</span> <span class="n">myzset</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">WITHSCORES</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>ZRANK key member<br />
+返回有序集合中元素的排名，排名默认从0开始  </p>
+</li>
+<li>
+<p>ZREM key member [member ...]<br />
+删除有序集合中一个或者多个元素  </p>
+</li>
+<li>
+<p>ZINTERSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]<br />
+计算多个有序集合的交集。WEIGHT是计算因子，默认是1. 指定WEIGHT就是 score = score*WEIGHT;聚簇函数AGGREGATE 选项默认是SUM</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">zadd</span> <span class="n">Q1</span> <span class="mi">88</span> <span class="ss">&quot;apple&quot;</span>
+<span class="n">zadd</span> <span class="n">Q1</span> <span class="mi">92</span> <span class="ss">&quot;orange&quot;</span>
+<span class="n">zadd</span> <span class="n">Q1</span> <span class="mi">100</span> <span class="ss">&quot;peach&quot;</span>
+<span class="n">zadd</span> <span class="n">Q2</span> <span class="mi">27</span> <span class="ss">&quot;apple&quot;</span>
+<span class="n">zadd</span> <span class="n">Q2</span> <span class="mi">34</span> <span class="ss">&quot;orange&quot;</span>
+<span class="n">zadd</span> <span class="n">Q2</span> <span class="mi">80</span> <span class="ss">&quot;peach&quot;</span>
+<span class="n">zadd</span> <span class="n">Q2</span> <span class="mi">100</span> <span class="ss">&quot;grape&quot;</span>
+<span class="n">zinterstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span>
+<span class="cm">/**</span>
+<span class="cm">*apple(115) = Q1(88) + Q2(27)</span>
+<span class="cm">*Q1 中不包含grape，Q1Q2中也没有</span>
+<span class="cm">*/</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;115&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;126&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;180&quot;</span>
+<span class="cm">/**</span>
+<span class="cm">*apple(115) = Q1(88*1) + Q2(27*2)</span>
+<span class="cm">*Q1 中不包含grape，Q1Q2中也没有</span>
+<span class="cm">*/</span>
+<span class="n">zinterstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span> <span class="n">WEIGHTS</span> <span class="mi">1</span> <span class="mi">2</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;142&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;160&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;260&quot;</span>
+<span class="n">zinterstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span> <span class="n">WEIGHTS</span> <span class="mi">1</span> <span class="mi">2</span> <span class="k">AGGREGATE</span> <span class="k">SUM</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;142&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;160&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;260&quot;</span>
+<span class="cm">/**</span>
+<span class="cm">*apple(54) = min(Q1(88*1), Q2(27*2))</span>
+<span class="cm">*orange(68) = min(Q1(92*1), Q2(34*2))</span>
+<span class="cm">*peach(68) = min(Q1(100*1), Q2(80*2))</span>
+<span class="cm">*Q1 中不包含grape，Q1Q2中也没有</span>
+<span class="cm">*/</span>
+<span class="n">zinterstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span> <span class="n">WEIGHTS</span> <span class="mi">1</span> <span class="mi">2</span> <span class="k">AGGREGATE</span> <span class="k">MIN</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;54&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;68&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;100&quot;</span>
+<span class="cm">/**</span>
+<span class="cm">*apple(54) = max(Q1(88*1), Q2(27*2))</span>
+<span class="cm">*orange(68) = max(Q1(92*1), Q2(34*2))</span>
+<span class="cm">*peach(68) = max(Q1(100*1), Q2(80*2))</span>
+<span class="cm">*Q1 中不包含grape，Q1Q2中也没有</span>
+<span class="cm">*/</span>
+<span class="n">zinterstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span> <span class="n">WEIGHTS</span> <span class="mi">1</span> <span class="mi">2</span> <span class="k">AGGREGATE</span> <span class="k">MAX</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;88&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;92&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;160&quot;</span>
+</pre></div>
+
+
+<ul>
+<li>ZUNIONSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]<br />
+计算多个有序集合的并集。WEIGHT是计算因子，默认是1. 指定WEIGHT就是 score = score*WEIGHT;聚簇函数AGGREGATE 选项默认是SUM</li>
+</ul>
+<div class="codehilite"><pre><span></span><span class="n">zunionstore</span> <span class="n">Q1Q2</span> <span class="mi">2</span> <span class="n">Q1</span> <span class="n">Q2</span> <span class="n">WEIGHTS</span> <span class="mi">1</span> <span class="mi">2</span> <span class="k">AGGREGATE</span> <span class="k">MAX</span>
+<span class="n">zrange</span> <span class="n">Q1Q2</span> <span class="mi">0</span> <span class="o">-</span><span class="mi">1</span> <span class="n">withscores</span>
+<span class="cm">/**</span>
+<span class="cm">*apple(54) = max(Q1(88*1), Q2(27*2))</span>
+<span class="cm">*orange(68) = max(Q1(92*1), Q2(34*2))</span>
+<span class="cm">*peach(68) = max(Q1(100*1), Q2(80*2))</span>
+<span class="cm">*Q1不包含grape，Q2包含grape，Q1Q2中包含grape</span>
+<span class="cm">*/</span>
+<span class="mi">1</span><span class="p">)</span> <span class="ss">&quot;apple&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="ss">&quot;88&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="ss">&quot;orange&quot;</span>
+<span class="mi">4</span><span class="p">)</span> <span class="ss">&quot;92&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="ss">&quot;peach&quot;</span>
+<span class="mi">6</span><span class="p">)</span> <span class="ss">&quot;160&quot;</span>
+<span class="mi">7</span><span class="p">)</span> <span class="ss">&quot;grape&quot;</span>
+<span class="mi">8</span><span class="p">)</span> <span class="ss">&quot;200&quot;</span>
+</pre></div>
+
+
+<h1 id="_1">引用<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p><a href="http://www.redis.cn/commands/zadd.html">参考链接1</a> <a href="https://redis.io/commands/zadd">参考链接2</a>  </p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../2018-03-14-common_migration_script -database/" title="Migration Scripts Sample" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Migration Scripts Sample
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../Devops/2018-11-21-gitusage-devops/" title="Git使用" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Git使用
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 - 2019 Jiajia Gui
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>

@@ -1,7 +1,7 @@
 # Project information
 site_name: 'Memo for Work'
 site_description: 'Some fucking useful thinks in work'
-site_author: 'JiaJia Gui'
+site_author: 'wait-play Sh'
 site_url: 'https://www.jackgui.top'
 
 # Repository
@@ -9,7 +9,7 @@ repo_name: 'Evliess/evliess.github.io'
 # repo_url: 'https://github.com/Evliess/evliess.github.io'
 
 # Copyright
-copyright: 'Copyright &copy; 2018 - 2019 Jiajia Gui'
+copyright: 'Copyright &copy; 2018 - 2019 wait-play Sh'
 
 # Configuration
 theme:

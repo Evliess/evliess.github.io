@@ -7,6 +7,18 @@ date: 2018-03-14 15:17:55
 
 # Database basic knowledge
 
+
+## Mysql Common Commands
+
+```
+// Add a column
+ALTER TABLE `stage` ADD `subpipeline_id` bigint(20) DEFAULT NULL;
+// Add a constraint
+ALTER TABLE `build_stage` ADD CONSTRAINT `BUILD_STAGE_SUBPIPELINE_FK` FOREIGN KEY (`subpipeline_id`) REFERENCES `pipeline` (`id`);
+// Drop a constraint
+ALTER TABLE `build_stage` DROP FOREIGN KEY `BUILD_STAGE_SUBPIPELINE_FK`;
+```
+
 ## Oracle Common Commands
 
 ### Install sqlplus instantclient to connect oracle.
@@ -64,6 +76,15 @@ call addUser('idaAdmin', 'idaAdmin');
 ## DB2 Common Commands
 
 ```
+// Add a column
+ALTER TABLE BUILD_STAGE ADD SUBPIPELINE_ID BIGINT;
+// Add a constraint
+ALTER TABLE BUILD_STAGE ADD CONSTRAINT BUILD_STAGE_SUBPIPELINE_FK FOREIGN KEY (SUBPIPELINE_ID) REFERENCES PIPELINE (ID);
+// Drop a constraint
+ALTER TABLE BUILD_STAGE DROP FOREIGN KEY BUILD_STAGE_SUBPIPELINE_FK;
+
+
+
 db2start
 
 db2 force application all

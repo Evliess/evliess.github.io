@@ -271,6 +271,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mysql-common-commands" class="md-nav__link">
+    Mysql Common Commands
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#oracle-common-commands" class="md-nav__link">
     Oracle Common Commands
   </a>
@@ -756,6 +763,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#mysql-common-commands" class="md-nav__link">
+    Mysql Common Commands
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#oracle-common-commands" class="md-nav__link">
     Oracle Common Commands
   </a>
@@ -814,6 +828,16 @@
                 
                 
                 <h1 id="database-basic-knowledge">Database basic knowledge<a class="headerlink" href="#database-basic-knowledge" title="Permanent link">&para;</a></h1>
+<h2 id="mysql-common-commands">Mysql Common Commands<a class="headerlink" href="#mysql-common-commands" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>// Add a column
+ALTER TABLE `stage` ADD `subpipeline_id` bigint(20) DEFAULT NULL;
+// Add a constraint
+ALTER TABLE `build_stage` ADD CONSTRAINT `BUILD_STAGE_SUBPIPELINE_FK` FOREIGN KEY (`subpipeline_id`) REFERENCES `pipeline` (`id`);
+// Drop a constraint
+ALTER TABLE `build_stage` DROP FOREIGN KEY `BUILD_STAGE_SUBPIPELINE_FK`;
+</pre></div>
+
+
 <h2 id="oracle-common-commands">Oracle Common Commands<a class="headerlink" href="#oracle-common-commands" title="Permanent link">&para;</a></h2>
 <h3 id="install-sqlplus-instantclient-to-connect-oracle">Install sqlplus instantclient to connect oracle.<a class="headerlink" href="#install-sqlplus-instantclient-to-connect-oracle" title="Permanent link">&para;</a></h3>
 <ol>
@@ -863,7 +887,16 @@ call addUser(&#39;idaAdmin&#39;, &#39;idaAdmin&#39;);
 
 
 <h2 id="db2-common-commands">DB2 Common Commands<a class="headerlink" href="#db2-common-commands" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span>db2start
+<div class="codehilite"><pre><span></span>// Add a column
+ALTER TABLE BUILD_STAGE ADD SUBPIPELINE_ID BIGINT;
+// Add a constraint
+ALTER TABLE BUILD_STAGE ADD CONSTRAINT BUILD_STAGE_SUBPIPELINE_FK FOREIGN KEY (SUBPIPELINE_ID) REFERENCES PIPELINE (ID);
+// Drop a constraint
+ALTER TABLE BUILD_STAGE DROP FOREIGN KEY BUILD_STAGE_SUBPIPELINE_FK;
+
+
+
+db2start
 
 db2 force application all
 db2stop

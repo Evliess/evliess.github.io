@@ -36,7 +36,7 @@ An quick start project with requirejs, bootstrap and codemirror.js
 ## Requirejs configuration  
 - index.html  
 
-```html
+```
 <script data-main="../js/require-index.js" src="../js/lib/require.js"></script>
 
 ```

@@ -185,7 +185,7 @@ $("select#commandType").prop("disabled", true);
 
 ## Javascript对象或者数组转化为字符串
 
-{% highlight javascript %}
+```javascript
 //1. Javascript对象或者数组转化为字符串
 
 /**
@@ -213,11 +213,11 @@ JSON.parse('{"p": 5}', (key, value) =>
 );
 
 
-{% endhighlight %}
+```
 
 ## How to add a HTMLEvent to Html element
 
-{% highlight javascript %}
+```javascript
 <script type="text/javascript">
 	var ele = document.getElementById("input_1");
 	/**
@@ -236,11 +236,11 @@ JSON.parse('{"p": 5}', (key, value) =>
 
 	//触发built-in 事件 https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Triggering_built-in_events
 </script>
-{% endhighlight %}
+```
 
 ## Add indicator when ajax call
 
-{% highlight javascript %}
+```javascript
 $(document)
 	  .ajaxStart(function () {
 	    $loading.show();
@@ -248,14 +248,14 @@ $(document)
 	  .ajaxStop(function () {
 	    $loading.hide();
 	  });
-{% endhighlight %}
+```
 
 ## Html 中取得Iframe中的元素
 
-{% highlight javascript%}
+```javascript
 var f = document.getElementById("#FrameId");
 f.contentDocument.getElementById("#ElementId").value;
-{% endhighlight%}
+```
 
 ## 阻止表单通过entry提交  
 

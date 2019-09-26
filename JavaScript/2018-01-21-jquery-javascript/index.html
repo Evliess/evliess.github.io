@@ -1094,66 +1094,73 @@
 
 
 <h2 id="javascript">Javascript对象或者数组转化为字符串<a class="headerlink" href="#javascript" title="Permanent link">&para;</a></h2>
-<p>{% highlight javascript %}
-//1. Javascript对象或者数组转化为字符串</p>
-<p>/*<em>
-* value: Javascript对象或者数组
-* replacer[optional]: 用来做格式化输出
-* space[optional]：值可以是字符串或者数字，用来替换空白字符
-</em>/
-JSON.stringify(value[, replacer [, space]]);
-e.g:
-JSON.stringify(JSONObject, null , 2);</p>
-<p>//2. 字符串转化为JSON对象</p>
-<p>/*<em>
-* text: JSON字符串
-* reviver[optional]: 可以操作转化的结果
-</em>/</p>
-<p>JSON.parse(text[, reviver])
-e.g:
-JSON.parse('{"p": 5}', (key, value) =&gt;
-  typeof value === 'number'
-    ? value * 2 // return value * 2 for numbers
-    : value     // return everything else unchanged
-);</p>
-<p>{% endhighlight %}</p>
-<h2 id="how-to-add-a-htmlevent-to-html-element">How to add a HTMLEvent to Html element<a class="headerlink" href="#how-to-add-a-htmlevent-to-html-element" title="Permanent link">&para;</a></h2>
-<p>{% highlight javascript %}
-<script type="text/javascript">
-    var ele = document.getElementById("input_1");
-    /<strong>
-    <em>事件类型
-    </em>事件被触发后执行的回调函数
-    *useCapture https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener
-    </strong>/
-    ele.addEventListener("input", function(){console.log(this.value)}, false);
-    /<strong>
-    *创建一个InputEvent https://developer.mozilla.org/en-US/docs/Web/Events
-    </strong>/
-    var inputEvent = new InputEvent("input");
-    //分发事件 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/dispatchEvent
-    ele.dispatchEvent(inputEvent);</p>
-<div class="codehilite"><pre><span></span>//触发built-in 事件 https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Triggering_built-in_events
+<div class="codehilite"><pre><span></span><span class="c1">//1. Javascript对象或者数组转化为字符串</span>
+
+<span class="cm">/**</span>
+<span class="cm">* value: Javascript对象或者数组</span>
+<span class="cm">* replacer[optional]: 用来做格式化输出</span>
+<span class="cm">* space[optional]：值可以是字符串或者数字，用来替换空白字符</span>
+<span class="cm">*/</span>
+<span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">value</span><span class="p">[,</span> <span class="nx">replacer</span> <span class="p">[,</span> <span class="nx">space</span><span class="p">]]);</span>
+<span class="nx">e</span><span class="p">.</span><span class="nx">g</span><span class="o">:</span>
+<span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">JSONObject</span><span class="p">,</span> <span class="kc">null</span> <span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">//2. 字符串转化为JSON对象</span>
+
+<span class="cm">/**</span>
+<span class="cm">* text: JSON字符串</span>
+<span class="cm">* reviver[optional]: 可以操作转化的结果</span>
+<span class="cm">*/</span>
+
+<span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">text</span><span class="p">[,</span> <span class="nx">reviver</span><span class="p">])</span>
+<span class="nx">e</span><span class="p">.</span><span class="nx">g</span><span class="o">:</span>
+<span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;{&quot;p&quot;: 5}&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">=&gt;</span>
+  <span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="s1">&#39;number&#39;</span>
+    <span class="o">?</span> <span class="nx">value</span> <span class="o">*</span> <span class="mi">2</span> <span class="c1">// return value * 2 for numbers</span>
+    <span class="o">:</span> <span class="nx">value</span>     <span class="c1">// return everything else unchanged</span>
+<span class="p">);</span>
 </pre></div>
 
 
-<p></script>
-{% endhighlight %}</p>
+<h2 id="how-to-add-a-htmlevent-to-html-element">How to add a HTMLEvent to Html element<a class="headerlink" href="#how-to-add-a-htmlevent-to-html-element" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+    <span class="kd">var</span> <span class="nx">ele</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;input_1&quot;</span><span class="p">);</span>
+    <span class="cm">/**</span>
+<span class="cm">    *事件类型</span>
+<span class="cm">    *事件被触发后执行的回调函数</span>
+<span class="cm">    *useCapture https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener</span>
+<span class="cm">    **/</span>
+    <span class="nx">ele</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">)},</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="cm">/**</span>
+<span class="cm">    *创建一个InputEvent https://developer.mozilla.org/en-US/docs/Web/Events</span>
+<span class="cm">    **/</span>
+    <span class="kd">var</span> <span class="nx">inputEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">InputEvent</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">);</span>
+    <span class="c1">//分发事件 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/dispatchEvent</span>
+    <span class="nx">ele</span><span class="p">.</span><span class="nx">dispatchEvent</span><span class="p">(</span><span class="nx">inputEvent</span><span class="p">);</span>
+
+
+    <span class="c1">//触发built-in 事件 https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events#Triggering_built-in_events</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</pre></div>
+
+
 <h2 id="add-indicator-when-ajax-call">Add indicator when ajax call<a class="headerlink" href="#add-indicator-when-ajax-call" title="Permanent link">&para;</a></h2>
-<p>{% highlight javascript %}
-$(document)
-      .ajaxStart(function () {
-        $loading.show();
-      })
-      .ajaxStop(function () {
-        $loading.hide();
-      });
-{% endhighlight %}</p>
+<div class="codehilite"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">ajaxStart</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$loading</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+      <span class="p">})</span>
+      <span class="p">.</span><span class="nx">ajaxStop</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$loading</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="p">});</span>
+</pre></div>
+
+
 <h2 id="html-iframe">Html 中取得Iframe中的元素<a class="headerlink" href="#html-iframe" title="Permanent link">&para;</a></h2>
-<p>{% highlight javascript%}
-var f = document.getElementById("#FrameId");
-f.contentDocument.getElementById("#ElementId").value;
-{% endhighlight%}</p>
+<div class="codehilite"><pre><span></span><span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;#FrameId&quot;</span><span class="p">);</span>
+<span class="nx">f</span><span class="p">.</span><span class="nx">contentDocument</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;#ElementId&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+</pre></div>
+
+
 <h2 id="entry">阻止表单通过entry提交<a class="headerlink" href="#entry" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;keyup keypress&quot;</span><span class="p">,</span> <span class="s2">&quot;form input&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
           <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">which</span> <span class="o">==</span> <span class="mi">13</span><span class="p">)</span> <span class="p">{</span>

@@ -32,7 +32,7 @@ docker build -t waitplay/jenkins:lst .
 4\. Start a contain to run jenkins
 
 ```
-docker run -u root --rm -d -p 32772:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v /etc/localtime:/etc/localtime  -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:lst
+docker run -u root --rm -d -p 32772:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v $(which docker-compose):/usr/local/bin/docker-compose -v /etc/localtime:/etc/localtime -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:lst
 ```
 5\. Download jdk-8u221-linux-x64.tar.gz
 . Download [maven](http://us.mirrors.quenda.co/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz)
@@ -69,4 +69,5 @@ java -version
 mvn -version
 docker -v
 ```
+
 

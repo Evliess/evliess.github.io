@@ -58,6 +58,9 @@ docker rmi -f $(docker images | grep "^test" | awk '{print$3}')
 docker volume prune
 //查看容器的log
 docker logs -f -t YOUR_CONTAINER_NAME
+
+
+docker run -e PASSWORD=passw0rd123 -p 9388:8388 -p 9388:8388/udp -d --rm --name fgw shadowsocks/shadowsocks-libev:latest
 ```
 
 

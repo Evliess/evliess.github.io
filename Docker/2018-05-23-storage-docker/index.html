@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
     
     
       
@@ -806,6 +806,9 @@ docker rmi -f <span class="k">$(</span>docker images <span class="p">|</span> gr
 docker volume prune
 //查看容器的log
 docker logs -f -t YOUR_CONTAINER_NAME
+
+
+docker run -e <span class="nv">PASSWORD</span><span class="o">=</span>passw0rd123 -p <span class="m">9388</span>:8388 -p <span class="m">9388</span>:8388/udp -d --rm --name fgw shadowsocks/shadowsocks-libev:latest
 </pre></div>
                 
                   
@@ -887,7 +890,7 @@ docker logs -f -t YOUR_CONTAINER_NAME
       
     </div>
     
-      <script src="../../assets/javascripts/application.c648116f.js"></script>
+      <script src="../../assets/javascripts/application.ac79c3b0.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

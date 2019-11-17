@@ -7,6 +7,89 @@ date: 2018-02-22 11:03:55
 
 # Common algorithm
 
+
+> 压缩算法
+
+```
+  public static void unzip(File zipFile, String destPath) throws Exception {
+    File dest = new File(destPath);
+    if (!dest.exists()) {
+      dest.mkdirs();
+    }
+    if (!zipFile.exists()) {
+      return;
+    }
+    FileInputStream fileInputStream = new FileInputStream(zipFile);
+    ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+    ZipEntry zipEntry = zipInputStream.getNextEntry();
+    byte[] buffer = new byte[8092];
+    while (zipEntry != null) {
+      String fileName = zipEntry.getName();
+      File newFile = new File(destPath + File.separator + fileName);
+      new File(newFile.getParent()).mkdirs();
+      FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+      int len = 0;
+      while ((len = zipInputStream.read(buffer)) > 0) {
+        fileOutputStream.write(buffer, 0, len);
+      }
+      fileOutputStream.close();
+      zipInputStream.closeEntry();
+      zipEntry = zipInputStream.getNextEntry();
+    }
+    zipInputStream.closeEntry();
+    zipInputStream.close();
+    fileInputStream.close();
+  }
+
+  public static void zipDir(File dir, String zipFilePath) throws Exception {
+    FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
+    ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+    compress(dir, zipOutputStream, "");
+    zipOutputStream.close();
+    fileOutputStream.close();
+  }
+
+  private static void compress(File file, ZipOutputStream zipOutputStream, String baseDir) {
+    if (file.isFile()) {
+      FileUtil.compressFile(file, zipOutputStream, baseDir);
+    } else {
+      if (file.exists()) {
+        File[] children = file.listFiles();
+        if (children != null && children.length > 0) {
+          Stream.of(children)
+              .forEach(child -> {
+                FileUtil.compress(child, zipOutputStream,
+                    baseDir + file.getName() + File.separator);
+              });
+        }
+      }
+    }
+  }
+
+  private static void compressFile(File file, ZipOutputStream zipOutputStream, String basedir) {
+    if (!file.exists()) {
+      return;
+    }
+    int buffer = 8192;
+    try {
+      BufferedInputStream bufferedInputStream = new BufferedInputStream(
+          new FileInputStream(file));
+      ZipEntry entry = new ZipEntry(basedir + file.getName());
+      zipOutputStream.putNextEntry(entry);
+      int count;
+      byte data[] = new byte[buffer];
+      while ((count = bufferedInputStream.read(data, 0, buffer)) != -1) {
+        zipOutputStream.write(data, 0, count);
+      }
+      bufferedInputStream.close();
+
+    } catch (Exception e) {
+      logger.error("Compress File Error!", e);
+    }
+  }
+
+```
+
 > 归并排序算法
 
 ```java

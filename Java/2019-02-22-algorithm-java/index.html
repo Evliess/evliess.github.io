@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.5.0">
     
     
       
@@ -46,7 +46,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -57,7 +57,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
     
     
       
@@ -737,52 +737,82 @@
 <blockquote>
 <p>压缩算法</p>
 </blockquote>
-<div class="codehilite"><pre><span></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">zipDir</span><span class="o">(</span><span class="n">File</span> <span class="n">dir</span><span class="o">,</span> <span class="n">String</span> <span class="n">zipFilePath</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-    <span class="n">FileOutputStream</span> <span class="n">fileOutputStream</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileOutputStream</span><span class="o">(</span><span class="n">zipFilePath</span><span class="o">);</span>
-    <span class="n">ZipOutputStream</span> <span class="n">zipOutputStream</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ZipOutputStream</span><span class="o">(</span><span class="n">fileOutputStream</span><span class="o">);</span>
-    <span class="n">compress</span><span class="o">(</span><span class="n">dir</span><span class="o">,</span> <span class="n">zipOutputStream</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">);</span>
-    <span class="n">zipOutputStream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-    <span class="n">fileOutputStream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-  <span class="o">}</span>
+<div class="codehilite"><pre><span></span>  public static void unzip(File zipFile, String destPath) throws Exception {
+    File dest = new File(destPath);
+    if (!dest.exists()) {
+      dest.mkdirs();
+    }
+    if (!zipFile.exists()) {
+      return;
+    }
+    FileInputStream fileInputStream = new FileInputStream(zipFile);
+    ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+    ZipEntry zipEntry = zipInputStream.getNextEntry();
+    byte[] buffer = new byte[8092];
+    while (zipEntry != null) {
+      String fileName = zipEntry.getName();
+      File newFile = new File(destPath + File.separator + fileName);
+      new File(newFile.getParent()).mkdirs();
+      FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+      int len = 0;
+      while ((len = zipInputStream.read(buffer)) &gt; 0) {
+        fileOutputStream.write(buffer, 0, len);
+      }
+      fileOutputStream.close();
+      zipInputStream.closeEntry();
+      zipEntry = zipInputStream.getNextEntry();
+    }
+    zipInputStream.closeEntry();
+    zipInputStream.close();
+    fileInputStream.close();
+  }
 
-  <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">compress</span><span class="o">(</span><span class="n">File</span> <span class="n">file</span><span class="o">,</span> <span class="n">ZipOutputStream</span> <span class="n">zipOutputStream</span><span class="o">,</span> <span class="n">String</span> <span class="n">baseDir</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">isFile</span><span class="o">())</span> <span class="o">{</span>
-      <span class="n">FileUtils</span><span class="o">.</span><span class="na">compressFile</span><span class="o">(</span><span class="n">file</span><span class="o">,</span> <span class="n">zipOutputStream</span><span class="o">,</span> <span class="n">baseDir</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span> <span class="o">{</span>
-        <span class="n">File</span><span class="o">[]</span> <span class="n">children</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">listFiles</span><span class="o">();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">children</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">children</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">children</span><span class="o">)</span>
-              <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">child</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="n">FileUtils</span><span class="o">.</span><span class="na">compress</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="n">zipOutputStream</span><span class="o">,</span>
-                    <span class="n">baseDir</span> <span class="o">+</span> <span class="n">file</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="n">File</span><span class="o">.</span><span class="na">separator</span><span class="o">);</span>
-              <span class="o">});</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+  public static void zipDir(File dir, String zipFilePath) throws Exception {
+    FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
+    ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+    compress(dir, zipOutputStream, &quot;&quot;);
+    zipOutputStream.close();
+    fileOutputStream.close();
+  }
 
-  <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">compressFile</span><span class="o">(</span><span class="n">File</span> <span class="n">file</span><span class="o">,</span> <span class="n">ZipOutputStream</span> <span class="n">zipOutputStream</span><span class="o">,</span> <span class="n">String</span> <span class="n">basedir</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">if</span> <span class="o">(!</span><span class="n">file</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span> <span class="o">{</span>
-    <span class="k">return</span><span class="o">;</span>
-  <span class="o">}</span>
-  <span class="kt">int</span> <span class="n">buffer</span> <span class="o">=</span> <span class="mi">8192</span><span class="o">;</span>
-  <span class="k">try</span> <span class="o">{</span>
-    <span class="n">BufferedInputStream</span> <span class="n">bufferedInputStream</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedInputStream</span><span class="o">(</span>
-        <span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">file</span><span class="o">));</span>
-    <span class="n">ZipEntry</span> <span class="n">entry</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ZipEntry</span><span class="o">(</span><span class="n">basedir</span> <span class="o">+</span> <span class="n">file</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="n">zipOutputStream</span><span class="o">.</span><span class="na">putNextEntry</span><span class="o">(</span><span class="n">entry</span><span class="o">);</span>
-    <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>
-    <span class="kt">byte</span> <span class="n">data</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">buffer</span><span class="o">];</span>
-    <span class="k">while</span> <span class="o">((</span><span class="n">count</span> <span class="o">=</span> <span class="n">bufferedInputStream</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">buffer</span><span class="o">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">zipOutputStream</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="n">bufferedInputStream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+  private static void compress(File file, ZipOutputStream zipOutputStream, String baseDir) {
+    if (file.isFile()) {
+      FileUtil.compressFile(file, zipOutputStream, baseDir);
+    } else {
+      if (file.exists()) {
+        File[] children = file.listFiles();
+        if (children != null &amp;&amp; children.length &gt; 0) {
+          Stream.of(children)
+              .forEach(child -&gt; {
+                FileUtil.compress(child, zipOutputStream,
+                    baseDir + file.getName() + File.separator);
+              });
+        }
+      }
+    }
+  }
 
-  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">LoggerUtil</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;Compress File Error!&quot;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  private static void compressFile(File file, ZipOutputStream zipOutputStream, String basedir) {
+    if (!file.exists()) {
+      return;
+    }
+    int buffer = 8192;
+    try {
+      BufferedInputStream bufferedInputStream = new BufferedInputStream(
+          new FileInputStream(file));
+      ZipEntry entry = new ZipEntry(basedir + file.getName());
+      zipOutputStream.putNextEntry(entry);
+      int count;
+      byte data[] = new byte[buffer];
+      while ((count = bufferedInputStream.read(data, 0, buffer)) != -1) {
+        zipOutputStream.write(data, 0, count);
+      }
+      bufferedInputStream.close();
+
+    } catch (Exception e) {
+      logger.error(&quot;Compress File Error!&quot;, e);
+    }
+  }
 </pre></div>
 
 
@@ -1036,7 +1066,7 @@
       
     </div>
     
-      <script src="../../assets/javascripts/application.ac79c3b0.js"></script>
+      <script src="../../assets/javascripts/application.a8b5e56f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

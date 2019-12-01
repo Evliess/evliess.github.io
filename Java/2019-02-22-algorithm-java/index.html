@@ -500,8 +500,49 @@
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
+    压缩算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    归并排序算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    快速排序算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    二分查找算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    串的查找算法
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
     参考链接
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -711,8 +752,49 @@
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
+    压缩算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    归并排序算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    快速排序算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    二分查找算法
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    串的查找算法
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
     参考链接
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -734,9 +816,7 @@
                 
                 
                 <h1 id="common-algorithm">Common algorithm<a class="headerlink" href="#common-algorithm" title="Permanent link">&para;</a></h1>
-<blockquote>
-<p>压缩算法</p>
-</blockquote>
+<h2 id="_1">压缩算法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">unzip</span><span class="o">(</span><span class="n">File</span> <span class="n">zipFile</span><span class="o">,</span> <span class="n">String</span> <span class="n">destPath</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
     <span class="n">File</span> <span class="n">dest</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">destPath</span><span class="o">);</span>
     <span class="k">if</span> <span class="o">(!</span><span class="n">dest</span><span class="o">.</span><span class="na">exists</span><span class="o">())</span> <span class="o">{</span>
@@ -816,9 +896,7 @@
 </pre></div>
 
 
-<blockquote>
-<p>归并排序算法</p>
-</blockquote>
+<h2 id="_2">归并排序算法<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">mergeSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">array</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
       <span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
           <span class="c1">//分解的最终结果，每个数组只有一个元素</span>
@@ -866,9 +944,7 @@
 </pre></div>
 
 
-<blockquote>
-<p>快速排序算法</p>
-</blockquote>
+<h2 id="_3">快速排序算法<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span>  <span class="kd">private</span> <span class="kt">int</span> <span class="nf">getBasePosition</span><span class="o">(</span><span class="kt">int</span> <span class="n">array</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">L</span><span class="o">,</span> <span class="kt">int</span> <span class="n">R</span><span class="o">)</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="n">array</span><span class="o">[</span><span class="n">L</span><span class="o">];</span>
     <span class="kt">int</span> <span class="n">temp</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">;</span>
@@ -910,9 +986,7 @@
 </pre></div>
 
 
-<blockquote>
-<p>二分查找算法</p>
-</blockquote>
+<h2 id="_4">二分查找算法<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><span class="c1">//递归实现</span>
 <span class="kd">private</span> <span class="kt">int</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="o">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">end</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>   <span class="c1">//算middle的位置一定要是(start + end)/2 , 想想为什么不能是end/2?</span>
@@ -949,9 +1023,7 @@
 </pre></div>
 
 
-<blockquote>
-<p>串的查找算法</p>
-</blockquote>
+<h2 id="_5">串的查找算法<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><span class="c1">//如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">strMatch_1</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">source</span><span class="o">,</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
@@ -985,7 +1057,7 @@
 </pre></div>
 
 
-<h4 id="_1">参考链接<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
+<h4 id="_6">参考链接<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
                 
                   
                 

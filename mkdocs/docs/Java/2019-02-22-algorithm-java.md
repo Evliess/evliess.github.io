@@ -8,7 +8,7 @@ date: 2018-02-22 11:03:55
 # Common algorithm
 
 
-> 压缩算法
+## 压缩算法
 
 ```java
   public static void unzip(File zipFile, String destPath) throws Exception {
@@ -90,7 +90,7 @@ date: 2018-02-22 11:03:55
 
 ```
 
-> 归并排序算法
+## 归并排序算法
 
 ```java
   public static void mergeSort(int array[], int start, int end) {
@@ -141,7 +141,7 @@ date: 2018-02-22 11:03:55
 
 ```
 
-> 快速排序算法
+## 快速排序算法
 
 ```java
   private int getBasePosition(int array[], int L, int R) {
@@ -185,7 +185,7 @@ date: 2018-02-22 11:03:55
 
 ```
 
-> 二分查找算法
+## 二分查找算法
 
 ```java
 //递归实现
@@ -224,7 +224,7 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 ```
 
-> 串的查找算法
+## 串的查找算法
 
 ```java
 //如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1

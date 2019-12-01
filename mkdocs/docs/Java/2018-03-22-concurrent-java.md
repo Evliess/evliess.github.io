@@ -84,7 +84,7 @@ JVM的有序性表现为：如果在本线程内观察，所有的操作都是�
 ReentrantLock有两种实现，一种是公平锁，另外一种是非公平锁。公平锁就是一个线程等待获取某个锁的时间最长，那么该线程最先获得锁。而非公平锁则不一定。
 
 ## 4.1 如何使用
-{% highlight Java %}
+```java
 	//公平锁new ReentrantLock(true),非公平锁new ReentrantLock(false)[推荐]
     Lock lock = new ReentrantLock(false);   
     lock.lock();  
@@ -94,11 +94,11 @@ ReentrantLock有两种实现，一种是公平锁，另外一种是非公平锁�
     finally {  
       lock.unlock();   
     }  
-{% endhighlight %}
+```
 
 ## 4.2 通过代码来看如何实现  
 **非公平锁:**  
-{% highlight Java %}
+```java
 static final class NonfairSync extends Sync {
         final void lock() {
         //如果CAS成功，将当前线程设置为资源的持有者
@@ -136,9 +136,9 @@ static final class NonfairSync extends Sync {
             return false;
         }
 
-{% endhighlight %}
+```
 **公平锁:**  
-{% highlight Java %}
+```java
 static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
 
@@ -172,11 +172,11 @@ static final class FairSync extends Sync {
         }
     }
 
-{% endhighlight %}
+```
 
 # 5. Read / Write Locks  
 ReentrantReadWriteLock是ReadWriteLock的一种实现，该类包含两个锁，一个是读锁，一个是写锁。  
-{% highlight Java %}
+```java
 public ReentrantReadWriteLock(boolean fair) {
         sync = fair ? new FairSync() : new NonfairSync();
         //读锁
@@ -184,9 +184,9 @@ public ReentrantReadWriteLock(boolean fair) {
         //写锁
         writerLock = new WriteLock(this);
     }
-{% endhighlight %}
+```
 写锁的申请条件:  
-{% highlight Java %}
+```java
 /**
  * 申请写锁.
  *
@@ -200,7 +200,7 @@ public void lock() {
 }
 {% endhighlight%}
 读锁的申请条件:  
-{% highlight Java %}
+```java
     /**
      * 申请读锁.
      *
@@ -210,10 +210,10 @@ public void lock() {
     public void lock() {
         sync.acquireShared(1);
     }
-{% endhighlight %}
+```
 # 6. ExecutorService
 
-{% highlight Java %}
+```java
 ExecutorService fixedThreadPool =Executors.newFixedThreadPool(9);
 	fixedThreadPool.execute(new Thread() {public void run() {
 		//operation
@@ -221,12 +221,12 @@ ExecutorService fixedThreadPool =Executors.newFixedThreadPool(9);
 ExecutorService singleThreadPool =Executors.newSingleThreadExecutor();
 ExecutorService cachedThreadPool =Executors.newCachedThreadPool();
 
-{% endhighlight %}
+```
 
 # 7. CountDownLatch
 > 一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成.
 
-{% highlight Java %}
+```java
 public class Test {
 	public static void main(String[] args) {
 		//主线程中创建一个CountDownLatch对象,构造函数的参数表示线程的数目
@@ -256,19 +256,19 @@ class MyThread extends Thread {
 		countDownLatch.countDown();
 	}
 }
-{% endhighlight %}
+```
 
 # 8. Future类的使用  
 > Future 是一个接口，通过它可以获得线程执行完成之后的返回值. Future没有提供线程完成通知的机制，只能通过轮询调用isDone()方法或者调用get()方法阻塞线程来获得结果。
 
-{% highlight Java %}
+```java
 boolean cancel(boolean mayInterruptIfRunning);
 boolean isCancelled();
 boolean isDone();
 V get() throws InterruptedException, ExecutionException;
 V get(long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException;
-{% endhighlight %}
+```
 
 > Java8 提供的CompletableFuture可以弥补Future的不足,让Java拥有了完整的非阻塞编程模型.
 

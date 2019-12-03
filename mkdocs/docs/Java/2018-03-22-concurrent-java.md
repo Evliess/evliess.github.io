@@ -5,7 +5,9 @@ category: java
 date: 2018-03-22 15:17:55
 ---
 
-# 1. 计算机硬件架构的简单图示  
+# Java并发基础
+
+## 1. 计算机硬件架构的简单图示  
 一个典型的CPU架构  
 
 ![CPU架构](./images/java/cpu_structure.png)  
@@ -20,13 +22,15 @@ date: 2018-03-22 15:17:55
 基于高速缓存的存储交互很好地解决了处理器与内存的速度矛盾，但是引入了一个新的问题：缓存一致性（Cache Coherence）。在多处理器系统中，每个处理器都有自己的高速缓存，而他们又共享同一主存，如下图所示：多个处理器运算任务都涉及同一块主存，需要一种协议可以保障数据的一致性，这类协议有MSI、MESI、MOSI及Dragon Protocol等。
 除此之外，为了使得处理器内部的运算单元能尽可能被充分利用，处理器可能会对输入代码进行乱序执行（Out-Of-Order Execution）优化，处理器会在计算之后将对乱序执行的代码进行结果重组，保证结果准确性。与处理器的乱序执行优化类似，Java虚拟机的即时编译器中也有类似的指令重排序（Instruction Recorder）优化。
 
-# 2. Java内存模型(Java Memory Model, JMM)
+## 2. Java内存模型(Java Memory Model, JMM)
 Java虚拟机规范中定义了Java内存模型(Java Memory Model，JMM),用于屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的并发效果，JMM规范了Java虚拟机与计算机内存是如何协同工作的：规定了一个线程如何和何时可以看到由其他线程修改过后的共享变量的值，以及在必须时如何同步的访问共享变量.
 
 ![JMM](./images/java/jmm.jpg)  
 
-Java内存模型通过图中的八种操作来完成变量从主内存加载到工作内存，然后从工作内存同步到主内存。
-**Lock --> Read --> Load --> Use --> Assign --> Store --> Write --> Unlock**  
+Java内存模型通过图中的八种操作来完成变量从主内存加载到工作内存，然后从工作内存同步到主内存.  
+
+> Lock --> Read --> Load --> Use --> Assign --> Store --> Write --> Unlock    
+
 JMM 要求这个过程必须按顺序执行，但是可以不必连续执行！举个栗子：（Read A，Read B, Load B, Load A, Store B, Write B, Store A, Write A）。
 此外，JMM还规定了执行上述8个操作必须满足以下规则：
 - 不允许read和load、store和write操作之一单独出现  
@@ -38,8 +42,9 @@ JMM 要求这个过程必须按顺序执行，但是可以不必连续执行！�
 - 如果一个变量事先没有被lock操作锁定，则不允许对它执行unlock操作；也不允许去unlock一个被其他线程锁定的变量  
 - 对一个变量执行unlock操作之前，必须先把此变量同步到主内存中（执行store和write操作）  
 
-**JMM 使用先行发生（happens-before）原则来确定一个内存访问在并发环境中是否安全**  
-## 2.1 先行发生（happens-before） 概念  
+>JMM 使用先行发生（happens-before）原则来确定一个内存访问在并发环境中是否安全
+
+### 2.1 先行发生（happens-before） 概念  
 一句话概括：操作A先行发生于操作B，操作A的影响会被操作B观察到  
 主要包括以下情况：  
 - 程序次序规则(Program Order Rule)： 在同一个线程中，按照程序代码顺序，书写在前面的操作先行发生于书写在后面的操纵。准确的说是程序的控制流顺序，考虑分支和循环等。  
@@ -51,39 +56,36 @@ JMM 要求这个过程必须按顺序执行，但是可以不必连续执行！�
 - 对象终结规则(Finilizer Rule)：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize()的开始。  
 - 传递性(Transitivity)：如果操作A 先行发生于操作B，操作B 先行发生于操作C，那么可以得出A 先行发生于操作C。  
 
-**敲黑板!!!**  
-不同操作时间先后顺序与先行发生原则之间没有关系，二者不能相互推断，衡量并发安全问题不能受到时间顺序的干扰，一切都要以happens-before原则为准.  
-**敲黑板!!!**  
-
-## 2.2 Volatile 变量的两种特性  
+  
+> 不同操作时间先后顺序与先行发生原则之间没有关系，二者不能相互推断，衡量并发安全问题不能受到时间顺序的干扰，一切都要以happens-before原则为准.  
+  
+### 2.2 Volatile 变量的两种特性  
 - 保持变量的可见性  
 - 屏蔽指令重排序  
 
-## 2.3 long/double非原子协定  
+### 2.3 long/double非原子协定  
 允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为2次32位操作进行  
 
-# 3. JMM的四个特性
-## 3.1 原子性  
+## 3. JMM的四个特性
+### 3.1 原子性  
 JMM保证的原子性变量操作包括read、load、use、assign、store、write，而long、double非原子协定导致的非原子性操作基本可以忽略。  
-## 3.2 可见性  
+### 3.2 可见性  
 可见性是指当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。JMM在变量修改后将新值同步回主内存，依赖主内存作为媒介，在变量被线程读取前从内存刷新变量新值，保证变量的可见性。普通变量和volatile变量都是如此，只不过volatile的特殊规则保证了这种可见性是立即得知的，而普通变量并不具备这种严格的可见性。除了volatile外，synchronized和final也能保证可见性。  
-## 3.3 有序性  
+### 3.3 有序性  
 JVM的有序性表现为：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。
-## 3.4 重排序  
+### 3.4 重排序  
 在执行程序时为了提高性能，编译器和处理器经常会对指令进行重排序。从硬件架构上来说，指令重排序是指CPU采用了允许将多条指令不按照程序规定的顺序，分开发送给各个相应电路单元处理，而不是指令任意重排。  
 - 编译器优化的重排序  
 - 指令级并行的重排序  
 - 内存系统的重排序  
 
+> 源代码 --> 编译器优化的重排序 --> 指令级并行的重排序 --> 内存系统的重排序 --> 最终执行
 
-**源代码 --> 编译器优化的重排序 --> 指令级并行的重排序 --> 内存系统的重排序 --> 最终执行**
-
-
-# 4. Java中的ReentrantLock  
+## 4. Java中的ReentrantLock  
 一个线程如果已经获得一个对象的锁，那么该线程在持有锁的期间可以重复多次获得改对象的锁。Java中的synchronized块是可以被重入的。当多个线程对共享资源激烈竞争的时候，使CPU减少频繁的线程调度，是线程的执行效率更高。  
 ReentrantLock有两种实现，一种是公平锁，另外一种是非公平锁。公平锁就是一个线程等待获取某个锁的时间最长，那么该线程最先获得锁。而非公平锁则不一定。
 
-## 4.1 如何使用
+### 4.1 如何使用
 ```java
 	//公平锁new ReentrantLock(true),非公平锁new ReentrantLock(false)[推荐]
     Lock lock = new ReentrantLock(false);   
@@ -96,9 +98,9 @@ ReentrantLock有两种实现，一种是公平锁，另外一种是非公平锁�
     }  
 ```
 
-## 4.2 通过代码来看如何实现  
-**非公平锁:**  
+### 4.2 通过代码来看如何实现   
 ```java
+//非公平锁
 static final class NonfairSync extends Sync {
         final void lock() {
         //如果CAS成功，将当前线程设置为资源的持有者
@@ -136,9 +138,8 @@ static final class NonfairSync extends Sync {
             return false;
         }
 
-```
-**公平锁:**  
-```java
+
+//非公平锁
 static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
 
@@ -174,15 +175,15 @@ static final class FairSync extends Sync {
 
 ```
 
-# 5. Read / Write Locks  
+## 5. Read / Write Locks  
 ReentrantReadWriteLock是ReadWriteLock的一种实现，该类包含两个锁，一个是读锁，一个是写锁。  
 ```java
 public ReentrantReadWriteLock(boolean fair) {
-        sync = fair ? new FairSync() : new NonfairSync();
-        //读锁
-        readerLock = new ReadLock(this);
-        //写锁
-        writerLock = new WriteLock(this);
+    sync = fair ? new FairSync() : new NonfairSync();
+    //读锁
+    readerLock = new ReadLock(this);
+    //写锁
+    writerLock = new WriteLock(this);
     }
 ```
 写锁的申请条件:  
@@ -197,21 +198,18 @@ public ReentrantReadWriteLock(boolean fair) {
  */
 public void lock() {
     sync.acquire(1);
+} 
+/**
+    * 申请读锁.
+    *
+    * 1.该线程申请时刻没有其他线程持有写锁。  
+    * 2.该线程申请的时刻如果有其他的线程正在持有写锁，则当前的线程将不会被线程调度器调度将会进入lies dormant状态，只至该线程获得读锁.
+    */
+public void lock() {
+    sync.acquireShared(1);
 }
-{% endhighlight%}
-读锁的申请条件:  
-```java
-    /**
-     * 申请读锁.
-     *
-     * 1.该线程申请时刻没有其他线程持有写锁。  
-     * 2.该线程申请的时刻如果有其他的线程正在持有写锁，则当前的线程将不会被线程调度器调度将会进入lies dormant状态，只至该线程获得读锁.
-     */
-    public void lock() {
-        sync.acquireShared(1);
-    }
 ```
-# 6. ExecutorService
+## 6. ExecutorService
 
 ```java
 ExecutorService fixedThreadPool =Executors.newFixedThreadPool(9);
@@ -223,7 +221,7 @@ ExecutorService cachedThreadPool =Executors.newCachedThreadPool();
 
 ```
 
-# 7. CountDownLatch
+## 7. CountDownLatch
 > 一般用于主线程执行某些指令之前，需要等待其他的几个线程全部完成.
 
 ```java
@@ -276,7 +274,7 @@ V get(long timeout, TimeUnit unit)
 public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {}
 ```
 
-# 9. Java中的CAS  
+## 9. Java中的CAS  
 CAS是compare and swap 的缩写。随着Java的发展，Java本地方法调用(JNI)的出现，使得Java程序可以越过JVM而直接调用本地方法，这为Java实现并发拓展一条新的途径。CAS理论是java concurrent包的理论基石。  
 
 Java可以通过synchronized实现线程之间同步，但是这种方法有以下弊端:  
@@ -288,7 +286,7 @@ Synchronized就是一种独占锁或者是悲观锁，乐观锁就是每次操�
 
 CAS包含三个操作数:内存位置(V), 预期原值(A)和新值(B)。如果内存位置的当前值与预期原值一样，那么处理器就会将新值更新内存位置(V)的值。否则，不做任何操作，只需要告诉我内存位置(V)的值就好了。无论哪种情况，它都会在 CAS指令之前返回该位置的值。
 
-# 10. JVM内存模型 (jdk1.8)
+## 10. JVM内存模型 (jdk1.8)
 
 ![JVM内存模型 jdk1.8](./images/java/jvm.jpg) 
 
@@ -314,7 +312,7 @@ jdk1.8之前使用PermGen存放类的元数据信息，在jdk1.8中用元数据�
 
 
 
-### 引用  
+#### 引用  
 - [参考链接1](https://blog.csdn.net/u011080472/article/details/51337422)
 - [参考链接2](http://tutorials.jenkov.com/java-concurrency/java-memory-model.html)
 - [参考链接3](https://blog.csdn.net/fw0124/article/details/6672522)

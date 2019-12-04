@@ -460,6 +460,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#spring" class="md-nav__link">
+    Spring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springboot-mockitoannotations-example" class="md-nav__link">
+    Springboot MockitoAnnotations example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springboot-mock" class="md-nav__link">
+    Springboot mock表单绑定的对象
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#springboot-mockmvc-httpsession" class="md-nav__link">
     Springboot mockMvc 使用HttpSession
   </a>
@@ -814,6 +835,27 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#spring" class="md-nav__link">
+    Spring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springboot-mockitoannotations-example" class="md-nav__link">
+    Springboot MockitoAnnotations example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#springboot-mock" class="md-nav__link">
+    Springboot mock表单绑定的对象
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#springboot-mockmvc-httpsession" class="md-nav__link">
     Springboot mockMvc 使用HttpSession
   </a>
@@ -954,6 +996,38 @@
 </pre></div>
 
 
+<h2 id="spring">Spring<a class="headerlink" href="#spring" title="Permanent link">&para;</a></h2>
+<h2 id="springboot-mockitoannotations-example">Springboot MockitoAnnotations example<a class="headerlink" href="#springboot-mockitoannotations-example" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span>  <span class="nd">@Mock</span>
+  <span class="kd">private</span> <span class="n">TeamService</span> <span class="n">teamService</span><span class="o">;</span>
+
+  <span class="nd">@Mock</span>
+  <span class="kd">private</span> <span class="n">UserService</span> <span class="n">userService</span><span class="o">;</span>
+
+  <span class="nd">@Before</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">MockitoAnnotations</span><span class="o">.</span><span class="na">initMocks</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">mockMvc</span> <span class="o">=</span> <span class="n">MockMvcBuilders</span><span class="o">.</span><span class="na">standaloneSetup</span><span class="o">(</span><span class="n">userController</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="err">···</span>
+  <span class="n">when</span><span class="o">(</span><span class="n">teamService</span><span class="o">.</span><span class="na">findTeamById</span><span class="o">(</span><span class="mi">1L</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">team</span><span class="o">);</span>
+  <span class="n">when</span><span class="o">(</span><span class="n">userService</span><span class="o">.</span><span class="na">checkUserExist</span><span class="o">(</span><span class="n">team</span><span class="o">,</span> <span class="mi">1L</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">&quot;error&quot;</span><span class="o">);</span>
+  <span class="err">···</span>
+</pre></div>
+
+
+<h2 id="springboot-mock">Springboot mock表单绑定的对象<a class="headerlink" href="#springboot-mock" title="Permanent link">&para;</a></h2>
+<div class="codehilite"><pre><span></span><span class="c1">//绑定的表单对象</span>
+<span class="n">UserViewObject</span> <span class="n">userViewObject</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UserViewObject</span><span class="o">();</span>
+    <span class="n">userViewObject</span><span class="o">.</span><span class="na">setType</span><span class="o">(</span><span class="s">&quot;teacher&quot;</span><span class="o">);</span>
+    <span class="n">MvcResult</span> <span class="n">result</span> <span class="o">=</span> <span class="n">mockMvc</span>
+        <span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">MockMvcRequestBuilderUtils</span>
+            <span class="o">.</span><span class="na">postForm</span><span class="o">(</span><span class="s">&quot;/users/&quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;/type&quot;</span><span class="o">,</span> <span class="n">userViewObject</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">status</span><span class="o">().</span><span class="na">is2xxSuccessful</span><span class="o">()).</span><span class="na">andReturn</span><span class="o">();</span>
+</pre></div>
+
+
 <h2 id="springboot-mockmvc-httpsession">Springboot mockMvc 使用HttpSession<a class="headerlink" href="#springboot-mockmvc-httpsession" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><span class="n">MockHttpSession</span> <span class="n">httpSession</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MockHttpSession</span><span class="o">();</span>
 <span class="n">httpSession</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">();</span>
@@ -1033,9 +1107,9 @@
 <blockquote>
 <p>@RequestParam  </p>
 </blockquote>
-<div class="codehilite"><pre><span></span><span class="c1">// GET /pets?color=red</span>
+<div class="codehilite"><pre><span></span><span class="c1">// GET /pets?color=red&amp;&amp;weight=10</span>
 <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;/pets&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">String</span> <span class="n">color</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">String</span> <span class="n">color</span><span class="o">,</span> <span class="nd">@RequestParam</span><span class="o">(</span><span class="n">required</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span> <span class="kt">int</span> <span class="n">weight</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// ...</span>
     <span class="o">}</span>
 </pre></div>

@@ -72,6 +72,46 @@ public class StaticAuthenticationProvider implements AuthenticationProvider {
 
 ```
 
+## Spring 
+
+## Springboot MockitoAnnotations example
+
+```java
+
+  @Mock
+  private TeamService teamService;
+
+  @Mock
+  private UserService userService;
+
+  @Before
+  public void setUp() {
+    MockitoAnnotations.initMocks(this);
+    this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+  }
+
+  ···
+  when(teamService.findTeamById(1L)).thenReturn(team);
+  when(userService.checkUserExist(team, 1L)).thenReturn("error");
+  ···
+
+```
+
+
+## Springboot mock表单绑定的对象
+
+```java
+
+//绑定的表单对象
+UserViewObject userViewObject = new UserViewObject();
+    userViewObject.setType("teacher");
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilderUtils
+            .postForm("/users/" + user.getId() + "/type", userViewObject))
+        .andExpect(status().is2xxSuccessful()).andReturn();
+
+```
+
 ## Springboot mockMvc 使用HttpSession
 
 ```java
@@ -156,9 +196,9 @@ $("#uploadTestData").on('shown.bs.modal' , function(e) {
 > @RequestParam  
 
 ```java
-// GET /pets?color=red
+// GET /pets?color=red&&weight=10
 @RequestMapping(value="/pets", method=RequestMethod.GET)
-	public User getUser(@RequestParam String color) {
+	public User getUser(@RequestParam String color, @RequestParam(required = false) int weight) {
 		// ...
 	}
 ```

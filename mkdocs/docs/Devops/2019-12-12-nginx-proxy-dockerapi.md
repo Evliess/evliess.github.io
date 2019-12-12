@@ -19,15 +19,15 @@ authorityKeyIdentifier = keyid
 ```
 [openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
 #CA证书及密钥生成方法一----直接生成CA密钥及其自签名证书
-openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com"
+openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com"
 
 #服务器证书及密钥生成方法一----直接生成服务器密钥及待签名证书
-openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com"
+openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com"
 #使用CA证书及密钥对服务器证书进行签名：
 openssl x509 -req -days 365 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile ./openssl.cnf -extensions v3_ca
 
 #客户端证书及密钥生成方法一----直接生成客户端密钥及待签名证书
-openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com"
+openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com"
 #使用CA证书及密钥对客户端证书进行签名
 openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile ./openssl.cnf -extensions v3_ca
 

@@ -701,9 +701,7 @@
                 
                 
                 <h1 id="how-nginx-proxy-docker-api">How nginx proxy docker api<a class="headerlink" href="#how-nginx-proxy-docker-api" title="Permanent link">&para;</a></h1>
-<ol>
-<li>Vi openssl.cnf</li>
-</ol>
+<p>1. Vi openssl.cnf</p>
 <div class="codehilite"><pre><span></span>[ v3_ca ]
 basicConstraints = CA:true
 subjectKeyIdentifier = hash
@@ -711,9 +709,7 @@ authorityKeyIdentifier = keyid
 </pre></div>
 
 
-<ol>
-<li>Generate certification</li>
-</ol>
+<p>2. Generate certification</p>
 <div class="codehilite"><pre><span></span>[openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
 #CA证书及密钥生成方法一----直接生成CA密钥及其自签名证书
 openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
@@ -734,17 +730,13 @@ openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreat
 </pre></div>
 
 
-<ol>
-<li>Verify vertification </li>
-</ol>
+<p>3. Verify vertification </p>
 <div class="codehilite"><pre><span></span>openssl x509 -in client-cert.pem -noout -purpose | grep SSL
 openssl x509 -in server-cert.pem -noout -purpose | grep SSL
 </pre></div>
 
 
-<ol>
-<li>vi ssl.conf for nginx</li>
-</ol>
+<p>4. vi ssl.conf for nginx</p>
 <div class="codehilite"><pre><span></span>upstream docker-ssl {
   server unix:/var/run/docker.sock fail_timeout=0;
 }
@@ -781,25 +773,19 @@ server {
 </pre></div>
 
 
-<ol>
-<li>Vi dockerfile</li>
-</ol>
+<p>5. Vi dockerfile</p>
 <div class="codehilite"><pre><span></span>FROM nginx
 VOLUME [&quot;/var/run&quot;, &quot;/etc/nginx/certs&quot;]
 </pre></div>
 
 
-<ol>
-<li>Build image</li>
-</ol>
+<p>6. Build image</p>
 <div class="codehilite"><pre><span></span>docker rmi -f docker-api-nginx
 docker build -t docker-api-nginx .
 </pre></div>
 
 
-<ol>
-<li>Run with docker</li>
-</ol>
+<p>7. Run with docker</p>
 <div class="codehilite"><pre><span></span>docker run --rm --name docker-api-nginx -d -p 7443:443 -p 4080:80 \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v /root/nginx-ca/ssl.conf:/etc/nginx/conf.d/ssl.conf \
@@ -807,9 +793,7 @@ docker build -t docker-api-nginx .
 </pre></div>
 
 
-<ol>
-<li>Used scripts</li>
-</ol>
+<p>8. Used scripts</p>
 <div class="codehilite"><pre><span></span>nginx -t -c /etc/nginx/nginx.conf
 sudo systemctl restart nginx
 tail /var/log/nginx/error.log 

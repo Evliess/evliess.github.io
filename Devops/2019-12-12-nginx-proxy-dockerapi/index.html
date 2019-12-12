@@ -13,7 +13,7 @@
         <meta name="description" content="Some fucking useful thinks in work">
       
       
-        <link rel="canonical" href="https://www.jackgui.top/Devops/2019-09-20-docker-jenkins-devops/">
+        <link rel="canonical" href="https://www.jackgui.top/Devops/2019-12-12-nginx-proxy-dockerapi/">
       
       
         <meta name="author" content="wait-play Sh">
@@ -42,7 +42,7 @@
     
     
       
-        <title>Setup Jenkins in docker</title>
+        <title>How nginx proxy docker api</title>
       
     
     
@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#how-to-config-jenkins-using-host-jdk-and-maven" tabindex="1" class="md-skip">
+      <a href="#how-nginx-proxy-docker-api" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -142,7 +142,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Setup Jenkins in docker
+                How nginx proxy docker api
               
             </span>
           
@@ -314,6 +314,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-nav__link">
+      Setup Jenkins in docker
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -324,22 +336,10 @@
       
     
     
-    <a href="./" title="Setup Jenkins in docker" class="md-nav__link md-nav__link--active">
-      Setup Jenkins in docker
-    </a>
-    
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../2019-12-12-nginx-proxy-dockerapi/" title="How nginx proxy docker api" class="md-nav__link">
+    <a href="./" title="How nginx proxy docker api" class="md-nav__link md-nav__link--active">
       How nginx proxy docker api
     </a>
+    
   </li>
 
         
@@ -700,63 +700,121 @@
               
                 
                 
-                <h1 id="how-to-config-jenkins-using-host-jdk-and-maven">How to config jenkins using host JDK and Maven<a class="headerlink" href="#how-to-config-jenkins-using-host-jdk-and-maven" title="Permanent link">&para;</a></h1>
-<p>1. Download jenkins image  </p>
-<div class="codehilite"><pre><span></span>docker pull jenkins/jenkins:lts
+                <h1 id="how-nginx-proxy-docker-api">How nginx proxy docker api<a class="headerlink" href="#how-nginx-proxy-docker-api" title="Permanent link">&para;</a></h1>
+<ol>
+<li>Vi openssl.cnf</li>
+</ol>
+<div class="codehilite"><pre><span></span>[ v3_ca ]
+basicConstraints = CA:true
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
 </pre></div>
 
 
-<p>2. Custom dockerfile</p>
-<div class="codehilite"><pre><span></span>FROM jenkins/jenkins:lts
-# if we want to install via apt
-USER root
-RUN apt-get update -y &amp;&amp; apt-get install -y libltdl-dev &amp;&amp; rm -rf /var/lib/apt/lists/*
-# drop back to the regular jenkins user - good practice
-USER jenkins
+<ol>
+<li>Generate certification</li>
+</ol>
+<div class="codehilite"><pre><span></span>[openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
+#CA证书及密钥生成方法一----直接生成CA密钥及其自签名证书
+openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.crt -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+
+#服务器证书及密钥生成方法一----直接生成服务器密钥及待签名证书
+openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+#使用CA证书及密钥对服务器证书进行签名：
+openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile ./openssl.cnf -extensions v3_ca
+#openssl rsa -in server.pem -out server.pem
+#openssl rsa -in server.pem -out server.key
+
+#客户端证书及密钥生成方法一----直接生成客户端密钥及待签名证书
+openssl req -newkey rsa:2048 -nodes -keyout client.pem -out client.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+#使用CA证书及密钥对客户端证书进行签名
+openssl x509 -req -days 365 -in client.csr -CA ca.crt -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile ./openssl.cnf -extensions v3_ca
+#openssl rsa -in client.pem -out client.pem
+#openssl rsa -in client.pem -out client.key
 </pre></div>
 
 
-<p>3. Build a new image</p>
-<div class="codehilite"><pre><span></span>docker build -t waitplay/jenkins:lst .
+<ol>
+<li>Verify vertification </li>
+</ol>
+<div class="codehilite"><pre><span></span>openssl x509 -in client-cert.pem -noout -purpose | grep SSL
+openssl x509 -in server-cert.pem -noout -purpose | grep SSL
 </pre></div>
 
 
-<p>4. Start a contain to run jenkins</p>
-<div class="codehilite"><pre><span></span>docker run -u root --rm -d -p 32772:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v $(which docker-compose):/usr/local/bin/docker-compose -v /etc/localtime:/etc/localtime -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:lst
+<ol>
+<li>vi ssl.conf for nginx</li>
+</ol>
+<div class="codehilite"><pre><span></span>upstream docker-ssl {
+  server unix:/var/run/docker.sock fail_timeout=0;
+}
+server {
+    listen      443 ssl;
+    server_name   localhost;
+    ssl_certificate         /etc/nginx/certs/server-cert.pem;
+    ssl_certificate_key     /etc/nginx/certs/server-key.pem;
+    ssl_client_certificate  /etc/nginx/certs/ca.pem;
+    ssl_verify_client              on;
+#   ssl_verify_depth 3;
+
+   location / {
+      proxy_pass                 http://docker-ssl;
+      proxy_redirect             off;
+
+      proxy_set_header           Host             $host;
+      proxy_set_header           X-Real-IP        $remote_addr;
+      proxy_set_header           X-Forwarded-For  $proxy_add_x_forwarded_for;
+
+      client_max_body_size       10m;
+      client_body_buffer_size    128k;
+
+      proxy_connect_timeout      90;
+      proxy_send_timeout         120;
+      proxy_read_timeout         120;
+
+      proxy_buffer_size          4k;
+      proxy_buffers              4 32k;
+      proxy_busy_buffers_size    64k;
+      proxy_temp_file_write_size 64k;
+   }
+}
 </pre></div>
 
 
-<p>5. Download jdk-8u221-linux-x64.tar.gz
-. Download <a href="http://us.mirrors.quenda.co/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz">maven</a></p>
-<p>6. unzip</p>
-<div class="codehilite"><pre><span></span>mkdir -p /var/jenkins_home/globalEnvi
-chown -R 1000:1000 jenkins_home
-
-cd /var/jenkins_home/globalEnvi
-tar -zxvf jdk-8u221-linux-x64.tar.gz
-tar -zxvf apache-maven-3.6.2-bin.tar.gz
+<ol>
+<li>Vi dockerfile</li>
+</ol>
+<div class="codehilite"><pre><span></span>FROM nginx
+VOLUME [&quot;/var/run&quot;, &quot;/etc/nginx/certs&quot;]
 </pre></div>
 
 
-<p>7. Set Jenkins -&gt; configuration -&gt; add Environment variables</p>
-<div class="codehilite"><pre><span></span>JAVA_HOME=/var/jenkins_home/globalEnvi/jdk1.8.0_221
-CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
-M2_HOME=/var/jenkins_home/globalEnvi/apache-maven-3.6.2
-PATH=$JAVA_HOME/bin:$PATH
+<ol>
+<li>Build image</li>
+</ol>
+<div class="codehilite"><pre><span></span>docker rmi -f docker-api-nginx
+docker build -t docker-api-nginx .
 </pre></div>
 
 
-<p>8. Global Tool Configuration</p>
-<ul>
-<li>Maven Configuration
-  xxx/conf/setting.xml</li>
-<li>JDK</li>
-<li>MAVEN</li>
-</ul>
-<p>9. Test shell script</p>
-<div class="codehilite"><pre><span></span>java -version
-mvn -version
-docker -v
+<ol>
+<li>Run with docker</li>
+</ol>
+<div class="codehilite"><pre><span></span>docker run --rm --name docker-api-nginx -d -p 7443:443 -p 4080:80 \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v /root/nginx-ca/ssl.conf:/etc/nginx/conf.d/ssl.conf \
+-v /root/nginx-ca/certs:/etc/nginx/certs docker-api-nginx
+</pre></div>
+
+
+<ol>
+<li>Used scripts</li>
+</ol>
+<div class="codehilite"><pre><span></span>nginx -t -c /etc/nginx/nginx.conf
+sudo systemctl restart nginx
+tail /var/log/nginx/error.log 
+usermod -a -G www-data,docker $USER
+docker rmi -f docker-api-nginx
 </pre></div>
                 
                   
@@ -778,7 +836,7 @@ docker -v
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../2018-11-21-gitusage-devops/" title="Git Usage" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../2019-09-20-docker-jenkins-devops/" title="Setup Jenkins in docker" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -787,19 +845,19 @@ docker -v
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Git Usage
+                Setup Jenkins in docker
               </span>
             </div>
           </a>
         
         
-          <a href="../2019-12-12-nginx-proxy-dockerapi/" title="How nginx proxy docker api" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../Docker/2018-04-08-docker-compose-docker/" title="Docker Compose" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                How nginx proxy docker api
+                Docker Compose
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

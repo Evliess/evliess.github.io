@@ -15,7 +15,6 @@ basicConstraints = CA:true
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid
 ```
-
 2. Generate certification
 ```
 [openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
@@ -43,7 +42,6 @@ openssl x509 -req -days 365 -in client.csr -CA ca.crt -CAkey ca-key.pem -CAcreat
 openssl x509 -in client-cert.pem -noout -purpose | grep SSL
 openssl x509 -in server-cert.pem -noout -purpose | grep SSL
 ```
-
 4. vi ssl.conf for nginx
 
 ```
@@ -81,21 +79,18 @@ server {
    }
 }
 ```
-
 5. Vi dockerfile
 
 ```
 FROM nginx
 VOLUME ["/var/run", "/etc/nginx/certs"]
 ```
-
 6. Build image
 
 ```
 docker rmi -f docker-api-nginx
 docker build -t docker-api-nginx .
 ```
-
 7. Run with docker
 
 ```
@@ -104,7 +99,6 @@ docker run --rm --name docker-api-nginx -d -p 7443:443 -p 4080:80 \
 -v /root/nginx-ca/ssl.conf:/etc/nginx/conf.d/ssl.conf \
 -v /root/nginx-ca/certs:/etc/nginx/certs docker-api-nginx
 ```
-
 8. Used scripts
 
 ```

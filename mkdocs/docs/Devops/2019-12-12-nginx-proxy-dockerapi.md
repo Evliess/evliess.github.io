@@ -25,15 +25,11 @@ openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.p
 openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com"
 #使用CA证书及密钥对服务器证书进行签名：
 openssl x509 -req -days 365 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile ./openssl.cnf -extensions v3_ca
-#openssl rsa -in server.pem -out server.pem
-#openssl rsa -in server.pem -out server.key
 
 #客户端证书及密钥生成方法一----直接生成客户端密钥及待签名证书
 openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj "/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com"
 #使用CA证书及密钥对客户端证书进行签名
 openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile ./openssl.cnf -extensions v3_ca
-#openssl rsa -in client.pem -out client.pem
-#openssl rsa -in client.pem -out client.key
 
 ```
 

@@ -42,7 +42,7 @@
     
     
       
-        <title>How nginx proxy docker api</title>
+        <title>How to reverse proxy docker api with nginx</title>
       
     
     
@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#how-nginx-proxy-docker-api" tabindex="1" class="md-skip">
+      <a href="#how-to-reverse-proxy-docker-api-with-nginx" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -142,7 +142,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                How nginx proxy docker api
+                How to reverse proxy docker api with nginx
               
             </span>
           
@@ -336,8 +336,8 @@
       
     
     
-    <a href="./" title="How nginx proxy docker api" class="md-nav__link md-nav__link--active">
-      How nginx proxy docker api
+    <a href="./" title="How to reverse proxy docker api with nginx" class="md-nav__link md-nav__link--active">
+      How to reverse proxy docker api with nginx
     </a>
     
   </li>
@@ -700,7 +700,7 @@
               
                 
                 
-                <h1 id="how-nginx-proxy-docker-api">How nginx proxy docker api<a class="headerlink" href="#how-nginx-proxy-docker-api" title="Permanent link">&para;</a></h1>
+                <h1 id="how-to-reverse-proxy-docker-api-with-nginx">How to reverse proxy docker api with nginx<a class="headerlink" href="#how-to-reverse-proxy-docker-api-with-nginx" title="Permanent link">&para;</a></h1>
 <p>1. Vi openssl.cnf</p>
 <div class="codehilite"><pre><span></span>[ v3_ca ]
 basicConstraints = CA:true
@@ -712,15 +712,15 @@ authorityKeyIdentifier = keyid
 <p>2. Generate certification</p>
 <div class="codehilite"><pre><span></span>[openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
 #CA证书及密钥生成方法一----直接生成CA密钥及其自签名证书
-openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com&quot;
 
 #服务器证书及密钥生成方法一----直接生成服务器密钥及待签名证书
-openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+openssl req -newkey rsa:2048 -nodes -keyout server-key.pem  -out server.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com&quot;
 #使用CA证书及密钥对服务器证书进行签名：
 openssl x509 -req -days 365 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile ./openssl.cnf -extensions v3_ca
 
 #客户端证书及密钥生成方法一----直接生成客户端密钥及待签名证书
-openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=9.30.94.86/emailAddress=test@test.com&quot;
+openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com&quot;
 #使用CA证书及密钥对客户端证书进行签名
 openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile ./openssl.cnf -extensions v3_ca
 </pre></div>

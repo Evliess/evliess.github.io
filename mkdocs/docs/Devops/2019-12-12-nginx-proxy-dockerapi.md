@@ -1,11 +1,11 @@
 ---
 layout: index
-title: "How nginx proxy docker api"
+title: "How to reverse proxy docker api with nginx"
 category: devops
 date: 2018-11-21 15:17:55
 ---
 
-# How nginx proxy docker api
+# How to reverse proxy docker api with nginx
 
 1\. Vi openssl.cnf
 ``` 

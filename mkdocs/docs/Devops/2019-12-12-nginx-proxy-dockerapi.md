@@ -104,3 +104,8 @@ tail /var/log/nginx/error.log
 usermod -a -G www-data,docker $USER
 docker rmi -f docker-api-nginx
 ```
+
+
+#### References
+
+[Protect the Docker daemon socket](https://docs.docker.com/engine/security/https/)

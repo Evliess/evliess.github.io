@@ -7,11 +7,27 @@ date: 2018-02-22 11:03:55
 
 # Java common knowledge
 
+
+## Understanding JVM
+
+> 对象在内存中的结构
+
+- 对象头(Header): 包含HashCode，GC分代年龄，锁状态标志，线程持有的锁，偏向线程ID，偏向时间戳，类型指针（指向类元数据的指针）。
+
+- 实例数据(Instance data)
+
+- 对齐填充(Padding)
+
+
+> String.intern() 
+
+该方法是一个native方法。它的作用是：如果字符串常量池中已经包含一个等于此String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到字符串常量池中，并且返回此String对象的引用。
+
+
+
 ## Java secure coding rules
 
 > Injection attacks
-
-
 
 > Leaking sensitive data
 

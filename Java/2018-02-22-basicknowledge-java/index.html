@@ -463,6 +463,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#understanding-jvm" class="md-nav__link">
+    Understanding JVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#java-secure-coding-rules" class="md-nav__link">
     Java secure coding rules
   </a>
@@ -563,6 +570,18 @@
   <li class="md-nav__item">
     <a href="../2019-05-10-JEE-java/" title="JEE Basic" class="md-nav__link">
       JEE Basic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../2020-02-16-UnderstandingJVM/" title="UnderstandingJVM" class="md-nav__link">
+      UnderstandingJVM
     </a>
   </li>
 
@@ -749,6 +768,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#understanding-jvm" class="md-nav__link">
+    Understanding JVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#java-secure-coding-rules" class="md-nav__link">
     Java secure coding rules
   </a>
@@ -800,6 +826,25 @@
                 
                 
                 <h1 id="java-common-knowledge">Java common knowledge<a class="headerlink" href="#java-common-knowledge" title="Permanent link">&para;</a></h1>
+<h2 id="understanding-jvm">Understanding JVM<a class="headerlink" href="#understanding-jvm" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>对象在内存中的结构</p>
+</blockquote>
+<ul>
+<li>
+<p>对象头(Header): 包含HashCode，GC分代年龄，锁状态标志，线程持有的锁，偏向线程ID，偏向时间戳，类型指针（指向类元数据的指针）。</p>
+</li>
+<li>
+<p>实例数据(Instance data)</p>
+</li>
+<li>
+<p>对齐填充(Padding)</p>
+</li>
+</ul>
+<blockquote>
+<p>String.intern() </p>
+</blockquote>
+<p>该方法是一个native方法。它的作用是：如果字符串常量池中已经包含一个等于此String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到字符串常量池中，并且返回此String对象的引用。</p>
 <h2 id="java-secure-coding-rules">Java secure coding rules<a class="headerlink" href="#java-secure-coding-rules" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>Injection attacks</p>

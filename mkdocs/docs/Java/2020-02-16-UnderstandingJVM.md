@@ -62,6 +62,7 @@ Java程序需要通过栈上的reference数据来操作对上的具体对象。
 
 > 对象的finalize()只会被系统自动调用一次。
 
+
 > 垃圾收集算法
 
 - 标记-清除算法
@@ -95,10 +96,9 @@ Java程序需要通过栈上的reference数据来操作对上的具体对象。
 
 ## Chapter4 虚拟机性能监控与故障处理工具 p124
 
-
 ## Chapter5 调优案例分析与实践 p155
 
-## Chapter6 类文件结构 p185
+## Chapter6 类文件结构 p185 //TODO
 
 ## Chapter7 虚拟机类加载机制 p232
 
@@ -110,9 +110,9 @@ Java程序需要通过栈上的reference数据来操作对上的具体对象。
 
 ## Chapter11 运行期优化 p352
 
-## Chapter12 Java内存模型与线程 p383
+## Chapter12 Java内存模型与线程 p383 //TODO
 
-## Chapter13 线程安全与锁优化 p408
+## Chapter13 线程安全与锁优化 p408   //TODO
 
 
 

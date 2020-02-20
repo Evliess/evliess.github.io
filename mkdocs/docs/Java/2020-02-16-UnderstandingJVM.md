@@ -116,7 +116,7 @@ Java程序需要通过栈上的reference数据来操作对上的具体对象。
 
 Class文件不保存方法，字段的最终内存布局信息，因此这些字段，方法的符号引用不经过运行期转换无法获得真正的内存地址。因此，当虚拟机运行时，需要先从常量池获得对应的符号引用，在类创建或运行时解析，翻译到具体的内存地址。
 
-> JDK/bin ```javap -berbose xxx.class```
+> JDK/bin ```javap -verbose xxx.class```
 
 ### 6.3 访问标志 access_flag
 

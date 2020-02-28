@@ -235,9 +235,123 @@ Java虚拟机支持方法级别的同步和代码块的同步。
 
 ## Chapter8 虚拟机字节码执行引擎 p259
 
+### 8.1 运行时栈帧结构
+
+栈帧的概念结构：
+![栈帧的概念结构](./images/java/stackframe.png)
+
+- 栈帧（Stack Frame）是虚拟机进行方法调用和方法执行的数据结构，它是虚拟机运行时数据区中的虚拟机栈的栈元素。栈帧存储了方法的局部变量，操作数栈，动态链接和方法返回地址的信息。
+
+- 局部变量表用于存放方法的参数和方法的局部变量。
+
+- 操作数栈
+
+- 动态链接
+
+- 方法返回地址
+
+### 8.2 方法调用 p272
+
+> 重载(Overload) 属于静态分派 
+
+```
+abstract class Human {}
+
+class Man extends Human {}
+
+public void sayHello (Human human) {
+  System.out.println("hello, guy!");
+}
+
+public void sayHello (Man man) {
+   System.out.println("hello, gentleman!");
+}
+
+Human human = new Human();
+
+//Human 称为变量的静态类型，Man成为变量的实际类型，静态类型是编译期可知，实际类型在运行时才知道。
+//虚拟机在重载时是通过参数的静态类型作为判定依据！
+Human man = new Man();
+
+sayHello(human);  //hello, guy!
+sayHello(man);    //hello, guy!
+
+```
+
+> 覆盖(Override) 虚拟机通过在类的方法去建立一个虚拟方法表实现动态分派。如果某个方法没有在子类中被重写，那子类的虚方法表里面的地址入口和父类相同方法的地址入口是一致的，都指向父类的实现入口。如果子类中重写了这个方法，子类方法表中的地址将会替换为指向子类实现版本的入口。
+
+```
+abstract class Human {
+  protected abstract void sayHello();
+}
+
+class Man extends Human {
+  @override
+  protected void sayHello() {
+    System.out.println("hello, gentleman!");
+  }
+}
+
+```
+
 ## Chapter9 类加载及执行子系统的案例与实践 p299
 
+> 动态代理
+
+```
+public class DynamicProxyTest {
+
+  interface IHello {
+    void sayHello();
+  }
+
+  static class Hello implements IHello {
+    @Override
+    public void sayHello() {
+      System.out.println("hello, world!");
+    }
+  }
+
+  static class DynamicProxy implements InvocationHandler {
+    Object object;
+    Object bind(Object object) {
+      this.object = object;
+      return Proxy
+          .newProxyInstance(object.getClass().getClassLoader(), object.getClass().getInterfaces(),
+              DynamicProxy.this);
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+      return method.invoke(object, args);
+    }
+  }
+
+  public static void main(String[] args){
+    IHello iHello = (IHello)new DynamicProxy().bind(new Hello());
+    iHello.sayHello();
+  }
+}
+```
+
 ## Chapter10 编译器优化 p325
+
+> 泛型
+
+- 不能通过编译
+```
+public class GenericTypes {
+  public static void method(List<String> list) {
+    System.out.println("invoke method(List<String> list)");
+  }
+
+  public static void method(List<Integer> list) {
+    System.out.println("invoke method(List<Integer> list)");
+  }
+}
+
+```
+
 
 ## Chapter11 运行期优化 p352
 

@@ -717,6 +717,20 @@
 <li><a href="http://rogerdudler.github.io/git-guide/">Usage link</a></li>
 </ul>
 <blockquote>
+<p>Cherry pick</p>
+</blockquote>
+<div class="codehilite"><pre><span></span>dd2e86 - 946992 - 9143a9 - a6fd86 - 5a6057 [master]
+           \
+            76cada - 62ecb3 - b886a0 [feature]
+
+git checkout master
+git cherry-pick 62ecb3
+
+#That’s all. 62ecb3 is now applied to the master branch and commited (as a new commit) in master.
+</pre></div>
+
+
+<blockquote>
 <p>一台电脑配置多个git账户</p>
 </blockquote>
 <div class="codehilite"><pre><span></span><span class="c1"># 如果执行ssh-add命令报错： Could not open a connection to your authentication agent</span>

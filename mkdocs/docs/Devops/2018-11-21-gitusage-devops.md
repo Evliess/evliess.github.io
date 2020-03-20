@@ -9,6 +9,19 @@ date: 2018-11-21 15:17:55
 
 - [Usage link](http://rogerdudler.github.io/git-guide/)
 
+> Cherry pick
+
+```
+dd2e86 - 946992	- 9143a9 - a6fd86 - 5a6057 [master]
+           \
+            76cada - 62ecb3	- b886a0 [feature]
+
+git checkout master
+git cherry-pick 62ecb3
+
+#That’s all. 62ecb3 is now applied to the master branch and commited (as a new commit) in master.
+```
+
 > 一台电脑配置多个git账户
 
 ```bash

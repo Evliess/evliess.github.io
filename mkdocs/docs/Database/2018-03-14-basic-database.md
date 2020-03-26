@@ -90,7 +90,6 @@ db2start
 db2 force application all
 db2stop
 
-
 db2 create database YOUR_DB automatic storage yes using codeset UTF-8 territory US pagesize 32768
 db2 connect to YOUR_DB
 db2 CREATE BUFFERPOOL BP32K IMMEDIATE ALL DBPARTITIONNUMS SIZE AUTOMATIC NUMBLOCKPAGES 0 PAGESIZE 32 K
@@ -102,12 +101,20 @@ db2 list active databases
 
 db2 list tables 
 
-db2 -tvf scripts.sql
-
-db2 ? 22001 
+db2 -stvf scripts.sql
 
 ```
+> Query below returns foreign key constrants defined in a database.
 
+```
+select 
+    ref.tabschema  concat '.' concat ref.tabname as foreign_table,
+    '>-' as rel,
+    ref.reftabschema concat '.' concat ref.reftabname as primary_table,
+    ref.constname as fk_constraint_name
+from syscat.references ref
+order by foreign_table, primary_table
+```
 
 > 数据库左连接和右连接的区别？  
 

@@ -59,6 +59,9 @@ docker volume prune
 //查看容器的log
 docker logs -f -t YOUR_CONTAINER_NAME
 
+ //Remove local unused volume
+ docker volume prune -f
+
 
 docker run -e PASSWORD=passw0rd123 -p 9388:8388 -p 9388:8388/udp -d --rm --name fgw shadowsocks/shadowsocks-libev:latest
 ```

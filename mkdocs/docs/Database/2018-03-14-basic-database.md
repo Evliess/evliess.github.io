@@ -77,11 +77,15 @@ call addUser('idaAdmin', 'idaAdmin');
 
 ```
 // Add a column
-ALTER TABLE BUILD_STAGE ADD SUBPIPELINE_ID BIGINT;
+ALTER TABLE <table-name> ADD SUBPIPELINE_ID BIGINT;
 // Add a constraint
-ALTER TABLE BUILD_STAGE ADD CONSTRAINT BUILD_STAGE_SUBPIPELINE_FK FOREIGN KEY (SUBPIPELINE_ID) REFERENCES PIPELINE (ID);
-// Drop a constraint
-ALTER TABLE BUILD_STAGE DROP FOREIGN KEY BUILD_STAGE_SUBPIPELINE_FK;
+ALTER TABLE <table-name> ADD CONSTRAINT <constraint-name> FOREIGN KEY (SUBPIPELINE_ID) REFERENCES <table-name> (ID);
+// Drop a foreign key constraint
+ALTER TABLE <table-name> DROP FOREIGN KEY <constraint-name>;
+// Drop a primary key constraint
+ALTER TABLE <table-name>  DROP PRIMARY KEY
+// Drop unique constraint
+ALTER TABLE <table-name> DROP UNIQUE <constraint-name>
 
 
 

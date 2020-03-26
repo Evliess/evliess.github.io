@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.3">
     
     
       
@@ -46,7 +46,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -57,7 +57,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -68,7 +68,7 @@
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
-      <link rel="manifest" href="../../manifest.webmanifest">
+      <link rel="manifest" type="application/manifest+json" href="../../manifest.webmanifest" crossorigin="use-credentials">
     
     
     
@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#1-docker-compose-installation" tabindex="1" class="md-skip">
+      <a href="#1-docker-compose-installation" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -125,7 +125,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+        <a href="https://www.jackgui.top" title="Memo for Work" aria-label="Memo for Work" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -156,7 +156,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -765,33 +765,33 @@
 <ol>
 <li>Download the latest version of Docker Compose:</li>
 </ol>
-<div class="codehilite"><pre><span></span>sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-<span class="k">$(</span>uname -s<span class="k">)</span>-<span class="k">$(</span>uname -m<span class="k">)</span> -o /usr/local/bin/docker-compose
-</pre></div>
+<div class="codehilite"><pre><span></span><code>sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-<span class="k">$(</span>uname -s<span class="k">)</span>-<span class="k">$(</span>uname -m<span class="k">)</span> -o /usr/local/bin/docker-compose
+</code></pre></div>
 
 
 <ol>
 <li>Apply executable permissions to the binary:  </li>
 </ol>
-<div class="codehilite"><pre><span></span>sudo chmod +x /usr/local/bin/docker-compose
-</pre></div>
+<div class="codehilite"><pre><span></span><code>sudo chmod +x /usr/local/bin/docker-compose
+</code></pre></div>
 
 
 <ol>
 <li>Install command completion:  </li>
 </ol>
-<div class="codehilite"><pre><span></span>sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
-</pre></div>
+<div class="codehilite"><pre><span></span><code>sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.2/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+</code></pre></div>
 
 
 <ol>
 <li>Test the installation:  </li>
 </ol>
-<div class="codehilite"><pre><span></span>docker-compose --version
-</pre></div>
+<div class="codehilite"><pre><span></span><code>docker-compose --version
+</code></pre></div>
 
 
 <h1 id="2-docker-compose-useful-command">2. Docker Compose Useful Command<a class="headerlink" href="#2-docker-compose-useful-command" title="Permanent link">&para;</a></h1>
-<div class="codehilite"><pre><span></span>//Starts the containers in the background and leaves them running
+<div class="codehilite"><pre><span></span><code>//Starts the containers in the background and leaves them running
 docker-compose up -d
 
 //Stops containers and removes containers, networks, volumes, and images created by up
@@ -802,14 +802,14 @@ docker-compose stop
 
 //Starts existing containers <span class="k">for</span> a service.
 docker-compose start
-</pre></div>
+</code></pre></div>
 
 
 <h1 id="3-example-docker-compose-file">3. Example Docker Compose File<a class="headerlink" href="#3-example-docker-compose-file" title="Permanent link">&para;</a></h1>
 <blockquote>
 <p>3.1 Configure container network and ip</p>
 </blockquote>
-<div class="codehilite"><pre><span></span>version: <span class="s1">&#39;3&#39;</span>
+<div class="codehilite"><pre><span></span><code>version: <span class="s1">&#39;3&#39;</span>
 services:
   eureka-server-1:
     image: waitplay/eureka-server:latest
@@ -835,7 +835,7 @@ services:
       driver: default
       config:
       - subnet: <span class="m">172</span>.16.238.0/24
-</pre></div>
+</code></pre></div>
                 
                   
                 
@@ -898,16 +898,16 @@ services:
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/Evliess" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
   </div>
 
@@ -917,7 +917,7 @@ services:
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

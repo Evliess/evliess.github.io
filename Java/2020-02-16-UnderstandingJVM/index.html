@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.3">
     
     
       
@@ -46,7 +46,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -57,7 +57,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -68,7 +68,7 @@
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
-      <link rel="manifest" href="../../manifest.webmanifest">
+      <link rel="manifest" type="application/manifest+json" href="../../manifest.webmanifest" crossorigin="use-credentials">
     
     
     
@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#understanding-jvm-version-2" tabindex="1" class="md-skip">
+      <a href="#understanding-jvm-version-2" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -125,7 +125,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+        <a href="https://www.jackgui.top" title="Memo for Work" aria-label="Memo for Work" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -156,7 +156,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -1637,7 +1637,7 @@ Java程序方法体中的代码经过Javac编译器处理后，最终变为字�
 <blockquote>
 <p>重载(Overload) 属于静态分派 </p>
 </blockquote>
-<div class="codehilite"><pre><span></span>abstract class Human {}
+<div class="codehilite"><pre><span></span><code>abstract class Human {}
 
 class Man extends Human {}
 
@@ -1657,13 +1657,13 @@ Human man = new Man();
 
 sayHello(human);  //hello, guy!
 sayHello(man);    //hello, guy!
-</pre></div>
+</code></pre></div>
 
 
 <blockquote>
 <p>覆盖(Override) 虚拟机通过在类的方法去建立一个虚拟方法表实现动态分派。如果某个方法没有在子类中被重写，那子类的虚方法表里面的地址入口和父类相同方法的地址入口是一致的，都指向父类的实现入口。如果子类中重写了这个方法，子类方法表中的地址将会替换为指向子类实现版本的入口。</p>
 </blockquote>
-<div class="codehilite"><pre><span></span>abstract class Human {
+<div class="codehilite"><pre><span></span><code>abstract class Human {
   protected abstract void sayHello();
 }
 
@@ -1673,14 +1673,14 @@ class Man extends Human {
     System.out.println(&quot;hello, gentleman!&quot;);
   }
 }
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="chapter9-p299">Chapter9 类加载及执行子系统的案例与实践 p299<a class="headerlink" href="#chapter9-p299" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>动态代理</p>
 </blockquote>
-<div class="codehilite"><pre><span></span>public class DynamicProxyTest {
+<div class="codehilite"><pre><span></span><code>public class DynamicProxyTest {
 
   interface IHello {
     void sayHello();
@@ -1713,7 +1713,7 @@ class Man extends Human {
     iHello.sayHello();
   }
 }
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="chapter10-p325">Chapter10 编译器优化 p325<a class="headerlink" href="#chapter10-p325" title="Permanent link">&para;</a></h2>
@@ -1723,7 +1723,7 @@ class Man extends Human {
 <ul>
 <li>不能通过编译</li>
 </ul>
-<div class="codehilite"><pre><span></span>public class GenericTypes {
+<div class="codehilite"><pre><span></span><code>public class GenericTypes {
   public static void method(List&lt;String&gt; list) {
     System.out.println(&quot;invoke method(List&lt;String&gt; list)&quot;);
   }
@@ -1732,7 +1732,7 @@ class Man extends Human {
     System.out.println(&quot;invoke method(List&lt;Integer&gt; list)&quot;);
   }
 }
-</pre></div>
+</code></pre></div>
 
 
 <h2 id="chapter11-p352">Chapter11 运行期优化 p352<a class="headerlink" href="#chapter11-p352" title="Permanent link">&para;</a></h2>
@@ -1745,7 +1745,7 @@ class Man extends Human {
 <blockquote>
 <p>很适合volatile变量控制并发的场景</p>
 </blockquote>
-<div class="codehilite"><pre><span></span>volatile boolean shutdownRequested;
+<div class="codehilite"><pre><span></span><code>volatile boolean shutdownRequested;
 
 public void shutdown() {
   shutdownRequested = true;
@@ -1756,7 +1756,7 @@ public void doWork() {
     // do stuff
   }
 }
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="122-java">12.2 Java与线程<a class="headerlink" href="#122-java" title="Permanent link">&para;</a></h3>
@@ -1881,16 +1881,16 @@ public void doWork() {
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/Evliess" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
   </div>
 
@@ -1900,7 +1900,7 @@ public void doWork() {
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

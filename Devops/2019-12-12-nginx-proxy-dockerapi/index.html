@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.3">
     
     
       
@@ -46,7 +46,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -57,7 +57,7 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
     
     
       
@@ -68,7 +68,7 @@
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
-      <link rel="manifest" href="../../manifest.webmanifest">
+      <link rel="manifest" type="application/manifest+json" href="../../manifest.webmanifest" crossorigin="use-credentials">
     
     
     
@@ -116,7 +116,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#how-to-reverse-proxy-docker-api-with-nginx" tabindex="1" class="md-skip">
+      <a href="#how-to-reverse-proxy-docker-api-with-nginx" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -125,7 +125,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://www.jackgui.top" title="Memo for Work" class="md-header-nav__button md-logo">
+        <a href="https://www.jackgui.top" title="Memo for Work" aria-label="Memo for Work" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -156,7 +156,7 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
       <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
@@ -759,15 +759,15 @@
                 
                 <h1 id="how-to-reverse-proxy-docker-api-with-nginx">How to reverse proxy docker api with nginx<a class="headerlink" href="#how-to-reverse-proxy-docker-api-with-nginx" title="Permanent link">&para;</a></h1>
 <p>1. Vi openssl.cnf</p>
-<div class="codehilite"><pre><span></span>[ v3_ca ]
+<div class="codehilite"><pre><span></span><code>[ v3_ca ]
 basicConstraints = CA:true
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid
-</pre></div>
+</code></pre></div>
 
 
 <p>2. Generate certification</p>
-<div class="codehilite"><pre><span></span>[openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
+<div class="codehilite"><pre><span></span><code>[openssl](https://www.cnblogs.com/lsdb/p/9391979.html)
 #CA证书及密钥生成方法一----直接生成CA密钥及其自签名证书
 openssl req -newkey rsa:2048 -nodes -keyout ca-key.pem -x509 -days 365 -out ca.pem -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com&quot;
 
@@ -780,17 +780,17 @@ openssl x509 -req -days 365 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreat
 openssl req -newkey rsa:2048 -nodes -keyout client-key.pem -out client.csr -subj &quot;/C=ch/ST=ch/L=ch/O=ch/OU=ch/CN=0.0.0.1/emailAddress=test@test.com&quot;
 #使用CA证书及密钥对客户端证书进行签名
 openssl x509 -req -days 365 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile ./openssl.cnf -extensions v3_ca
-</pre></div>
+</code></pre></div>
 
 
 <p>3. Verify vertification </p>
-<div class="codehilite"><pre><span></span>openssl x509 -in client-cert.pem -noout -purpose | grep SSL
+<div class="codehilite"><pre><span></span><code>openssl x509 -in client-cert.pem -noout -purpose | grep SSL
 openssl x509 -in server-cert.pem -noout -purpose | grep SSL
-</pre></div>
+</code></pre></div>
 
 
 <p>4. vi ssl.conf for nginx</p>
-<div class="codehilite"><pre><span></span>upstream docker-ssl {
+<div class="codehilite"><pre><span></span><code>upstream docker-ssl {
   server unix:/var/run/docker.sock fail_timeout=0;
 }
 server {
@@ -823,36 +823,36 @@ server {
       proxy_temp_file_write_size 64k;
    }
 }
-</pre></div>
+</code></pre></div>
 
 
 <p>5. Vi dockerfile</p>
-<div class="codehilite"><pre><span></span>FROM nginx
+<div class="codehilite"><pre><span></span><code>FROM nginx
 VOLUME [&quot;/var/run&quot;, &quot;/etc/nginx/certs&quot;]
-</pre></div>
+</code></pre></div>
 
 
 <p>6. Build image</p>
-<div class="codehilite"><pre><span></span>docker rmi -f docker-api-nginx
+<div class="codehilite"><pre><span></span><code>docker rmi -f docker-api-nginx
 docker build -t docker-api-nginx .
-</pre></div>
+</code></pre></div>
 
 
 <p>7. Run with docker</p>
-<div class="codehilite"><pre><span></span>docker run --rm --name docker-api-nginx -d -p 7443:443 -p 4080:80 \
+<div class="codehilite"><pre><span></span><code>docker run --rm --name docker-api-nginx -d -p 7443:443 -p 4080:80 \
 -v /var/run/docker.sock:/var/run/docker.sock \
 -v /root/nginx-ca/ssl.conf:/etc/nginx/conf.d/ssl.conf \
 -v /root/nginx-ca/certs:/etc/nginx/certs docker-api-nginx
-</pre></div>
+</code></pre></div>
 
 
 <p>8. Used scripts</p>
-<div class="codehilite"><pre><span></span>nginx -t -c /etc/nginx/nginx.conf
+<div class="codehilite"><pre><span></span><code>nginx -t -c /etc/nginx/nginx.conf
 sudo systemctl restart nginx
 tail /var/log/nginx/error.log 
 usermod -a -G www-data,docker $USER
 docker rmi -f docker-api-nginx
-</pre></div>
+</code></pre></div>
 
 
 <h4 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h4>
@@ -919,16 +919,16 @@ docker rmi -f docker-api-nginx
           </div>
         
         powered by
-        <a href="https://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
           Material for MkDocs</a>
       </div>
       
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/Evliess" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/Evliess" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
     
   </div>
 
@@ -938,7 +938,7 @@ docker rmi -f docker-api-nginx
       
     </div>
     
-      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       

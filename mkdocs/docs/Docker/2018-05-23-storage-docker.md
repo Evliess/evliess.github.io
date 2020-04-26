@@ -63,7 +63,7 @@ docker logs -f -t YOUR_CONTAINER_NAME
  docker volume prune -f
 
 
-docker run -e PASSWORD=passw0rd123 -p 9388:8388 -p 9388:8388/udp -d --rm --name fgw shadowsocks/shadowsocks-libev:latest
+docker run -e PASSWORD=passw0rd123 -e METHOD=chacha20-ietf-poly1305 -p 9388:8388 -p 9388:8388/udp -d --rm --restart always --name fgw shadowsocks/shadowsocks-libev:latest
 ```
 
 

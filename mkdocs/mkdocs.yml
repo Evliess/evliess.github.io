@@ -1,43 +1,91 @@
-# Project information
-site_name: 'Memo for Work'
-site_description: 'Some fucking useful thinks in work'
-site_author: 'wait-play Sh'
-site_url: 'https://www.jackgui.top'
-
+site_name: Memo for Work
+site_url: https://www.jackgui.top
+site_author: wait-play Sh
+site_description: >-
+  Some fucking useful thinks in work
 # Repository
-repo_name: 'Evliess/evliess.github.io'
-# repo_url: 'https://github.com/Evliess/evliess.github.io'
+repo_name: Evliess/evliess.github.io
+repo_url: https://github.com/Evliess/evliess.github.io
+
 
 # Copyright
-copyright: 'Copyright &copy; 2018 - 2019 wait-play Sh'
+copyright: Copyright &copy; 2018 - 2019 wait-play Sh
 
 # Configuration
 theme:
-  name: 'material'
-  language: 'en'
+  name: material
+
+  # 404 page
+  static_templates:
+    - 404.html
+
+  # Don't include MkDocs' JavaScript
+  include_search_page: false
+  search_index_only: true
+
+  # Default values, taken from mkdocs_theme.yml
+  language: en
+  features:
+    - tabs
+    #- instant
   palette:
-    primary: 'Cyan'
-    accent: 'Cyan'
+    scheme: default
+    primary: indigo
+    accent: indigo
   font:
-    text: 'Roboto'
-    code: 'Roboto Mono'
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    logo: logo
+  favicon: assets/favicon.png
+
+# Plugins
+plugins:
+  - search
+  - minify:
+      minify_html: true
 
 # Customization
 extra:
-  manifest: 'manifest.webmanifest'
   social:
-    - type: 'github'
-      link: 'https://github.com/Evliess'
-
-# Google Analytics
-google_analytics:
-  - 'UA-XXXXXXXX-X'
-  - 'auto'
+    - icon: fontawesome/brands/github
+      link: https://github.com/Evliess
 
 # Extensions
 markdown_extensions:
-  - admonition
-  - codehilite:
+  - markdown.extensions.admonition
+  - markdown.extensions.attr_list
+  - markdown.extensions.codehilite:
       guess_lang: false
-  - toc:
+  - markdown.extensions.def_list
+  - markdown.extensions.footnotes
+  - markdown.extensions.meta
+  - markdown.extensions.toc:
       permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  # - pymdownx.highlight:
+  #     linenums_style: pymdownx-inline
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+

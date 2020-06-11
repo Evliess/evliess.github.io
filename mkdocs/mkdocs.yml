@@ -14,10 +14,7 @@ copyright: Copyright &copy; 2018 - 2020 wait-play Sh
 # Configuration
 theme:
   name: material
-  palette:
-    primary: deep purple
-    accent: deep purple
-
+  
   # 404 page
   static_templates:
     - 404.html
@@ -33,8 +30,8 @@ theme:
     #- instant
   palette:
     scheme: default
-    primary: indigo
-    accent: indigo
+    primary: deep purple
+    accent: deep purple
   font:
     text: Roboto
     code: Roboto Mono

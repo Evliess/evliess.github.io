@@ -83,7 +83,14 @@ The smaller and more focused a function is, the easier it is to choose a descrip
 
 ### FUNCTION ARGUMENTS
 
-The ideal number of arguments for a function is zero (niladic). Next comes one (monadic), followed closely by two (dyadic). Three arguments (triadic) should be avoided where possible. More than three (polyadic) requires very special justification—and then shouldn’t be used anyway.
+The ideal number of arguments for a function is zero (niladic). Next comes one (monadic), followed closely by two (dyadic). Three arguments (triadic) should be avoided where possible. More than three (polyadic) requires very special justification—and then shouldn’t be used anyway. Functions that take variable arguments can be monads, dyads, or even triads. But it would be a mistake to give them more arguments than that.
+
+```java
+//It's ok
+void monad(Integer… args);
+void dyad(String name, Integer… args);
+void triad(String name, int count, Integer… args);
+```
 
 ### Flag Arguments
 

@@ -79,7 +79,7 @@ kubectl apply -f install/kubernetes/istio.yaml
 > Note: If your cluster is running in an environment that does not support an external load balancer (e.g., minikube), the EXTERNAL-IP of istio-ingress says <pending>. You must access the application using the service NodePort, or use port-forwarding instead.  
 
 ```shell
-kubectl get svc -n istio-system
+kubectl get svc -n istio-system 
 kubectl get pods -n istio-system
 ```
 

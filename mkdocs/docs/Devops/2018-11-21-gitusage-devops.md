@@ -9,6 +9,14 @@ date: 2018-11-21 15:17:55
 
 - [Usage link](http://rogerdudler.github.io/git-guide/)
 
+> View current branch was created based which branch
+
+
+```
+ git reflog --date=local | grep <branch-name>
+```
+
+
 > Cherry pick
 
 ```

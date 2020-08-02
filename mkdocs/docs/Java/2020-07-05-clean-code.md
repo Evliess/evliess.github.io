@@ -5,6 +5,45 @@ category: java
 date: 2020-07-05 11:03:55
 ---
 
+# Refactoring
+
+> Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+
+1. When you have to add a feature to a program but the code is not structured in a convenient way, first refactor the program to make it easy to add the feature, then add the feature.
+
+2. Before you start refactoring, make sure you have a solid suite of tests. These tests must be self-checking.
+
+3. Refactoring changes the programs in small steps, so if you make a mistake, it is easy to find where the bug is.
+
+4. When programming, follow the camping rule: Always leave the code base healthier than when you found it.
+
+5. You have to refactor when you run into ugly code—but excellent code needs plenty of refactoring too.
+
+6. The whole purpose of refactoring is to make us program faster, producing more value with less effort.
+
+
+## Bad Smells in Code
+
+1. Mysterious Name  
+
+2. Duplicated Code  
+
+3. Long Function  
+
+4. Long Parameter List  
+
+5. Global Data - Then, it’s good to limit its scope as much as possible by moving it within a class or module where only that module’s code can see it.
+
+6. Mutable Data -  Use Combine Functions into Class (144) or Combine Functions into Transform (149) to limit how much code needs to update a variable. 
+
+6. Divergent Change
+
+7. Shotgun Surgery
+
+8. Comments - If you need a comment to explain what a block of code does, try Extract Function (106). If the method is already extracted but you still need a comment to explain what it does, use Change Function Declaration (124) to rename it. If you need to state some rules about the required state of the system, use Introduce Assertion (302).
+
+
+
 # Clean Code
 
 ## Meaningful Names

@@ -9,6 +9,18 @@ date: 2018-11-21 15:17:55
 
 - [Usage link](http://rogerdudler.github.io/git-guide/)
 
+
+> Git patch
+
+```
+git branch A
+git checkout A
+git diff A B > diff
+// Apply the difference to A
+git apply diff
+
+```
+
 > View current branch was created based which branch
 
 

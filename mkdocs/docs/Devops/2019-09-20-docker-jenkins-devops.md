@@ -20,7 +20,7 @@ docker pull jenkins/jenkins:lts
 FROM jenkins/jenkins:lts
 # if we want to install via apt
 USER root
-RUN apt-get update -y && apt-get install -y libltdl-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openjdk-8-jdk maven make && rm -rf /var/lib/apt/lists/*
 # drop back to the regular jenkins user - good practice
 USER jenkins
 ```
@@ -32,7 +32,7 @@ docker build -t waitplay/jenkins:lst .
 4\. Start a contain to run jenkins
 
 ```
-docker run -u root -d -p 32772:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v $(which docker-compose):/usr/local/bin/docker-compose -v /etc/localtime:/etc/localtime -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:lst
+docker run -u root -d -p 8080:8080 -p 50000:50000 -v $(which kubectl):/usr/bin/kubectl -v $(which oc):/usr/bin/oc -v /var/jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker):/usr/bin/docker -v /etc/localtime:/etc/localtime -v $(which docker-compose):/usr/local/bin/docker-compose -e JAVA_OPTS=-Duser.timezone=Asia/Shanghai --name jenkins waitplay/jenkins:latest
 ```
 5\. Download jdk-8u221-linux-x64.tar.gz
 . Download [maven](http://us.mirrors.quenda.co/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.tar.gz)

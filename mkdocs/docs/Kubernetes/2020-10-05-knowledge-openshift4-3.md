@@ -7,6 +7,61 @@ date: 2020-10-05 15:17:55
 
 # Openshift Memo
 
+## Adding roles to users
+
+https://docs.openshift.com/container-platform/4.5/authentication/using-rbac.html
+
+```
+#local role
+oc adm policy add-role-to-user <role> <user> -n <project>
+
+#For example, you can add the admin role to the alice user in joe project by running:
+oc adm policy add-role-to-user admin alice -n joe
+
+#cluster role
+oc adm policy add-cluster-role-to-user cluster-admin <user>
+```
+
+
+## View env in a container
+
+```
+podman exec -it todoapi env
+```
+
+## OpenShift Terminology
+
+Term | Definition
+---|---
+Infra Node| A node server containing infrastructure services like monitoring, logging, or external routing.
+Console | A web UI provided by the RHOCP cluster that allows developers and administrators to interact with cluster resources.
+Project | OpenShift's extension of Kubernetes' namespaces. Allows the definition of user access control (UAC) to resources.
+
+
+
+
+## CMD and ENTRYPOINT
+
+```
+ENTRYPOINT ["command", "param1", "param2"]
+CMD ["param1","param2"]
+
+```
+
+## Saving and Loading Images
+
+```
+sudo podman save [-o FILE_NAME] IMAGE_NAME[:TAG]
+
+sudo podman load -i mysql.tar
+```
+
+## Configuring Registries in Podman
+
+```
+cat /etc/containers/registries.conf
+```
+
 ## Build Kubernetes Operators from Helm Charts in 5 steps
 
 https://www.openshift.com/blog/build-kubernetes-operators-from-helm-charts-in-5-steps

@@ -227,33 +227,26 @@ private int binarySearch(int arr[], int start, int end, int target) {
 ## 串的查找算法
 
 ```java
-//如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1
-    public static int strMatch_1(char[] source, char[] target) {
-        int i = 0, j = 0;
-        int sourceLength = source.length;
-        int targetLength = target.length;
-        while (i < sourceLength && j < targetLength ) {
-            if (source[i] == target[j]) {
-                if (j == targetLength - 1) {
-                    return i - j;
-                } else {
-                    i++;
-                    j++;
-                }
-            } else {
-                //如果source中剩余的字符串长度小于target，那么直接返回 -1
-                if(sourceLength  < i + targetLength) {
-                    break;
-                } else {
-                    j = 0;
-                    //主串需要移动到下一位，然后和字串再次匹配
-                    i = i - j + 1;
-                }
-            }
+  public static int strMatch_1(char[] source, char[] target) {
+    int i = 0, j = 0;
+    int sourceLength = source.length;
+    int targetLength = target.length;
+    while (i < sourceLength && j < targetLength) {
+      if (source[i] == target[j]) {
+        if (j == targetLength - 1) {
+          return i - j;
+        } else {
+          i++;
+          j++;
         }
-        return -1;
+      } else {
+        i = i - j + 1;
+        j = 0;
+      }
     }
-
+    return -1;
+  }
+}
     /**
      * 字符串匹配还有KMP算法，BM算法以及Sunday算法
      */

@@ -189,33 +189,26 @@
     <span class=o>}</span>
     <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=o>;</span>
   <span class=o>}</span>
-</code></pre></div> <h2 id=_5>串的查找算法<a class=headerlink href=#_5 title="Permanent link">&para;</a></h2> <div class=highlight><pre><span></span><code><span class=c1>//如果target在source中, 返回target在source中的起始位置(从0算起)，如果不存在，返回-1</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>int</span> <span class=nf>strMatch_1</span><span class=o>(</span><span class=kt>char</span><span class=o>[]</span> <span class=n>source</span><span class=o>,</span> <span class=kt>char</span><span class=o>[]</span> <span class=n>target</span><span class=o>)</span> <span class=o>{</span>
-        <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=o>,</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
-        <span class=kt>int</span> <span class=n>sourceLength</span> <span class=o>=</span> <span class=n>source</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
-        <span class=kt>int</span> <span class=n>targetLength</span> <span class=o>=</span> <span class=n>target</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
-        <span class=k>while</span> <span class=o>(</span><span class=n>i</span> <span class=o>&lt;</span> <span class=n>sourceLength</span> <span class=o>&amp;&amp;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>targetLength</span> <span class=o>)</span> <span class=o>{</span>
-            <span class=k>if</span> <span class=o>(</span><span class=n>source</span><span class=o>[</span><span class=n>i</span><span class=o>]</span> <span class=o>==</span> <span class=n>target</span><span class=o>[</span><span class=n>j</span><span class=o>])</span> <span class=o>{</span>
-                <span class=k>if</span> <span class=o>(</span><span class=n>j</span> <span class=o>==</span> <span class=n>targetLength</span> <span class=o>-</span> <span class=mi>1</span><span class=o>)</span> <span class=o>{</span>
-                    <span class=k>return</span> <span class=n>i</span> <span class=o>-</span> <span class=n>j</span><span class=o>;</span>
-                <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
-                    <span class=n>i</span><span class=o>++;</span>
-                    <span class=n>j</span><span class=o>++;</span>
-                <span class=o>}</span>
-            <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
-                <span class=c1>//如果source中剩余的字符串长度小于target，那么直接返回 -1</span>
-                <span class=k>if</span><span class=o>(</span><span class=n>sourceLength</span>  <span class=o>&lt;</span> <span class=n>i</span> <span class=o>+</span> <span class=n>targetLength</span><span class=o>)</span> <span class=o>{</span>
-                    <span class=k>break</span><span class=o>;</span>
-                <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
-                    <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
-                    <span class=c1>//主串需要移动到下一位，然后和字串再次匹配</span>
-                    <span class=n>i</span> <span class=o>=</span> <span class=n>i</span> <span class=o>-</span> <span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=o>;</span>
-                <span class=o>}</span>
-            <span class=o>}</span>
+</code></pre></div> <h2 id=_5>串的查找算法<a class=headerlink href=#_5 title="Permanent link">&para;</a></h2> <div class=highlight><pre><span></span><code>  <span class=kd>public</span> <span class=kd>static</span> <span class=kt>int</span> <span class=nf>strMatch_1</span><span class=o>(</span><span class=kt>char</span><span class=o>[]</span> <span class=n>source</span><span class=o>,</span> <span class=kt>char</span><span class=o>[]</span> <span class=n>target</span><span class=o>)</span> <span class=o>{</span>
+    <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=o>,</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
+    <span class=kt>int</span> <span class=n>sourceLength</span> <span class=o>=</span> <span class=n>source</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+    <span class=kt>int</span> <span class=n>targetLength</span> <span class=o>=</span> <span class=n>target</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+    <span class=k>while</span> <span class=o>(</span><span class=n>i</span> <span class=o>&lt;</span> <span class=n>sourceLength</span> <span class=o>&amp;&amp;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>targetLength</span><span class=o>)</span> <span class=o>{</span>
+      <span class=k>if</span> <span class=o>(</span><span class=n>source</span><span class=o>[</span><span class=n>i</span><span class=o>]</span> <span class=o>==</span> <span class=n>target</span><span class=o>[</span><span class=n>j</span><span class=o>])</span> <span class=o>{</span>
+        <span class=k>if</span> <span class=o>(</span><span class=n>j</span> <span class=o>==</span> <span class=n>targetLength</span> <span class=o>-</span> <span class=mi>1</span><span class=o>)</span> <span class=o>{</span>
+          <span class=k>return</span> <span class=n>i</span> <span class=o>-</span> <span class=n>j</span><span class=o>;</span>
+        <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
+          <span class=n>i</span><span class=o>++;</span>
+          <span class=n>j</span><span class=o>++;</span>
         <span class=o>}</span>
-        <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=o>;</span>
+      <span class=o>}</span> <span class=k>else</span> <span class=o>{</span>
+        <span class=n>i</span> <span class=o>=</span> <span class=n>i</span> <span class=o>-</span> <span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=o>;</span>
+        <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
+      <span class=o>}</span>
     <span class=o>}</span>
-
+    <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=o>;</span>
+  <span class=o>}</span>
+<span class=o>}</span>
     <span class=cm>/**</span>
 <span class=cm>     * 字符串匹配还有KMP算法，BM算法以及Sunday算法</span>
 <span class=cm>     */</span>

@@ -24,6 +24,16 @@ date: 2018-02-22 11:03:55
 该方法是一个native方法。它的作用是：如果字符串常量池中已经包含一个等于此String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到字符串常量池中，并且返回此String对象的引用。
 
 
+## JVM tuning
+
+Tools: Arthas https://arthas.aliyun.com/doc/quick-start.html
+
+
+```
+
+```
+
+
 
 ## Java secure coding rules
 

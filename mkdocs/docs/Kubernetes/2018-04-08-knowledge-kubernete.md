@@ -19,8 +19,17 @@ Controller | A controller is a Kubernetes process that watches resources and mak
 Label | A key-value pair that can be assigned to any Kubernetes resource. Selectors use labels to filter eligible resources for scheduling and other operations.
 Namespace | A scope for Kubernetes resources and processes, so that resources with the same name can be used in different boundaries.
 
+## Switching
 
+![Switching](./images/kubernetes/switching.jpg)
 
+## Routing
+
+![Routing](./images/kubernetes/routing.jpg)
+
+## Gateway
+![Gateway](./images/kubernetes/gateway.jpg)
+![DefaultGateway](./images/kubernetes/default_gateway.jpg)
 
 
 

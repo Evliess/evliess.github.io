@@ -31,7 +31,12 @@ Namespace | A scope for Kubernetes resources and processes, so that resources wi
 ![Gateway](./images/kubernetes/gateway.jpg)
 ![DefaultGateway](./images/kubernetes/default_gateway.jpg)
 
-
+## Namespace
+![ns_1](./images/kubernetes/namespace_1.png)
+![ns_2](./images/kubernetes/namespace_2.png)
+![ns_3](./images/kubernetes/namespace_3.png)
+![ns_4](./images/kubernetes/namespace_4.png)
+![ns_5](./images/kubernetes/namespace_5.png)
 
 ## Using Secrets as environment variables
 

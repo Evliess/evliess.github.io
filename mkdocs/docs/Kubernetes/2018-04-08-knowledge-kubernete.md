@@ -21,15 +21,15 @@ Namespace | A scope for Kubernetes resources and processes, so that resources wi
 
 ## Switching
 
-![Switching](./images/kubernetes/switching.jpg)
+![Switching](./images/kubernetes/switching.png)
 
 ## Routing
 
-![Routing](./images/kubernetes/routing.jpg)
+![Routing](./images/kubernetes/routing.png)
 
 ## Gateway
-![Gateway](./images/kubernetes/gateway.jpg)
-![DefaultGateway](./images/kubernetes/default_gateway.jpg)
+![Gateway](./images/kubernetes/gateway.png)
+![DefaultGateway](./images/kubernetes/default_gateway.png)
 
 ## Namespace
 ![ns_1](./images/kubernetes/namespace_1.png)

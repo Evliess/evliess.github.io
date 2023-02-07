@@ -96,6 +96,23 @@ Java程序需要通过栈上的reference数据来操作对上的具体对象。
 
 ## Chapter4 虚拟机性能监控与故障处理工具 p124
 
+```
+jstat -gcutil [pid] [intervel] [count]
+
+# 输出如下：
+
+# S0：堆上 Survivor space 0 区已使用空间的百分比
+# S1：堆上 Survivor space 1 区已使用空间的百分比
+# E：堆上 Eden 区已使用空间的百分比
+# O：堆上 Old space 区已使用空间的百分比
+# P：堆上 Perm space 区已使用空间的百分比
+# YGC：从程序启动到采样时发生的 Minor GC 次数
+# YGCT：从程序启动到采样时 Minor GC 所用的时间
+# FGC：从程序启动到采样时发生的 Full GC 次数
+# FGCT：从程序启动到采样时 Full GC 所用的时间
+# GCT：从程序启动到采样时 GC 的总时间
+```
+
 ## Chapter5 调优案例分析与实践 p155
 
 ## Chapter6 类文件结构 p185 

@@ -116,7 +116,7 @@ General tips when Ideating:
 
 - To map the To_Be Scenario experience, teams will walk through the same process (i.e mapping the Doing, Thinking, and Felling steps) as was done in the As-Is Scenario
 - COntinue empathizing with the Persona as you work through the To-Be Scenario steps
-- As you work through the To-Be steps, ypu should see more of the pain points and concerns that your Persona expericenced in the As-Is Scenario change, to become experiences of excitement and the Wow factor
+- As you work through the To-Be steps, you should see more of the pain points and concerns that your Persona expericenced in the As-Is Scenario change, to become experiences of excitement and the Wow factor
 - One reason for conducting the To-Be Scenario map is to refine the experience to make it even better
 - If points of friction arise during the To-Be Scenario mapping exercise, continue empathizing wirh the Persona to achieve a more delightful outcome
 - When in doubt about ant step in the To-Be Scenario, do more research.

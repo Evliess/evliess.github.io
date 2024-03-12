@@ -6,6 +6,6 @@
 pip install mkdocs-material -U 
 cd evliess.github.io
 
-pip install mkdocs-minify-plugin
+pip install mkdocs-minify-plugin -U
 mkdocs gh-deploy --config-file ../mkdocs/mkdocs.yml --remote-branch master
 ```

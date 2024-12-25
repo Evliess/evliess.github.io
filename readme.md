@@ -2,7 +2,7 @@
 
 1. Go to evliess.github.io folder
 
-```
+```bash
 pip install mkdocs-material -U 
 cd evliess.github.io
 

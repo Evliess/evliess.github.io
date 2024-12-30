@@ -29,12 +29,6 @@ date: 2018-02-22 11:03:55
 Tools: Arthas https://arthas.aliyun.com/doc/quick-start.html
 
 
-```
-
-```
-
-
-
 ## Java secure coding rules
 
 > Injection attacks

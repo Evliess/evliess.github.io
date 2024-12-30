@@ -8,6 +8,132 @@ date: 2018-02-22 11:03:55
 # Common algorithm
 
 
+## 文件大小为2G，统计文件中出现次数为top100的单词，单词以空格分开。JVM限制使用2M，最后输入格式从小到大排列打印，例如 hello: 100, world: 99, java: 98
+
+```java
+public class CountWords {
+
+private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
+    private static final int TOP_WORDS_LIMIT = 10000;
+    private static final int MEMORY_THRESHOLD = 500000; // Flush to disk after 500,000 unique words
+
+    public static void main(String[] args) throws IOException {
+        String filePath = "C:\\Users\\xiao fei\\Desktop\\words.txt.txt";
+        List<File> intermediateFiles = new ArrayList<>();
+        Map<String, Integer> wordCounts = new HashMap<>();
+
+        // Process the file in chunks
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            char[] buffer = new char[CHUNK_SIZE];
+            int bytesRead;
+            StringBuilder leftover = new StringBuilder();
+
+            while ((bytesRead = reader.read(buffer)) != -1) {
+                String chunk = leftover + new String(buffer, 0, bytesRead);
+                int lastSpace = chunk.lastIndexOf(' ');
+                if (lastSpace == -1) {
+                    leftover.setLength(0);
+                    leftover.append(chunk);
+                    continue;
+                }
+
+                String processableChunk = chunk.substring(0, lastSpace);
+                leftover.setLength(0);
+                leftover.append(chunk.substring(lastSpace + 1));
+
+                // Count words in the current chunk
+                String[] words = processableChunk.split("\\s+");
+                for (String word : words) {
+                    wordCounts.put(word, wordCounts.getOrDefault(word, 0) + 1);
+                }
+
+                // Flush to disk if memory threshold is reached
+                if (wordCounts.size() >= MEMORY_THRESHOLD) {
+                    File tempFile = flushToDisk(wordCounts);
+                    intermediateFiles.add(tempFile);
+                    wordCounts.clear();
+                }
+            }
+
+            // Process the remaining leftover
+            if (leftover.length() > 0) {
+                String[] words = leftover.toString().split("\\s+");
+                for (String word : words) {
+                    wordCounts.put(word, wordCounts.getOrDefault(word, 0) + 1);
+                }
+            }
+
+            // Flush any remaining word counts to disk
+            if (!wordCounts.isEmpty()) {
+                File tempFile = flushToDisk(wordCounts);
+                intermediateFiles.add(tempFile);
+                wordCounts.clear();
+            }
+        }
+
+        // Merge intermediate files to get the top 10,000 words
+        Map<String, Integer> finalWordCounts = mergeIntermediateFiles(intermediateFiles);
+
+        // Find the top 10,000 words
+        PriorityQueue<Map.Entry<String, Integer>> topWords = new PriorityQueue<>(
+                Comparator.comparingInt(Map.Entry::getValue)
+        );
+
+        for (Map.Entry<String, Integer> entry : finalWordCounts.entrySet()) {
+            topWords.offer(entry);
+            if (topWords.size() > TOP_WORDS_LIMIT) {
+                topWords.poll();
+            }
+        }
+
+        // Print the top 10,000 words
+        List<Map.Entry<String, Integer>> result = new ArrayList<>();
+        while (!topWords.isEmpty()) {
+            result.add(topWords.poll());
+        }
+        Collections.reverse(result);
+
+        for (Map.Entry<String, Integer> entry : result) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
+        // Clean up intermediate files
+        for (File file : intermediateFiles) {
+            file.delete();
+        }
+    }
+
+    private static File flushToDisk(Map<String, Integer> wordCounts) throws IOException {
+        File tempFile = File.createTempFile("wordCounts", ".txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+            for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
+                writer.write(entry.getKey() + " " + entry.getValue());
+                writer.newLine();
+            }
+        }
+        return tempFile;
+    }
+
+    private static Map<String, Integer> mergeIntermediateFiles(List<File> intermediateFiles) throws IOException {
+        Map<String, Integer> finalWordCounts = new HashMap<>();
+        for (File file : intermediateFiles) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(" ");
+                    String word = parts[0];
+                    int count = Integer.parseInt(parts[1]);
+                    finalWordCounts.put(word, finalWordCounts.getOrDefault(word, 0) + count);
+                }
+            }
+        }
+        return finalWordCounts;
+    }
+}
+
+```
+
+
 ## 压缩算法
 
 ```java

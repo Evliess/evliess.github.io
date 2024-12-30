@@ -8,7 +8,7 @@ date: 2018-02-22 11:03:55
 # Common algorithm
 
 
-## 文件大小为2G，统计文件中出现次数为top100的单词，单词以空格分开。JVM限制使用2M，最后输入格式从小到大排列打印，例如 hello: 100, world: 99, java: 98
+> 文件大小为2G，统计文件中出现次数为top100的单词，单词以空格分开。JVM限制使用2M，最后输入格式从小到大排列打印，例如 hello: 100, world: 99, java: 98
 
 ```java
 public class CountWords {
@@ -134,7 +134,7 @@ private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
 ```
 
 
-## 压缩算法
+> 压缩算法
 
 ```java
   public static void unzip(File zipFile, String destPath) throws Exception {
@@ -216,7 +216,7 @@ private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
 
 ```
 
-## 归并排序算法
+> 归并排序算法
 
 ```java
   public static void mergeSort(int array[], int start, int end) {
@@ -267,7 +267,7 @@ private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
 
 ```
 
-## 快速排序算法
+> 快速排序算法
 
 ```java
   private int getBasePosition(int array[], int L, int R) {
@@ -311,7 +311,7 @@ private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
 
 ```
 
-## 二分查找算法
+> 二分查找算法
 
 ```java
 //递归实现
@@ -350,7 +350,7 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 ```
 
-## 串的查找算法
+> 串的查找算法
 
 ```java
   public static int strMatch_1(char[] source, char[] target) {
@@ -379,7 +379,8 @@ private int binarySearch(int arr[], int start, int end, int target) {
 
 ```
 
-#### 参考链接  
+#### 参考链接
+- https://leetcode.cn/problem-list/2cktkvj/
 
 
 

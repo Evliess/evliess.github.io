@@ -216,6 +216,25 @@ private static final int CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
 
 ```
 
+> 插入排序
+
+```java
+public static void insertSort(int[] arr) {
+    // 从第二个元素开始排序，假设第一个元素已排序
+    for (int i = 1; i < arr.length; i++) {
+        int current = arr[i];
+        int lastSortPos = i - 1;
+        while (lastSortPos >= 0 && arr[lastSortPos] > current) {
+            //将大于current的元素右移一位
+            arr[lastSortPos + 1] = arr[lastSortPos];
+            lastSortPos--;
+        }
+        // lastSortPos 记录的是排序好的最后一个元素的下标，所以current的位置是lastSortPos + 1
+        arr[lastSortPos + 1] = current;
+    }
+}
+```
+
 > 归并排序算法
 
 ```java

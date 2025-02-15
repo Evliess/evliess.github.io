@@ -110,37 +110,6 @@ AllowUsers jiajia
 
 sudo systemctl restart sshd
 ```
-
-
-
-## Create a service for your sprintboot app
-
-```bash
-# sudo vi /etc/systemd/system/hello.service
-
-[Unit]
-Description=Spring Boot HelloWorld
-After=syslog.target
-After=network.target[Service]
-User=jiajia
-Type=simple
-
-[Service]
-ExecStart=/usr/bin/java -DAPI_KEY=sk-9728996874e7443cb8d902328ef5cbb2 -jar /home/jiajia/hello/app.jar
-Restart=always
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=helloworld
-
-[Install]
-WantedBy=multi-user.target
-
-
-#verify
-sudo systemctl start hello
-sudo systemctl status hello
-```
-
 ## Setup jdk17
 
 ```bash
@@ -221,6 +190,9 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 30s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 300s;
     }
 
     # 禁止访问隐藏文件
@@ -236,7 +208,51 @@ server {
 
 
 sudo systemctl restart nginx
+sudo systemctl status nginx
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
 ```
+
+## Create a service for your sprintboot app
+
+
+```bash
+# sudo vi /home/jiajia/start.sh
+
+#!/bin/bash
+export API_KEY=KEY
+java -jar /home/jiajia/app.jar
+```
+
+```bash
+# sudo vi /etc/systemd/system/sugar.service
+
+[Unit]
+Description=Sugar
+After=syslog.target
+After=network.target[Service]
+User=jiajia
+Type=simple
+
+[Service]
+ExecStart=/home/jiajia/start.sh
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=helloworld
+
+[Install]
+WantedBy=multi-user.target
+
+
+#verify
+sudo systemctl start sugar
+sudo systemctl status sugar
+sudo journalctl -u sugar -f
+```
+
+
 
 
 

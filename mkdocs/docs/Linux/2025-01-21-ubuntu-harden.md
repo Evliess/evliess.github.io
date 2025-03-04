@@ -252,7 +252,73 @@ sudo systemctl status sugar
 sudo journalctl -u sugar -f
 ```
 
+## h2
 
+```
+java -cp .\h2-2.3.232.jar org.h2.tools.Shell
+java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -web
+```
+
+```sql
+CREATE TABLE s_users(
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    s_name VARCHAR(255),
+    s_key VARCHAR(255)
+);
+
+
+CREATE TABLE s_orders(
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    token VARCHAR(255),
+    apply_date VARCHAR(255),
+    expired_days int
+);
+
+CREATE INDEX idx_token on s_orders(token);
+
+CREATE TABLE s_actions (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uid VARCHAR(63),
+    s_operations VARCHAR(255)
+);
+
+CREATE INDEX idx_uid on s_actions(uid);
+```
+
+## ssh key-gen
+
+```
+1. 生成keys <RAS/ED25519/ECDSA>
+
+openssl genrsa -out C:/keys/rsa_private_key.pem 2048
+openssl pkcs8 -topk8 -nocrypt -inform PEM -in C:/keys/rsa_private_key.pem -outform PEM
+openssl rsa -in C:/keys/rsa_private_key.pem -pubout -out C:/keys/rsa_public_key.pem
+
+```
+
+## Angular build
+
+```node
+npm run build --prod
+```
+
+## Run within Springboot
+
+- 1. Copy dist/project_name/browser into resources/static/public/project_name/
+- 2. Edit index.html and set ```<base href=".">```
+- 3. add addViewControllers
+
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/public/project_name/welcome")
+                .setViewName("forward:/public/project_name/index.html");
+    }
+}
+```
 
 
 

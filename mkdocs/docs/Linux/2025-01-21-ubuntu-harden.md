@@ -257,32 +257,34 @@ sudo journalctl -u sugar -f
 ```
 java -cp .\h2-2.3.232.jar org.h2.tools.Shell
 java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -web
+java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -tcpPort 9081 -baseDir ~/sugar
 ```
 
 ```sql
-CREATE TABLE s_users(
+CREATE TABLE SugarUser(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    s_name VARCHAR(255),
-    s_key VARCHAR(255)
+    userName VARCHAR(255),
+    userKey VARCHAR(255)
 );
 
 
-CREATE TABLE s_orders(
+CREATE TABLE SugarToken(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     token VARCHAR(255),
-    apply_date VARCHAR(255),
-    expired_days int
+    s_name VARCHAR(255)
 );
 
-CREATE INDEX idx_token on s_orders(token);
+CREATE INDEX idx_token on s_token(token);
 
-CREATE TABLE s_actions (
+CREATE TABLE s_audit (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    uid VARCHAR(63),
-    s_operations VARCHAR(255)
+    token VARCHAR(255),
+    s_name VARCHAR(255),
+    consumed_at DATE
 );
 
-CREATE INDEX idx_uid on s_actions(uid);
+
+CREATE INDEX idx_audit_token on s_audit (token);
 ```
 
 ## ssh key-gen

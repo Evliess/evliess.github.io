@@ -261,30 +261,29 @@ java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -tcpPort 9081 -baseDir ~/suga
 ```
 
 ```sql
-CREATE TABLE SugarUser(
+CREATE TABLE S_USERS(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    userName VARCHAR(255),
-    userKey VARCHAR(255)
+    s_name VARCHAR(255),
+    s_key VARCHAR(255)
 );
 
 
-CREATE TABLE SugarToken(
+CREATE TABLE S_TOKEN(
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     token VARCHAR(255),
     s_name VARCHAR(255)
 );
-
 CREATE INDEX idx_token on s_token(token);
 
 CREATE TABLE s_audit (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     token VARCHAR(255),
     s_name VARCHAR(255),
-    consumed_at DATE
+    consumed_at Long,
+    s_type VARCHAR(15) 
 );
-
-
-CREATE INDEX idx_audit_token on s_audit (token);
+CREATE INDEX idx_audit_token on s_audit (s_name);
+CREATE INDEX idx_audit_consumed_at on s_audit (consumed_at);
 ```
 
 ## ssh key-gen

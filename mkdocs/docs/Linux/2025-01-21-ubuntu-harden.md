@@ -98,6 +98,12 @@ sudo adduser jiajia
 sudo usermod -aG sudo jiajia
 ```
 
+### Create no-login user
+
+```
+sudo useradd -M -s /usr/sbin/nologin sugar
+```
+
 ### Config SSH
 ```bash
 sudo vi /etc/ssh/sshd_config
@@ -147,6 +153,17 @@ _acme-challenge.YOU_DOMAIN: Xh-RYYirtUKz7r9OR8hDBsg0e8pd7NLWmOVcyMyTPRY
 # Key is saved at:         /etc/letsencrypt/live/YOU_DOMAIN/privkey.pem
 # This certificate expires on 2025-04-22.
 
+# nginx config
+sudo vi /etc/nginx/nginx.conf
+```
+http {
+    # 1. 定义连接控制区域 (基于 IP 地址的限制)
+    limit_conn_zone $binary_remote_addr zone=addr:10m;
+
+    # 2. 定义请求速率控制区域 (基于 IP 地址的限制)
+    limit_req_zone $binary_remote_addr zone=one:10m rate=1r/s;
+```
+
 # website config
 sudo vi /etc/nginx/sites-available/yourdomain.com
 
@@ -185,6 +202,11 @@ server {
 
     # 反向代理到Spring Boot应用
     location / {
+        # 并发连接限制，每个 IP 同时只能有 10 个连接
+        limit_conn addr 10;
+        # 请求速率限制，每秒允许 1 次请求，突发队列长度为 5
+        limit_req zone=one burst=5 nodelay;
+
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -284,6 +306,15 @@ CREATE TABLE s_audit (
 );
 CREATE INDEX idx_audit_token on s_audit (s_name);
 CREATE INDEX idx_audit_consumed_at on s_audit (consumed_at);
+
+CREATE TABLE s_dict (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    s_name VARCHAR(255),
+    s_meaning VARCHAR(512),
+    s_type VARCHAR(15),
+    s_other VARCHAR(255)
+);
+CREATE INDEX idx_s_dict on s_dict (s_name);
 ```
 
 ## ssh key-gen

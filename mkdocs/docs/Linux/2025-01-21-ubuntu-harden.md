@@ -353,6 +353,15 @@ public class WebConfig implements WebMvcConfigurer {
 ```
 
 
+### 提取字体
+
+```
+pip install fonttools
+pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.otf" --unicodes="U+3000-303F, U+4E00-9FFF" --layout-features='*' --flavor="woff2" --with-zopfli                  
+
+```
+
+
 
 
 

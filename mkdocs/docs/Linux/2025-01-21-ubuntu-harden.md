@@ -171,6 +171,14 @@ server {
     listen 80;
     server_name YOU_DOMAIN YOU_DOMAIN;
     return 301 https://$host$request_uri;
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff2|woff|ttf|otf|svg)$ {
+        # 设置缓存时间为30天
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+
+        # 可选：关闭日志记录减少I/O
+        access_log off;
+    }
 }
 server {
     listen 443 ssl;
@@ -357,7 +365,13 @@ public class WebConfig implements WebMvcConfigurer {
 
 ```
 pip install fonttools
-pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.otf" --unicodes="U+3000-303F, U+4E00-9FFF" --layout-features='*' --flavor="woff2" --with-zopfli                  
+grep -rohP '[\p{Han}]' ./pages | sort | uniq > charset.txt
+
+## 抽取常用字体
+pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.otf" --unicodes="U+3000-303F, U+4E00-9FFF" --layout-features='*' --flavor="woff2" --with-zopfli
+
+## 抽取用到的字体
+pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.ttf" --text-file=charset.txt --layout-features='*' --flavor="woff2" --with-zopfli
 
 ```
 

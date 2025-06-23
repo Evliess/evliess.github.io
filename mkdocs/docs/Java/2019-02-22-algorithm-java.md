@@ -289,32 +289,50 @@ public static void insertSort(int[] arr) {
 > 快速排序算法
 
 ```java
-public static void sort(int[] arr, int low, int high) {
-        if (low >= high) return;
+    public static void sort(int[] arr, int low, int high) {
+        if (arr == null | low >= high) return;
+        if (high - low < 16) {
+            insertSort(arr);
+            return;
+        }
         int pos = partition(arr, low, high);
         sort(arr, low, pos - 1);
         sort(arr, pos + 1, high);
     }
 
-public static int partition(int[] arr, int low, int high) {
-    int key = arr[low];
-    int left = low;
-    int right = high;
-    while (left < right) {
-        while (left < right && arr[right] >= key) right--;
-        while (left < right && arr[left] <= key) left++;
-        if (left < right) {
-            int temp = arr[right];
-            arr[right] = arr[left];
-            arr[left] = temp;
+    public static void insertSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int current = arr[i];
+            int lastSortedPos = i - 1;
+            while (lastSortedPos >= 0 && arr[lastSortedPos] > current) {
+                arr[lastSortedPos + 1] = arr[lastSortedPos];
+                lastSortedPos--;
+            }
+            arr[lastSortedPos + 1] = current;
         }
     }
-    //left == right, return pos and swap key and arr[left]
-    int temp = arr[left];
-    arr[left] = key;
-    arr[low] = temp;
-    return left;
-}
+
+    public static int partition(int[] arr, int low, int high) {
+        int key = arr[low];
+        int left = low;
+        int right = high;
+        while (left < right) {
+            while (left < right && arr[right] >= key) right--;
+            while (left < right && arr[left] <= key) left++;
+            if (left < right) {
+                swap(arr, left, right);
+            }
+        }
+        //left == right, return pos and swap key and arr[right]
+        swap(arr, low, right);
+        return right;
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
 
 ```
 

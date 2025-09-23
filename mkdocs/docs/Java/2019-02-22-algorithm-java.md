@@ -238,34 +238,50 @@ public static void insertSort(int[] arr) {
 > 归并排序算法
 
 ```java
-    public static void sort(int[] nums) {
-        if (nums.length > 1) {
-            //将数组分为两半
-            int mid = nums.length >> 1;
-            int[] left = Arrays.copyOfRange(nums, 0, mid);
-            int[] right = Arrays.copyOfRange(nums, mid, nums.length);
-            //递归到left和right数组的大小都为1，然后merge
-            sort(left);
-            sort(right);
-            merge(nums, left, right);
+  public static void mergeSort(int array[], int start, int end) {
+      if (start == end) {
+          //分解的最终结果，每个数组只有一个元素
+          return;
+      }
+      int middle = start + ((end - start) >> 1);
+      mergeSort(array, start, middle);
+      mergeSort(array, middle + 1, end);
+      merge(array, start, middle, end);
+  }
 
-        }
-    }
 
-    public static void merge(int[] target, int[] a, int[] b) {
-        int pa = 0, pb = 0, pt = 0;
-        while (pa < a.length && pb < b.length) {
-            if (a[pa] < b[pb]) {
-                target[pt++] = a[pa++];
-            } else {
-                target[pt++] = b[pb++];
-            }
-        }
-        //数组a还有剩余元素
-        while (pa < a.length) target[pt++] = a[pa++];
-        //数组b还有剩余元素
-        while (pb < b.length) target[pt++] = b[pb++];
-    }
+  /**
+    *
+    * @param array
+    * @param start
+    * @param middle
+    * @param end
+    *
+    */
+  private static void merge(int array[], int start, int middle, int end) {
+      int[] help = new int[end - start + 1];
+      int p1 = start;
+      int p2 = middle + 1;
+      int i = 0;
+      //另个数组逐次比较，先将较小的数归位。  例如产生的递增的中间产物数组，[5, 10], [6,7]，经过该循环后help = {5, 6, 7}
+      while (p1 <= middle && p2 <= end) {
+          help[i++] = array[p1] < array[p2] ? array[p1++] : array[p2++];
+      }
+
+      //以下的两个while只会执行其中一个
+      while (p1 <= middle) {
+          help[i++] = array[p1++];
+      }
+      while (p2 <= end) {
+          help[i++] = array[p2++];
+      }
+
+      for (int j = 0; j < help.length; j++) {
+          //将排序了的结果放入数组
+          array[start + j] = help[j];
+      }
+
+  }
 
 
 ```
@@ -273,34 +289,51 @@ public static void insertSort(int[] arr) {
 > 快速排序算法
 
 ```java
-public static void quicksort(int[] nums, int start, int end) {
-        if (nums == null || start >= end) return;
-        int pos = getPos(nums, start, end);
-        quicksort(nums, start, pos - 1);
-        quicksort(nums, pos + 1, end);
+    public static void sort(int[] arr, int low, int high) {
+        if (arr == null | low >= high) return;
+        if (high - low < 16) {
+            insertSort(arr);
+            return;
+        }
+        int pos = partition(arr, low, high);
+        sort(arr, low, pos - 1);
+        sort(arr, pos + 1, high);
     }
 
-    public static int getPos(int[] nums, int start, int end) {
-        int random = ThreadLocalRandom.current().nextInt(start, end + 1);
-        swap(nums, start, random);
-        int pivot = nums[start];
-        int left = start;
-        while (start < end) {
-            while (start < end && nums[end] >= pivot) end--;
-            while (start < end && nums[start] <= pivot) start++;
-            if (start < end) {
-                swap(nums, start, end);
+    public static void insertSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int current = arr[i];
+            int lastSortedPos = i - 1;
+            while (lastSortedPos >= 0 && arr[lastSortedPos] > current) {
+                arr[lastSortedPos + 1] = arr[lastSortedPos];
+                lastSortedPos--;
+            }
+            arr[lastSortedPos + 1] = current;
+        }
+    }
+
+    public static int partition(int[] arr, int low, int high) {
+        int key = arr[low];
+        int left = low;
+        int right = high;
+        while (left < right) {
+            while (left < right && arr[right] >= key) right--;
+            while (left < right && arr[left] <= key) left++;
+            if (left < right) {
+                swap(arr, left, right);
             }
         }
-        swap(nums, left, end);
-        return end;
+        //left == right, return pos and swap key and arr[right]
+        swap(arr, low, right);
+        return right;
     }
 
-    public static void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
+    public static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
+
 ```
 
 > 二分查找算法

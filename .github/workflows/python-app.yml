@@ -31,3 +31,11 @@ jobs:
         pip install mkdocs-minify-plugin -U
         # mkdocs gh-deploy --config-file ../mkdocs/mkdocs.yml --remote-branch master
         mkdocs build
+    - name: Commit and push to release branch
+      run: |
+        ls -la mkdocs
+        # git config --global user.name 'github-actions[bot]'
+        # git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        # git add .
+        # git commit -m "chore: Auto deploy build assets" || echo "No changes to commit"
+        # git push

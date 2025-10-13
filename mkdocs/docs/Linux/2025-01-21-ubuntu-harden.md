@@ -163,6 +163,7 @@ http {
 
     # 2. 定义请求速率控制区域 (基于 IP 地址的限制)
     limit_req_zone $binary_remote_addr zone=one:10m rate=1r/s;
+}
 ```
 
 # website config

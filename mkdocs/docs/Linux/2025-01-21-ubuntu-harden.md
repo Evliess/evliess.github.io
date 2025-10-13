@@ -156,6 +156,7 @@ _acme-challenge.YOU_DOMAIN: Xh-RYYirtUKz7r9OR8hDBsg0e8pd7NLWmOVcyMyTPRY
 # nginx config
 sudo vi /etc/nginx/nginx.conf
 ```
+```
 http {
     # 1. 定义连接控制区域 (基于 IP 地址的限制)
     limit_conn_zone $binary_remote_addr zone=addr:10m;
@@ -166,7 +167,7 @@ http {
 
 # website config
 sudo vi /etc/nginx/sites-available/yourdomain.com
-
+```
 server {
     listen 80;
     server_name YOU_DOMAIN YOU_DOMAIN;
@@ -236,7 +237,8 @@ server {
     }
 }
 
-
+```
+```
 sudo systemctl restart nginx
 sudo systemctl status nginx
 sudo tail -f /var/log/nginx/access.log

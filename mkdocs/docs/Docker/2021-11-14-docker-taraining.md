@@ -368,6 +368,67 @@ https://docs.docker.com/engine/swarm/
 ![container_ecosystem_layer](../Docker/images/docker/container_ecosystem_layers.png)
 
 
+-- slide Dockerfile refernece - EXEC Vs CMD
+
+1. Dockerfile should specify at least one of **CMD** or **ENTRYPOINT** commands.
+2. **ENTRYPOINT** should be defined when using the container as an executable.
+3. **CMD** should be used as a way of defining default arguments for an **ENTRYPOINT** command or for executing an ad-hoc command in a container.
+4. **CMD** will be overridden when running the container with alternative arguments.
+
+Example：
+```
+FROM ubuntu
+ENTRYPOINT ["top", "-b"]
+CMD ["-c"]
+
+# docker run without other args will result: top -b -c
+# docker run -it --rm --name test  top -H  This will results top -H
+```
+
+-- slide
+
+## Dockerfile refernece - ADD
+
+```bash
+ADD [OPTIONS] <src> ... <dest>
+ADD [OPTIONS] ["<src>", ... "<dest>"]
+
+1. If <src> is a local file or directory, the contents of the directory are copied to the specified destination.
+2. If <src> is a local tar archive, it is decompressed and extracted to the specified destination. 
+3. If <src> is a URL, the contents of the URL are downloaded and placed at the specified destination.
+4. If <src> is a Git repository, the repository is cloned to the specified destination.
+```
+
+-- slide
+
+## Build Images Tools
+
+- Docker（BuildKit, BuildX）
+
+### Daemon-less
+
+- Buildah
+- Kaniko
+- Podman
+
+## Container Runtime （High-Level）
+
+- containerd
+- CRI-O
+- Podman
+
+## Container Runtime （Low-Level）
+
+- runC
+- crun
+
+## Container Runtime （Virtual）
+
+- kata Containers
+- gVisor
+
+
+
 
 
 

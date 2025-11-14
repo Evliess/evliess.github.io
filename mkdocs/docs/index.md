@@ -21,9 +21,12 @@ jstat -gc <pid> 1s
 3. 使用Eclipse MAT 快照分析
 
 3.1 查看 Leak Suspects
+
 3.2 使用Dominator Tree 查看大对象，以及所引用的对象
-3.3 常见的可疑点 *静态集合类， ThreadLoacl 局部变量，数据库连接，网络连接，文件流未关闭， 监听回调没有取消* 如果是```ThreadLocal```，确保在```try-finally```块中使用，并在```finally```中调用 ```threadLocal.remove()```。
-3.4 使用自动死锁检测报告 Deadlock Suspects, 从线程视图分析 重点关注状态为 BLOCKED 或 WAITING 的线程。
+
+3.3 常见的可疑点 *静态集合类， ThreadLoacl 局部变量，数据库连接，网络连接，文件流未关闭， 监听回调没有取消* 如果是```ThreadLocal```，确保在```try-finally```块中使用，并在```finally```中调用 ```threadLocal.remove()```
+
+3.4 使用自动死锁检测报告 Deadlock Suspects, 从线程视图分析 重点关注状态为 BLOCKED 或 WAITING 的线程
 
 ### 场景2 堆内存分配小
 症状：GC日志显示每次Full GC回收效果很好，但很快又满了。
@@ -80,8 +83,10 @@ jstat -gc <pid> 1s
 
 ### 场景4：不合理的GC策略或对象分配
 
-4.1 调整年轻代大小：年轻代过小会导致Minor GC频繁，存活对象年龄迅速增长，提前进入老年代。
-4.2 避免大对象：检查是否有过大的数组或字符串，它们会直接在老年代分配。优化代码逻辑，避免创建过大的对象。
+4.1 调整年轻代大小：年轻代过小会导致Minor GC频繁，存活对象年龄迅速增长，提前进入老年代
+
+4.2 避免大对象：检查是否有过大的数组或字符串，它们会直接在老年代分配。优化代码逻辑，避免创建过大的对象
+
 ### 场景5：代码中调用了System.gc()
 
 ## AQS
@@ -101,78 +106,78 @@ ThreadLocalMap中的entry，key是弱引用对象,value是强引用对象。GC�
 
 ## Spring如何解决Bean循环依赖
 
-只能解决单例的bean通过属性注入的场景，不支持构造方法注入，非单例的bean，以及多例Bean通过@Async等AOP代理产生的循环依赖。一级缓存singletonObjects，二级缓存earlySingletonObjects，三级缓存singletonFactories。
-为什么三级缓存时Factories? 因为在调用 ```ObjectFactory.getObject()```需要判断是否需要AOP代理，不需要则直接返回，需要的话返回的是AOP代理对象。
+只能解决单例的bean通过属性注入的场景，不支持构造方法注入，非单例的bean，以及多例Bean通过@Async等AOP代理产生的循环依赖。一级缓存singletonObjects，二级缓存earlySingletonObjects，三级缓存singletonFactories
+为什么三级缓存时Factories? 因为在调用 ```ObjectFactory.getObject()```需要判断是否需要AOP代理，不需要则直接返回，需要的话返回的是AOP代理对象
 
 ```
-我们以最经典的 A 依赖 B，B 依赖 A 为例，详细走一遍流程。
+我们以最经典的 A 依赖 B，B 依赖 A 为例，详细走一遍流程
 
 步骤 1：开始创建 A
-调用 getBean("a")，发现 A 不在二、三级缓存中，开始创建。
+调用 getBean("a")，发现 A 不在二、三级缓存中，开始创建
 
-实例化 A：通过反射 new A() 得到一个对象（此时 @Autowired B b 字段还是 null）。
+实例化 A：通过反射 new A() 得到一个对象（此时 @Autowired B b 字段还是 null）
 
-【关键一步】：Spring 将封装了 A 原始对象的 ObjectFactory 放入 三级缓存 (singletonFactories)。这个 ObjectFactory 的作用是：在需要时，能够返回 A 的一个“早期引用”。
+【关键一步】：Spring 将封装了 A 原始对象的 ObjectFactory 放入 三级缓存 (singletonFactories)。这个 ObjectFactory 的作用是：在需要时，能够返回 A 的一个“早期引用”
 
-进行属性填充 (populateBean)：Spring 发现 A 依赖 B，于是调用 getBean("b")。
+进行属性填充 (populateBean)：Spring 发现 A 依赖 B，于是调用 getBean("b")
 
 此时的状态：
 
-A 对象已实例化，但属性 B 为 null。
+A 对象已实例化，但属性 B 为 null
 
-A 的 ObjectFactory 已在 三级缓存。
+A 的 ObjectFactory 已在 三级缓存
 
-一级、二级缓存没有 A。
+一级、二级缓存没有 A
 
 步骤 2：开始创建 B
-调用 getBean("b")，发现 B 不在二、三级缓存中，开始创建。
+调用 getBean("b")，发现 B 不在二、三级缓存中，开始创建
 
-实例化 B：通过反射 new B() 得到一个对象（此时 @Autowired A a 字段还是 null）。
+实例化 B：通过反射 new B() 得到一个对象（此时 @Autowired A a 字段还是 null）
 
-【关键一步】：Spring 将封装了 B 原始对象的 ObjectFactory 放入 三级缓存 (singletonFactories)。
+【关键一步】：Spring 将封装了 B 原始对象的 ObjectFactory 放入 三级缓存 (singletonFactories)
 
-进行属性填充 (populateBean)：Spring 发现 B 依赖 A，于是调用 getBean("a")。
+进行属性填充 (populateBean)：Spring 发现 B 依赖 A，于是调用 getBean("a")
 
 步骤 3：B 获取 A（循环依赖的解决点）
-再次调用 getBean("a")。
+再次调用 getBean("a")
 
-这次，Spring 在 三级缓存 中找到了 A 的 ObjectFactory。
+这次，Spring 在 三级缓存 中找到了 A 的 ObjectFactory
 
-调用 ObjectFactory.getObject()。
+调用 ObjectFactory.getObject()
 
-如果 A 不需要 AOP 代理：这个方法直接返回步骤 1 中实例化的那个原始 A 对象。
+如果 A 不需要 AOP 代理：这个方法直接返回步骤 1 中实例化的那个原始 A 对象
 
-如果 A 需要 AOP 代理：这个方法会返回 A 的代理对象（一个 Proxy 或 CGLIB 增强对象）。这就是为什么三级缓存是工厂，而不是直接放对象的原因——为了在暴露早期引用时，有机会介入生成代理。
+如果 A 需要 AOP 代理：这个方法会返回 A 的代理对象（一个 Proxy 或 CGLIB 增强对象）。这就是为什么三级缓存是工厂，而不是直接放对象的原因——为了在暴露早期引用时，有机会介入生成代理
 
-Spring 将这个从三级缓存工厂得到的对象（可能是原始对象，也可能是代理对象）放入二级缓存 (earlySingletonObjects)。
+Spring 将这个从三级缓存工厂得到的对象（可能是原始对象，也可能是代理对象）放入二级缓存 (earlySingletonObjects)
 
-同时，从三级缓存中移除A的ObjectFactory。
+同时，从三级缓存中移除A的ObjectFactory
 
-将这个A的早期引用（来自二级缓存）注入到B对象中。至此，B的a字段被成功赋值。
+将这个A的早期引用（来自二级缓存）注入到B对象中。至此，B的a字段被成功赋值
 
 此时的状态：
 
-B 完成了属性填充，它的a字段指向了A的早期引用。
+B 完成了属性填充，它的a字段指向了A的早期引用
 
-A 的早期引用现在存在于二级缓存。
+A 的早期引用现在存在于二级缓存
 
 步骤 4：B 完成创建
-B 继续执行后续的初始化流程（如 InitializingBean, @PostConstruct 等）。
+B 继续执行后续的初始化流程（如 InitializingBean, @PostConstruct 等）
 
-B 完全创建好后，成为一个“成品” Bean，被放入一级缓存 (singletonObjects)。
+B 完全创建好后，成为一个“成品” Bean，被放入一级缓存 (singletonObjects)
 
-同时，从二级、三级缓存中移除 B。
+同时，从二级、三级缓存中移除 B
 
 步骤 5：A 完成创建
-此时，getBean("b") 返回了创建好的 B 对象（从一级缓存获取）。
+此时，getBean("b") 返回了创建好的 B 对象（从一级缓存获取）
 
-Spring 将这个 B 的“成品”注入到A的b字段中。
+Spring 将这个 B 的“成品”注入到A的b字段中
 
-A 继续执行后续的初始化流程。
+A 继续执行后续的初始化流程
 
-A 完全创建好后，成为一个“成品” Bean，被放入一级缓存 (singletonObjects)。
+A 完全创建好后，成为一个“成品” Bean，被放入一级缓存 (singletonObjects)
 
-同时，从二级、三级缓存中移除 A。
+同时，从二级、三级缓存中移除 A
 ```
 
 ## 一万QPS + 500ms 接口，需要多少机器？

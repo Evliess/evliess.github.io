@@ -39,6 +39,45 @@ jstat -gc <pid> 1s
 -XX:MaxMetaspaceSize=256m
 
 ```
+
+### G1 常用参数
+
+```
+#堆内存，示例设置最大最小值为4g，对于G1，一般建议2g以上。注意设定Xms=Xmx，防止发生扩容、缩容
+-Xms4g -Xmx4g 
+
+#配置元空间初始256m、最大256m。不配置的话，元空间会不受限地占用物理机内存
+-XX:MetaspaceSize=256m  -XX:MaxMetaspaceSize=256m 
+
+#设置最大暂停时间，默认200ms。
+-XX:MaxGCPauseMillis=100
+
+#指定Region大小，必须是2次幂，最大是32m，具体取值有1MB、2MB、4MB、8MB、16MB、32MB。不声明时，Region大小等于堆大小除以2048
+-XX:G1HeapRegionSize=2m
+
+#设置新生代大小，默认5%，默认最大60%。
+-XX:G1NewSizePercent=5 -XX:G1MaxNewSizePercent=60
+
+#可以生成更详细的Survivor空间占用日志，开发环境调试用
+-Xlog:gc+age=trace
+
+#针对混合回收回收的参数：混合回收不仅针对老年代，还有新生代和大对象
+
+#老年代Region触发混合GC的占比，默认值是45，也就是说老年代占据了堆内存45%的Region的时，会触发混合GC。该值一般不需要调整，这样可以让JVM内存占用维持在50%左右
+-XX:InitiatingHeapOccupancyPercent=45
+#混合回收阶段会执行8次（默认值），一次只回收掉部分Region，然后系统继续运行一小段时间，之后再继续混合回收，重复8轮。混合回收通过间断操作，可以把每次的回收时间控制在指定的停顿时间之内，最终也达到了垃圾清理的效果。
+-XX:G1MixedGCCountTarget=8
+#混合回收整理出来的空闲空间占heap的5%时（默认值），终止本次回收
+-XX:G1HeapWastePercent=5
+#如果一个Region中的存活对象大于Region大小的85%的话（默认值），就不去回收这个Region
+-XX:+UnlockExperimentalVMOptions -XX:G1MixedGCLiveThresholdPercent=85
+
+#OOM时堆内存dump到当前目录
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/java_pid%p.hprof
+
+
+```
+
 ### 场景4：不合理的GC策略或对象分配
 
 4.1 调整年轻代大小：年轻代过小会导致Minor GC频繁，存活对象年龄迅速增长，提前进入老年代。

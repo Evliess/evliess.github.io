@@ -48,7 +48,7 @@ sudo systemctl restart docker
 # Run a mysql 8.4 container
 
 ```bash
-sudo docker pull mysql:8.4
+sudo docker pull mysql:8.4.7
 sudo docker run --name mysql -p 3307:3306  -v /var/lib/mysql:/var/lib/mysql -e MYSQL_USER=test_user -e MYSQL_PASSWORD=qq123456 -d mysql:8.4.7
 ```
 

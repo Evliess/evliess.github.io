@@ -5,6 +5,90 @@ category: devops
 date: 2019-09-20 12:17:55
 ---
 
+# Install docker on Ubuntu 22.04.5 LST
+
+```
+# 1. 卸载旧版本（如有）
+sudo apt remove docker docker-engine docker.io containerd runc
+
+# 2. 安装依赖
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg lsb-release
+
+# 3. 创建目录
+sudo mkdir -p /etc/apt/keyrings
+
+# 4. 下载阿里云提供的 GPG 密钥（替代官方）
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# 5. 添加阿里云的 Docker APT 源
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 6. 安装 Docker
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 7. 配置 /etc/docker/daemon.json
+
+cat /etc/docker/daemon.json
+{
+  "registry-mirrors": [
+    "https://docker.1ms.run"
+  ]
+}
+
+# 8. 重启Docker 服务
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+# Run a mysql 8.4 container
+
+```bash
+sudo docker pull mysql:8.4
+sudo docker run --name mysql -p 3307:3306  -v /var/lib/mysql:/var/lib/mysql -e MYSQL_USER=test_user -e MYSQL_PASSWORD=qq123456 -d mysql:8.4.7
+```
+
+# Ubuntu 22.04 安装mysql 8.4.7
+
+- https://dev.mysql.com/downloads/mysql/
+- https://dev.mysql.com/downloads/repo/apt/
+```
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.36-1_all.deb
+
+sudo apt update
+sudo apt install mysql-server
+
+#运行安全初始化（设置 root 密码等）
+#sudo mysql_secure_installation
+mysql --version
+sudo mysql
+
+#添加用户
+
+-- 创建用户（% 表示任意主机）
+CREATE USER 'test_user'@'%' IDENTIFIED BY 'qq123456';
+
+-- 授权（这里以 mydb.* 为例，按需调整）
+GRANT ALL PRIVILEGES ON mydb.* TO 'test_user'@'%';
+
+-- 刷新权限
+FLUSH PRIVILEGES;
+
+# 查看 MySQL 配置,找到数据目录
+sudo mysqld --verbose --help | grep "datadir"  
+=> /var/lib/mysql/
+
+# Removing MySQL with APT
+sudo systemctl stop mysql
+sudo apt-get remove mysql-server
+sudo apt-get autoremove
+```
+
 
 # How to config jenkins using host JDK and Maven
 

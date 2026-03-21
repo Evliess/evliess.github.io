@@ -14,7 +14,7 @@ irm https://claude.ai/install.ps1 | iex
 ## Setup Environment
 
 ```bash
-export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_BASE_URL=https://api.hunyuan.cloud.tencent.com/anthropic
 export ANTHROPIC_AUTH_TOKEN=token
 export ANTHROPIC_MODEL=deepseek-chat
 export ANTHROPIC_SMALL_FAST_MODEL=deepseek-chat
@@ -116,4 +116,6 @@ claude mcp add playwright npx @playwright/mcp@latest
 claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp
 /mcp list
 /plugin install figma@claude-plugins-official
+claude mcp add context7 --scope user -- npx @upstash/context7-mcp 
+claude mcp remove
 ```

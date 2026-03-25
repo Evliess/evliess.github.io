@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n '```bash' /c/Users/xiaofei/Documents/github/evliess.github.io/mkdocs/docs/AI/claude_practise.md)",
+      "Bash(grep -n '```' /c/Users/xiaofei/Documents/github/evliess.github.io/mkdocs/docs/AI/claude_practise.md)"
+    ]
+  }
+}

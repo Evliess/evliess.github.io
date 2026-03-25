@@ -364,18 +364,76 @@ public class WebConfig implements WebMvcConfigurer {
 ```
 
 
-### 提取字体
+### Enable https for front and backend
 
 ```
-pip install fonttools
-grep -rohP '[\p{Han}]' ./pages | sort | uniq > charset.txt
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d $DOMAIN_NAME
 
-## 抽取常用字体
-pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.otf" --unicodes="U+3000-303F, U+4E00-9FFF" --layout-features='*' --flavor="woff2" --with-zopfli
+###
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem
+This certificate expires on 2026-06-23.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+###
 
-## 抽取用到的字体
-pyftsubset ./SourceHanSerifCN-Regular.otf --output-file="SourceHanSansCN-Subset.ttf" --text-file=charset.txt --layout-features='*' --flavor="woff2" --with-zopfli
+### sudo vi /etc/nginx/sites-available/sugar.conf
+server {
+    listen 80;
+    server_name $DOMAIN_NAME;
+    
+    # Certbot 添加的重定向规则
+    if ($host = $DOMAIN_NAME) {
+        return 301 https://$host$request_uri;
+    }
+    
+    # 原有的配置保持不变...
+    return 404;
+}
 
+server {
+    listen 443 ssl;
+    server_name $DOMAIN_NAME;
+    
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    ssl_session_cache shared:SSL:60m;
+    
+    gzip on;
+    gzip_min_length 1k;
+    gzip_comp_level 6;
+    gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/json image/svg+xml;
+    gzip_vary on;
+    
+    root /var/www/frontend/browser;
+    index index.html index.htm;
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    location /sugar-dict/ {
+        proxy_pass http://localhost:8080/sugar-dict/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}
+###
+sudo nginx -t
+sudo systemctl reload nginx
 ```
 
 

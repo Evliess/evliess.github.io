@@ -271,18 +271,38 @@ Type=simple
 [Service]
 ExecStart=/home/jiajia/start.sh
 Restart=always
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=append:/home/jiajia/back_end/logs/helloworld.log
+StandardError=append:/home/jiajia/back_end/logs/helloworld.log
 SyslogIdentifier=helloworld
 
 [Install]
 WantedBy=multi-user.target
+```
 
+## config logrotate
+sudo cat /etc/logrotate.d/helloworld
+```
+/home/jiajia/back_end/logs/helloworld.log {
+    daily                    
+    rotate 7                 
+    compress                 
+    delaycompress            
+    missingok                
+    notifempty              
+    create 0644 jiajia jiajia   
+    size 100M         
+}
+```
+## verify logrotate
+```
+sudo logrotate -d /etc/logrotate.d/helloworld
+``` 
 
-#verify
+### verify
+```
 sudo systemctl start sugar
 sudo systemctl status sugar
-sudo journalctl -u sugar -f
+sudo tail -f /home/jiajia/back_end/logs/helloworld.log
 ```
 
 ## h2
@@ -291,41 +311,6 @@ sudo journalctl -u sugar -f
 java -cp .\h2-2.3.232.jar org.h2.tools.Shell
 java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -web
 java -cp .\h2-2.3.232.jar org.h2.tools.Server -tcp -tcpPort 9081 -baseDir ~/sugar
-```
-
-```sql
-CREATE TABLE S_USERS(
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    s_name VARCHAR(255),
-    s_key VARCHAR(255)
-);
-
-
-CREATE TABLE S_TOKEN(
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    token VARCHAR(255),
-    s_name VARCHAR(255)
-);
-CREATE INDEX idx_token on s_token(token);
-
-CREATE TABLE s_audit (
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    token VARCHAR(255),
-    s_name VARCHAR(255),
-    consumed_at Long,
-    s_type VARCHAR(15) 
-);
-CREATE INDEX idx_audit_token on s_audit (s_name);
-CREATE INDEX idx_audit_consumed_at on s_audit (consumed_at);
-
-CREATE TABLE s_dict (
-    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    s_name VARCHAR(255),
-    s_meaning VARCHAR(512),
-    s_type VARCHAR(15),
-    s_other VARCHAR(255)
-);
-CREATE INDEX idx_s_dict on s_dict (s_name);
 ```
 
 ## ssh key-gen

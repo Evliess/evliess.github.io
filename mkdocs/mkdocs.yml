@@ -14,7 +14,8 @@ copyright: Copyright &copy; 2018 - 2026 wait-play Sh
 # Configuration
 theme:
   name: material
-  
+  custom_dir: overrides
+
   # 404 page
   static_templates:
     - 404.html

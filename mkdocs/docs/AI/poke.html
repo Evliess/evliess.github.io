@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Texas Hold'em Poker</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- Fonts: system font stack, no external CDN -->
 <link rel="stylesheet" href="https://unpkg.com/carbon-components@10.58.8/css/carbon-components.min.css">
 <style>
 :root {
@@ -26,8 +25,8 @@
   --lensing-blue: #6366f1;
   --card-width: 70px;
   --card-height: 100px;
-  --font-ibm: 'IBM Plex Sans', sans-serif;
-  --font-roboto: 'Roboto', sans-serif;
+  --font-ibm: system-ui, -apple-system, 'Segoe UI', 'Noto Sans SC', sans-serif;
+  --font-roboto: system-ui, -apple-system, 'Segoe UI', 'Noto Sans SC', sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -468,7 +467,7 @@ header .lang-toggle:hover {
   left: 50%;
   transform: translate(-50%, -55%);
   text-align: center;
-  z-index: 5;
+  z-index: 15;
 }
 .community-cards {
   display: flex;
@@ -497,7 +496,8 @@ header .lang-toggle:hover {
   justify-content: center;
   gap: 6px;
 }
-.pot-display .material-icons { font-size: 1.2rem; }
+.ico { font-style: normal; display: inline-block; vertical-align: middle; line-height: 1; }
+.pot-display .ico { font-size: 1.2rem; }
 
 /* ── Playing Cards (Material-inspired) ── */
 .card {
@@ -633,6 +633,11 @@ header .lang-toggle:hover {
   flex-shrink: 0;
 }
 #controls.hidden { display: none; }
+#controls .btn-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
 #controls .raise-input-group {
   display: flex;
   align-items: center;
@@ -708,7 +713,7 @@ header .lang-toggle:hover {
   cursor: pointer;
   margin: 0 12px;
 }
-.log-toggle .material-icons { font-size: 1rem; }
+.log-toggle .ico { font-size: 1rem; }
 #game-log .log-entry {
   padding: 6px 0;
   border-bottom: 1px solid var(--cds-border-subtle);
@@ -716,7 +721,7 @@ header .lang-toggle:hover {
   font-family: var(--font-ibm);
   line-height: 1.4;
 }
-#game-log .log-entry .material-icons {
+#game-log .log-entry .ico {
   font-size: 0.9rem;
   vertical-align: middle;
 }
@@ -920,10 +925,10 @@ header .lang-toggle:hover {
   #table-area { top: 4px; right: 4px; bottom: 4px; left: 4px; }
   #game-log { font-size: 0.7rem; padding: 6px; max-height: 100px; }
   #game-log .log-entry { padding: 3px 0; }
-  #controls { padding: 6px 8px; padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)); gap: 5px; flex-direction: column; }
+  #controls { padding: 8px 10px; padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)); gap: 6px; flex-direction: column; }
   #controls .your-hand { margin-right: 0; }
   .btn { height: 34px; padding: 0 10px; font-size: 0.7rem; }
-  .btn .material-icons { font-size: 0.9rem; }
+  .btn .ico { font-size: 0.9rem; }
   #controls input[type="range"] { width: 80px; }
   .seat .seat-inner { min-width: 80px; padding: 4px 6px; border-radius: 8px; }
   .seat .player-name { font-size: 0.65rem; }
@@ -990,7 +995,7 @@ header .lang-toggle:hover {
         </div>
       </div>
       <button class="btn btn-primary btn-lg btn-full" id="start-btn">
-        <span class="material-icons">play_arrow</span> <span data-i18n="setup.start">开始游戏</span>
+        <span class="ico">▶</span> <span data-i18n="setup.start">开始游戏</span>
       </button>
       <p style="font-size:0.7rem;color:var(--cds-text-secondary);margin-top:12px;" data-i18n="setup.browser">
         仅用于学习和娱乐！洗牌使用 Fisher-Yates + CSPRNG 算法。</p>
@@ -1018,7 +1023,7 @@ header .lang-toggle:hover {
         <div class="community-area">
           <div class="community-cards" id="community-cards"></div>
           <div class="pot-display">
-            <span class="material-icons">casino</span>
+            <span class="ico">♠</span>
             <span data-i18n="ui.pot">底池: $</span><span id="pot-amount">0</span>
           </div>
         </div>
@@ -1039,21 +1044,23 @@ header .lang-toggle:hover {
 
   <!-- Mobile log toggle (visible below 800px) -->
   <button class="log-toggle" id="log-toggle-mobile">
-    <span class="material-icons">article</span> <span data-i18n="ui.gameLog">游戏日志</span>
+    <span class="ico">☰</span> <span data-i18n="ui.gameLog">游戏日志</span>
   </button>
 
   <!-- Controls -->
   <div id="controls" class="hidden">
     <div class="your-hand" id="your-hand-display"></div>
-    <button class="btn btn-danger" id="btn-fold"><span class="material-icons">close</span> <span data-i18n="btn.fold">弃牌</span></button>
-    <button class="btn btn-secondary" id="btn-check"><span class="material-icons">check</span> <span data-i18n="btn.check">过牌</span></button>
-    <button class="btn btn-primary" id="btn-call"><span class="material-icons">call_made</span> <span data-i18n="btn.call">跟注</span><span class="call-amount"></span></button>
+    <button class="btn btn-secondary" id="btn-check"><span class="ico">✓</span> <span data-i18n="btn.check">过牌</span></button>
+    <div class="btn-row" id="btn-fold-call-row">
+      <button class="btn btn-danger" id="btn-fold"><span class="ico">✕</span> <span data-i18n="btn.fold">弃牌</span></button>
+      <button class="btn btn-primary" id="btn-call"><span class="ico">↗</span> <span data-i18n="btn.call">跟注</span><span class="call-amount"></span></button>
+    </div>
     <div class="raise-input-group">
       <input type="range" id="raise-slider" min="0" max="100" value="0" step="1">
       <span class="raise-amount" id="raise-amount">$0</span>
-      <button class="btn btn-success" id="btn-raise"><span class="material-icons">trending_up</span> <span data-i18n="btn.raise">加注</span></button>
+      <button class="btn btn-success" id="btn-raise"><span class="ico">↑</span> <span data-i18n="btn.raise">加注</span></button>
     </div>
-    <button class="btn btn-danger" id="btn-allin"><span class="material-icons">all_in</span> <span data-i18n="btn.allin">全下</span></button>
+    <button class="btn btn-danger" id="btn-allin"><span class="ico">⚡</span> <span data-i18n="btn.allin">全下</span></button>
   </div>
 
   <!-- Result Banner -->
@@ -2591,9 +2598,10 @@ class PokerGame {
     const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
     const cx = tableW / 2;
     const cy = tableH / 2;
-    // Ellipse radii (as fraction of table size)
-    const rx = tableW * 0.40;
-    const ry = tableH * 0.38;
+    // Push seats outward for more players to avoid overlapping community cards
+    const scale = 0.95 + n * 0.02;
+    const rx = tableW * (0.40 * scale);
+    const ry = tableH * (0.38 * scale);
 
     for (let i = 0; i < n; i++) {
       const player = this.players[i];
@@ -2700,6 +2708,7 @@ class PokerGame {
       document.getElementById('btn-fold').style.display = toCall > 0 ? '' : 'none';
       document.getElementById('btn-check').style.display = toCall === 0 ? '' : 'none';
       document.getElementById('btn-call').style.display = toCall > 0 ? '' : 'none';
+      document.getElementById('btn-fold-call-row').style.display = toCall > 0 ? '' : 'none';
       const callSpan = document.querySelector('#btn-call span[data-i18n]');
       const callAmtSpan = document.querySelector('#btn-call .call-amount');
       if (toCall >= human.chips) {
@@ -3030,7 +3039,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logToggleMobile && gameLog) {
     logToggleMobile.addEventListener('click', () => {
       const collapsed = gameLog.classList.toggle('collapsed');
-      logToggleMobile.querySelector('.material-icons').textContent =
+      logToggleMobile.querySelector('.ico').textContent =
         collapsed ? 'article' : 'expand_less';
     });
   }

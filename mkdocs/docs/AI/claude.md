@@ -240,6 +240,7 @@ components[].type: group       # 用分组容器嵌套
 ```
 
 ---
+<a href="poke.html" target="_blank">Open Poke</a>
 
 > **使用提示**：将此模板完整复制到对话中，附上你的 YAML 数据，AI 将自动生成符合上述规范的 HTML 文件。你不需要关心 D3.js 或 CSS 细节 — 只需描述**你有什么组件、它们如何连接**。
 

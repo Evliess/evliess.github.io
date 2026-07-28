@@ -2607,9 +2607,13 @@ class PokerGame {
       const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
       const cx = tableW / 2;
       const cy = tableH / 2;
-      const scale = 0.95 + n * 0.02;
-      const rx = tableW * (0.40 * scale);
-      const ry = tableH * (0.38 * scale);
+      // Reduce vertical radius to keep seats from overlapping header/controls.
+      // Seat height ≈ 70px; reserve 45px padding on top and bottom edges.
+      const vPadding = 45;
+      const maxRy = (tableH / 2) - vPadding;
+      const rawRy = tableH * (0.38 * (0.95 + n * 0.02));
+      const rx = tableW * (0.40 * (0.95 + n * 0.02));
+      const ry = Math.min(rawRy, maxRy);
 
       for (let i = 0; i < n; i++) {
         const angle = (Math.PI / 2) - i * (2 * Math.PI / n);

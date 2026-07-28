@@ -221,13 +221,16 @@ header .lang-toggle:hover {
 .btn-full { width: 100%; }
 
 /* ═══════════════════════════════════════════
-   Gargantua Black Hole Table
-   Inspired by Interstellar's black hole:
-   - Pure black event horizon with sharp edge
-   - Razor-thin blazing accretion disk
-   - Doppler asymmetry (blue-shifted vs red-shifted)
-   - Gravitational lensing (disk wraps over + under)
-   - Photon ring at the Schwarzschild radius
+   Gargantua Black Hole Table — Interstellar film look
+   Key visual signatures from the movie:
+   - Perfectly black, hard-edged event horizon (the "shadow")
+   - Razor-thin accretion disk blazing at millions of degrees
+   - Extreme Doppler asymmetry: brilliant white-blue approaching,
+     dim orange/red receding
+   - Gravitational lensing: the rear disk appears as a complete
+     ring bent over BOTH top and bottom of the shadow
+   - Thin photon ring at the innermost stable circular orbit
+   - Faint Einstein ring (secondary lensed image) further out
    ═══════════════════════════════════════════ */
 
 #table-area {
@@ -238,152 +241,214 @@ header .lang-toggle:hover {
   left: 10px;
   border-radius: 50%;
   overflow: visible;
-  /* Event horizon: nearly pure black, sharp cutoff */
-  background: radial-gradient(circle at 49% 48%,
+  /* Event horizon: ABSOLUTE black with abrupt edge — no soft fade */
+  background: radial-gradient(circle at 50% 50%,
     #000000 0%,
-    #000002 58%,
-    #010108 72%,
-    #020212 82%,
-    #060620 90%,
-    #0e0e30 95%,
-    #1a1a40 98%,
+    #000000 73%,
+    #000003 76%,
+    #010108 79%,
+    #030315 83%,
+    #0a0a28 88%,
+    #151535 92%,
+    #1e1e42 96%,
     transparent 100%
   );
   box-shadow:
-    /* Outer gravitational halo */
-    0 0 80px 30px rgba(70, 90, 180, 0.15),
-    0 0 150px 60px rgba(40, 50, 140, 0.08),
-    0 0 250px 100px rgba(5, 5, 25, 0.7);
+    /* Distant gravitational glow — very subtle */
+    0 0 60px 20px rgba(60, 80, 180, 0.12),
+    0 0 120px 50px rgba(30, 40, 130, 0.06),
+    0 0 200px 80px rgba(5, 5, 25, 0.6);
 }
 
-/* ── Rear accretion disk: complete thin ring behind event horizon ── */
+/* ── Rear accretion disk: the complete ring visible via gravitational lensing ──
+   In Interstellar, light from the disk BEHIND the black hole is bent around it,
+   creating a full ring around the shadow. This layer sits UNDER the event horizon. */
 .bh-disk-rear {
   position: absolute;
-  inset: -4px;
+  inset: -6px;
   border-radius: 50%;
   z-index: 0;
   pointer-events: none;
+  /* The disk orbits counter-clockwise.
+     Left side (≈0°) = approaching = Doppler blue-shifted = blazing white-blue.
+     Right side (≈180°) = receding = Doppler red-shifted = dim orange/brown. */
   background: conic-gradient(
     from 215deg,
-    /* Counter-clockwise: blue-shifted side (approaching viewer) */
-    rgba(255, 255, 255, 0.02) 0deg,
-    rgba(160, 200, 255, 0.15) 15deg,
-    rgba(120, 170, 255, 0.45) 30deg,
-    rgba(180, 215, 255, 0.85) 48deg,
-    rgba(220, 240, 255, 1.0) 55deg,     /* Peak: blazing white-blue */
-    rgba(180, 215, 255, 0.85) 62deg,
-    rgba(255, 230, 180, 0.45) 80deg,
-    rgba(255, 190, 110, 0.22) 100deg,
-    rgba(255, 150, 70, 0.08) 120deg,     /* Red-shifted: dim orange */
-    rgba(200, 100, 40, 0.02) 145deg,
-    transparent 170deg,
-    /* Far side: nearly invisible */
-    transparent 300deg,
-    rgba(200, 100, 40, 0.015) 320deg,
-    rgba(255, 150, 70, 0.04) 340deg,
-    rgba(255, 255, 255, 0.015) 355deg,
+    /* ── Far side: barely visible ── */
+    transparent 0deg,
+    transparent 8deg,
+    /* ── Approaching limb (left): INTENSE blue-white ── */
+    rgba(140, 190, 255, 0.10) 12deg,
+    rgba(100, 160, 255, 0.30) 22deg,
+    rgba(140, 195, 255, 0.65) 32deg,
+    rgba(200, 230, 255, 0.92) 40deg,
+    rgba(230, 245, 255, 1.00) 45deg,     /* ★ Peak brilliance */
+    rgba(200, 230, 255, 0.92) 50deg,
+    rgba(140, 195, 255, 0.60) 60deg,
+    rgba(160, 200, 240, 0.35) 72deg,
+    rgba(200, 220, 240, 0.18) 85deg,
+    /* ── Receding limb (right): dim orange/red ── */
+    rgba(255, 210, 140, 0.10) 100deg,
+    rgba(255, 180, 100, 0.20) 115deg,
+    rgba(255, 150, 70, 0.12) 130deg,
+    rgba(200, 110, 45, 0.05) 150deg,
+    rgba(150, 80, 30, 0.02) 170deg,
+    transparent 195deg,
+    /* ── Far side resumes ── */
+    transparent 280deg,
+    rgba(150, 80, 30, 0.015) 310deg,
+    rgba(200, 110, 45, 0.03) 335deg,
+    rgba(255, 150, 70, 0.06) 350deg,
     transparent 360deg
   );
-  /* Thin ring: clip to just the outer edge */
+  /* Clip to a razor-thin ring just outside the event horizon */
   -webkit-mask-image: radial-gradient(circle,
-    transparent 84%,
-    rgba(0,0,0,0.3) 89%,
-    rgba(0,0,0,1) 93%,
-    rgba(0,0,0,0.3) 97%,
-    transparent 100%
+    transparent 72%,
+    rgba(0,0,0,0.10) 78%,
+    rgba(0,0,0,0.50) 82%,
+    rgba(0,0,0,1.00) 85%,
+    rgba(0,0,0,0.50) 88%,
+    rgba(0,0,0,0.10) 92%,
+    transparent 96%
   );
   mask-image: radial-gradient(circle,
-    transparent 84%,
-    rgba(0,0,0,0.3) 89%,
-    rgba(0,0,0,1) 93%,
-    rgba(0,0,0,0.3) 97%,
-    transparent 100%
+    transparent 72%,
+    rgba(0,0,0,0.10) 78%,
+    rgba(0,0,0,0.50) 82%,
+    rgba(0,0,0,1.00) 85%,
+    rgba(0,0,0,0.50) 88%,
+    rgba(0,0,0,0.10) 92%,
+    transparent 96%
   );
 }
 
-/* ── Event horizon glow layer (pseudo-element for photon scattering) ── */
+/* ── Photon shell glow: faint inner glow at the event horizon boundary ── */
 #table-area::before {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: 0;
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
   background: transparent;
   box-shadow:
-    /* Inner photon ring — faint bluish glow at event horizon edge */
-    inset 0 0 3px 1px rgba(140, 170, 240, 0.35),
-    inset 0 0 8px 3px rgba(100, 140, 220, 0.12),
-    /* Outer photon ring */
-    0 0 2px 1px rgba(160, 200, 255, 0.5),
-    0 0 6px 3px rgba(120, 160, 240, 0.25),
-    0 0 15px 6px rgba(90, 130, 220, 0.1);
+    /* Inner photon ring — bluish light bent at the photon sphere */
+    inset 0 0 2px 1px rgba(140, 180, 240, 0.30),
+    inset 0 0 6px 2px rgba(100, 150, 220, 0.10),
+    /* Outer photon ring glow */
+    0 0 1px 1px rgba(160, 210, 255, 0.45),
+    0 0 4px 2px rgba(130, 180, 240, 0.20),
+    0 0 12px 5px rgba(100, 150, 230, 0.08);
 }
 
-/* ── Gravitationally lensed front disk: bright arc over event horizon ── */
+/* ── Lensed front disk: the accretion disk warps OVER the event horizon ──
+   Gravitational lensing bends light from the disk so it appears to arch
+   over BOTH the top AND bottom of the black hole shadow. This is THE
+   signature visual from Interstellar. */
 .bh-disk-front {
   position: absolute;
-  inset: -2px;
+  inset: -4px;
   border-radius: 50%;
   z-index: 2;
   pointer-events: none;
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    transparent 18deg,
-    rgba(200, 225, 255, 0.25) 30deg,
-    rgba(160, 200, 255, 0.6) 42deg,
-    rgba(210, 235, 255, 0.95) 50deg,    /* Lensed peak brightness */
-    rgba(255, 240, 210, 0.7) 58deg,
-    rgba(255, 210, 140, 0.35) 70deg,
-    rgba(255, 170, 90, 0.12) 85deg,
-    transparent 105deg,
+    /* ── Top arc (lensed disk arching over the north pole) ── */
+    transparent 12deg,
+    rgba(180, 215, 255, 0.15) 22deg,
+    rgba(140, 190, 255, 0.38) 32deg,
+    rgba(200, 230, 255, 0.72) 42deg,
+    rgba(235, 245, 255, 0.95) 48deg,     /* Peak: lensed brilliance */
+    rgba(210, 235, 255, 0.72) 54deg,
+    rgba(255, 235, 200, 0.45) 64deg,
+    rgba(255, 200, 130, 0.22) 76deg,
+    rgba(255, 160, 80, 0.08) 92deg,
+    transparent 110deg,
+    /* ── Middle: gap (sides of the disk are edge-on) ── */
+    transparent 140deg,
+    /* ── Bottom arc (lensed disk arching under the south pole) ── */
+    transparent 165deg,
+    rgba(255, 160, 80, 0.04) 175deg,
+    rgba(255, 200, 130, 0.15) 188deg,
+    rgba(255, 230, 190, 0.35) 200deg,
+    rgba(210, 235, 255, 0.55) 212deg,
+    rgba(180, 215, 255, 0.30) 224deg,
+    rgba(140, 190, 255, 0.12) 236deg,
+    rgba(180, 215, 255, 0.05) 248deg,
+    transparent 265deg,
     transparent 360deg
   );
-  /* Only show the top arc that bends over the event horizon */
+  /* Mask: show only the thin ring bands at top and bottom */
+  /* Top band: the lensed disk bending OVER the shadow.
+     Bottom band: the lensed disk bending UNDER the shadow. */
   -webkit-mask-image: radial-gradient(circle,
-    transparent 82%,
-    rgba(0,0,0,0.15) 87%,
-    rgba(0,0,0,0.6) 91%,
-    rgba(0,0,0,0.15) 95%,
+    transparent 70%,
+    /* Top arc band region */
+    rgba(0,0,0,0.05) 76%,
+    rgba(0,0,0,0.40) 80%,
+    rgba(0,0,0,0.80) 83%,
+    rgba(0,0,0,1.00) 86%,
+    rgba(0,0,0,0.80) 89%,
+    rgba(0,0,0,0.40) 92%,
+    rgba(0,0,0,0.05) 96%,
     transparent 100%
   );
   mask-image: radial-gradient(circle,
-    transparent 82%,
-    rgba(0,0,0,0.15) 87%,
-    rgba(0,0,0,0.6) 91%,
-    rgba(0,0,0,0.15) 95%,
+    transparent 70%,
+    rgba(0,0,0,0.05) 76%,
+    rgba(0,0,0,0.40) 80%,
+    rgba(0,0,0,0.80) 83%,
+    rgba(0,0,0,1.00) 86%,
+    rgba(0,0,0,0.80) 89%,
+    rgba(0,0,0,0.40) 92%,
+    rgba(0,0,0,0.05) 96%,
     transparent 100%
   );
 }
 
-/* ── Photon ring: razor-thin bright ring at Schwarzschild radius ── */
+/* ── Photon ring: ultra-thin bright filament at the innermost stable orbit ── */
 .bh-photon-ring {
   position: absolute;
-  inset: 3px;
+  inset: 4px;
   border-radius: 50%;
   z-index: 3;
   pointer-events: none;
-  border: 1.5px solid rgba(160, 200, 255, 0.35);
+  border: 1px solid rgba(170, 210, 255, 0.30);
   box-shadow:
-    0 0 3px 1px rgba(180, 215, 255, 0.4),
-    0 0 8px 3px rgba(120, 160, 240, 0.15),
-    inset 0 0 3px 1px rgba(180, 215, 255, 0.2);
-  animation: photonPulse 3s ease-in-out infinite;
+    0 0 2px 1px rgba(180, 215, 255, 0.35),
+    0 0 6px 2px rgba(130, 170, 240, 0.12),
+    inset 0 0 2px 1px rgba(180, 215, 255, 0.18);
+  animation: photonPulse 4s ease-in-out infinite;
 }
 
-/* ── Gravitational lensing flare: bright spots from bent light ── */
+/* ── Einstein ring: faint secondary image from extreme lensing ── */
 .bh-lens-flare {
   position: absolute;
-  inset: -20px;
+  inset: -30px;
   border-radius: 50%;
   z-index: 4;
   pointer-events: none;
-  background: radial-gradient(ellipse at 38% 25%,
-    rgba(180, 210, 255, 0.12) 0%,
-    rgba(120, 160, 240, 0.05) 30%,
-    transparent 60%
-  );
+  /* The Einstein ring is a thin circle of bent light further out.
+     We use two ellipses to suggest the brightest lensed spots. */
+  background:
+    radial-gradient(ellipse at 35% 22%,
+      rgba(180, 215, 255, 0.10) 0%,
+      rgba(130, 170, 240, 0.04) 25%,
+      transparent 50%
+    ),
+    radial-gradient(ellipse at 68% 78%,
+      rgba(255, 200, 140, 0.06) 0%,
+      rgba(255, 170, 100, 0.02) 30%,
+      transparent 55%
+    ),
+    radial-gradient(circle at 50% 50%,
+      transparent 82%,
+      rgba(140, 180, 240, 0.04) 86%,
+      rgba(160, 200, 255, 0.08) 88%,
+      rgba(140, 180, 240, 0.04) 90%,
+      transparent 94%
+    );
 }
 
 /* Remove old ::after usage */
@@ -391,13 +456,8 @@ header .lang-toggle:hover {
   content: none;
 }
 
-@keyframes accretionSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 @keyframes photonPulse {
-  0%, 100% { opacity: 0.7; }
+  0%, 100% { opacity: 0.65; }
   50% { opacity: 1; }
 }
 
@@ -704,6 +764,9 @@ header .lang-toggle:hover {
   box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 60px rgba(139, 92, 246, 0.2);
   user-select: none;
   -webkit-user-select: none;
+  max-height: 90vh;
+  overflow-y: auto;
+  width: 90vw;
 }
 #result-banner .drag-handle {
   position: absolute;
@@ -754,13 +817,15 @@ header .lang-toggle:hover {
   color: var(--cds-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 4px;
+  margin: 10px 0 6px;
+  width: 100%;
 }
 #result-banner .result-players {
-  max-height: 280px;
+  max-height: 150px;
   overflow-y: auto;
   margin: 10px 0;
   text-align: left;
+  flex-shrink: 0;
 }
 .result-players .player-row {
   display: flex;
@@ -855,7 +920,7 @@ header .lang-toggle:hover {
   #table-area { top: 4px; right: 4px; bottom: 4px; left: 4px; }
   #game-log { font-size: 0.7rem; padding: 6px; max-height: 100px; }
   #game-log .log-entry { padding: 3px 0; }
-  #controls { padding: 6px 8px; gap: 5px; flex-direction: column; }
+  #controls { padding: 6px 8px; padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)); gap: 5px; flex-direction: column; }
   #controls .your-hand { margin-right: 0; }
   .btn { height: 34px; padding: 0 10px; font-size: 0.7rem; }
   .btn .material-icons { font-size: 0.9rem; }
@@ -869,6 +934,17 @@ header .lang-toggle:hover {
   .card.mini .card-suit { font-size: 0.6rem; }
   .community-cards { gap: 4px; }
   .pot-display { font-size: 0.75rem; }
+  #result-banner { padding: 14px 8px; border-radius: 12px; }
+  #result-cards > div { gap: 4px !important; }
+  #result-banner h3 { font-size: 0.95rem; }
+  #result-banner .hand-name { font-size: 1.2rem; }
+  #result-banner .winner-name { font-size: 0.95rem; }
+  #result-banner .pot-info { font-size: 0.8rem; }
+  #result-banner .result-players { max-height: 130px; }
+  #result-banner .result-cards .card { width: 42px; height: 60px; }
+  #result-banner .result-cards .card .card-rank { font-size: 0.85rem; }
+  #result-banner .result-cards .card .card-suit { font-size: 0.75rem; }
+  #result-banner .btn { margin-top: 10px; }
 }
 /* Tiny phones */
 @media (max-width: 360px) {
@@ -880,6 +956,14 @@ header .lang-toggle:hover {
   .card.mini .card-suit { font-size: 0.5rem; }
   .btn { height: 30px; padding: 0 8px; font-size: 0.65rem; }
   .seat .seat-inner { min-width: 65px; padding: 3px 5px; }
+  #result-banner { padding: 12px 6px; border-radius: 10px; }
+  #result-cards > div { gap: 3px !important; }
+  #result-banner h3 { font-size: 0.85rem; }
+  #result-banner .hand-name { font-size: 1.1rem; }
+  #result-banner .result-players { max-height: 110px; }
+  #result-banner .result-cards .card { width: 35px; height: 50px; }
+  #result-banner .result-cards .card .card-rank { font-size: 0.7rem; }
+  #result-banner .result-cards .card .card-suit { font-size: 0.65rem; }
 }
 </style>
 </head>
@@ -1072,6 +1156,7 @@ const I18N = {
     'ui.clickToStart': '点击开始游戏...',
     'ui.yourHand': '你的手牌',
     'ui.bestHand': '最佳牌组',
+    'ui.communityCards': '公共牌',
     'ui.playerHands': '玩家手牌',
     'ui.folded': '弃牌',
     'ui.bet': '下注: $',
@@ -1144,6 +1229,7 @@ const I18N = {
     'ui.clickToStart': 'Click Start Game to begin...',
     'ui.yourHand': 'Your Hand',
     'ui.bestHand': 'Best Hand',
+    'ui.communityCards': 'Community Cards',
     'ui.playerHands': 'Player Hands',
     'ui.folded': 'Folded',
     'ui.bet': 'Bet: $',
@@ -2368,9 +2454,16 @@ class PokerGame {
       winnerEl.textContent = t('ui.wins', result.winners.map(w => w.name).join(', '));
       handEl.textContent = result.bestHand.name;
 
+      // Community cards (table cards)
+      let cardsHTML = '<div class="result-label">' + t('ui.communityCards') + '</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">';
+      for (const c of this.communityCards) {
+        cardsHTML += cardHTML(c, false, false);
+      }
+      cardsHTML += '</div>';
+
       // Best 5-card combination (winning hand)
       const bestCards = result.bestHand.cards || [];
-      let cardsHTML = '<div class="result-label">' + t('ui.bestHand') + '</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">';
+      cardsHTML += '<div class="result-label">' + t('ui.bestHand') + '</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">';
       for (const c of bestCards) {
         cardsHTML += cardHTML(c, false, false);
       }
@@ -3026,24 +3119,29 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
 
     const bh = getBlackHoleCenter();
 
-    // ── Gravitational lensing: Einstein ring on canvas ──
-    // Outer glow halo
-    const haloGrad = ctx.createRadialGradient(bh.cx, bh.cy, bh.r * 0.85, bh.cx, bh.cy, bh.r * 1.2);
+    // ── Gravitational lensing halo: outer glow from bent disk light ──
+    const haloGrad = ctx.createRadialGradient(bh.cx, bh.cy, bh.r * 0.88, bh.cx, bh.cy, bh.r * 1.35);
     haloGrad.addColorStop(0, 'transparent');
-    haloGrad.addColorStop(0.3, 'rgba(100, 150, 240, 0.04)');
-    haloGrad.addColorStop(0.55, 'rgba(140, 190, 255, 0.12)');
-    haloGrad.addColorStop(0.7, 'rgba(100, 150, 240, 0.06)');
-    haloGrad.addColorStop(0.85, 'rgba(60, 100, 200, 0.02)');
+    haloGrad.addColorStop(0.25, 'rgba(120, 160, 230, 0.03)');
+    haloGrad.addColorStop(0.45, 'rgba(140, 190, 255, 0.08)');
+    haloGrad.addColorStop(0.60, 'rgba(120, 160, 230, 0.04)');
+    haloGrad.addColorStop(0.80, 'rgba(60, 100, 180, 0.015)');
     haloGrad.addColorStop(1, 'transparent');
     ctx.fillStyle = haloGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Einstein ring: thin bright arc (Doppler asymmetric)
-    const erGrad = ctx.createRadialGradient(bh.cx - bh.r * 0.02, bh.cy - bh.r * 0.02, bh.r * 0.97, bh.cx, bh.cy, bh.r * 1.04);
+    // Einstein ring: razor-thin secondary image of the accretion disk,
+    // displaced outward by extreme gravitational lensing.
+    // Slightly off-center to create Doppler asymmetry (brighter on blue-shifted side).
+    const erGrad = ctx.createRadialGradient(
+      bh.cx - bh.r * 0.015, bh.cy - bh.r * 0.015, bh.r * 0.96,
+      bh.cx, bh.cy, bh.r * 1.03
+    );
     erGrad.addColorStop(0, 'transparent');
-    erGrad.addColorStop(0.35, 'rgba(180, 215, 255, 0.15)');
-    erGrad.addColorStop(0.5, 'rgba(200, 230, 255, 0.35)');
-    erGrad.addColorStop(0.65, 'rgba(160, 200, 240, 0.15)');
+    erGrad.addColorStop(0.38, 'rgba(180, 215, 255, 0.08)');
+    erGrad.addColorStop(0.48, 'rgba(210, 235, 255, 0.22)');
+    erGrad.addColorStop(0.52, 'rgba(190, 225, 255, 0.18)');
+    erGrad.addColorStop(0.62, 'rgba(140, 190, 240, 0.06)');
     erGrad.addColorStop(1, 'transparent');
     ctx.fillStyle = erGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -3070,9 +3168,15 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       let sx = s.x, sy = s.y;
-      // Light bending: stars near event horizon appear shifted outward
-      if (dist < bh.r * 1.6 && dist > bh.r * 0.85) {
-        const factor = 1 + (bh.r * 0.3) / Math.max(dist - bh.r * 0.8, 1);
+      // Gravitational lensing: deflection angle ∝ 1 / impact_parameter²
+      // Stars passing close to the photon sphere (1.5× Schwarzschild radius)
+      // get their light bent outward dramatically — the Einstein ring effect.
+      const photonSphere = bh.r * 0.88;
+      if (dist < bh.r * 2.2 && dist > photonSphere) {
+        const impact = (dist - photonSphere) / bh.r;
+        const deflection = 1 + (0.25 / Math.max(impact * impact, 0.005));
+        const maxDeflect = 2.0;
+        const factor = Math.min(deflection, maxDeflect);
         sx = bh.cx + dx * factor;
         sy = bh.cy + dy * factor;
       }
@@ -3081,9 +3185,11 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       if (s.twinkle) {
         alpha *= 0.6 + 0.4 * Math.sin(s.twinklePhase + time * s.twinkleSpeed * 0.001);
       }
-      // Stars behind/near the event horizon are dimmed
-      if (dist < bh.r * 0.9) {
-        alpha *= Math.max(0, (dist - bh.r * 0.7) / (bh.r * 0.2));
+      // Stars behind the event horizon are invisible
+      if (dist < bh.r * 0.78) {
+        alpha = 0;
+      } else if (dist < bh.r * 0.88) {
+        alpha *= Math.max(0, (dist - bh.r * 0.74) / (bh.r * 0.14));
       }
 
       const hsl = s.hue > 0
@@ -3095,8 +3201,8 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Bright stars get a glow
-      if (s.r > 1.2 && dist > bh.r * 0.85) {
+      // Bright stars get a glow (only if not behind the event horizon)
+      if (s.r > 1.2 && dist > bh.r * 0.80) {
         const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.r * 3);
         glow.addColorStop(0, hsl);
         glow.addColorStop(1, 'transparent');

@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 
-{% block htmltitle %}{% if not page.url.endswith('.html') %}{{ super() }}{% endif %}{% endblock %}
+{% block htmltitle %}{% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}{% endblock %}
 
 {% block styles %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block fonts %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block site_meta %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block announce %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block header %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block tabs %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block site_nav %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block footer %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}
 
 {% block content %}
-  {% if page.url.endswith('.html') %}
+  {% if page and page.url.endswith('.html') %}
     {{ page.content }}
   {% else %}
     {{ super() }}
@@ -43,5 +43,5 @@
 {% endblock %}
 
 {% block scripts %}
-  {% if not page.url.endswith('.html') %}{{ super() }}{% endif %}
+  {% if not page or not page.url.endswith('.html') %}{{ super() }}{% endif %}
 {% endblock %}

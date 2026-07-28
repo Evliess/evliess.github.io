@@ -702,6 +702,27 @@ header .lang-toggle:hover {
   text-align: center;
   z-index: 600;
   box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 60px rgba(139, 92, 246, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+}
+#result-banner .drag-handle {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 28px;
+  cursor: grab;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#result-banner .drag-handle:active { cursor: grabbing; }
+#result-banner .drag-handle::after {
+  content: '';
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 6px 0 rgba(255,255,255,0.25), 0 -6px 0 rgba(255,255,255,0.25);
 }
 #result-banner.hidden { display: none; }
 #result-banner h3 { font-size: 1.1rem; margin-bottom: 4px; }
@@ -888,7 +909,7 @@ header .lang-toggle:hover {
         <span class="material-icons">play_arrow</span> <span data-i18n="setup.start">开始游戏</span>
       </button>
       <p style="font-size:0.7rem;color:var(--cds-text-secondary);margin-top:12px;" data-i18n="setup.browser">
-        推荐使用 Chrome / Edge 浏览器。洗牌使用 Fisher-Yates 算法。</p>
+        仅用于学习和娱乐！洗牌使用 Fisher-Yates + CSPRNG 算法。</p>
       </p>
     </div>
   </div>
@@ -953,6 +974,7 @@ header .lang-toggle:hover {
 
   <!-- Result Banner -->
   <div id="result-banner" class="hidden">
+    <div class="drag-handle" id="result-drag-handle"></div>
     <h3 id="result-title"></h3>
     <div class="winner-name" id="result-winner"></div>
     <div class="hand-name" id="result-hand"></div>
@@ -996,7 +1018,7 @@ const I18N = {
     'setup.players': '玩家人数',
     'setup.name': '你的名字',
     'setup.start': '开始游戏',
-    'setup.browser': '推荐使用 Chrome / Edge 浏览器。洗牌使用 Fisher-Yates 算法。',
+    'setup.browser': '仅用于学习目的。洗牌使用 Fisher-Yates + CSPRNG 算法。',
 
     'phase.waiting': '等待开始',
     'phase.preFlop': '翻牌前',
@@ -1068,7 +1090,7 @@ const I18N = {
     'setup.players': 'Players',
     'setup.name': 'Your Name',
     'setup.start': 'Start Game',
-    'setup.browser': 'Best experienced in Chrome / Edge. Shuffled with Fisher-Yates algorithm.',
+    'setup.browser': 'For educational purposes only. Shuffled with Fisher-Yates + CSPRNG.',
 
     'phase.waiting': 'Waiting',
     'phase.preFlop': 'Pre-Flop',
@@ -1206,10 +1228,19 @@ function buildDeck() {
   return deck;
 }
 
-// Fisher-Yates shuffle
+// CSPRNG: cryptographically secure random integer in [0, max)
+function secureRandomInt(max) {
+  const buf = new Uint32Array(1);
+  // Rejection sampling to eliminate modulo bias
+  const limit = 0x100000000 - (0x100000000 % max);
+  do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+  return buf[0] % max;
+}
+
+// Fisher-Yates shuffle with CSPRNG
 function shuffleDeck(deck) {
   for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = secureRandomInt(i + 1);
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
   return deck;
@@ -1410,8 +1441,16 @@ class PokerGame {
     // Reset players
     this.players.forEach(p => p.resetForNewHand());
 
-    // Remove busted players
-    // (keep them for now, they'll just sit out)
+    // Remove busted players (chips === 0 = out of the game)
+    const busted = this.players.filter(p => p.chips === 0);
+    if (busted.length > 0) {
+      this.addLog(busted.map(p => p.name).join(', ') + ' 已出局', 'action-fold');
+      this.players = this.players.filter(p => p.chips > 0);
+      // Fix dealer index if it now points past the array
+      if (this.dealerIdx >= this.players.length) {
+        this.dealerIdx = 0;
+      }
+    }
 
     // Rotate dealer
     if (this.handNumber > 1) {
@@ -1696,9 +1735,9 @@ class PokerGame {
     let wins = 0;
 
     for (let t = 0; t < trials; t++) {
-      // Fisher-Yates shuffle in-place
+      // Fisher-Yates shuffle in-place (CSPRNG)
       for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = secureRandomInt(i + 1);
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
 
@@ -2414,7 +2453,6 @@ class PokerGame {
       this.renderSeats();
       this.renderControls();
       this.renderPot();
-      this.renderBusted();
     } catch (e) {
       console.error('Render error:', e);
     }
@@ -2526,11 +2564,6 @@ class PokerGame {
 
       container.appendChild(seat);
     }
-  }
-
-  renderBusted() {
-    // Remove busted players (chips = 0 and not in current hand)
-    // For now, just show them with 0 chips
   }
 
   updateAllText() {
@@ -2689,6 +2722,46 @@ document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('player-name-input').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') startGame();
 });
+
+// ── Result banner drag ──
+(function() {
+  const banner = document.getElementById('result-banner');
+  const handle = document.getElementById('result-drag-handle');
+  let dragging = false, startX, startY, startLeft, startTop;
+
+  function onStart(e) {
+    if (e.target !== handle && !handle.contains(e.target)) return;
+    dragging = true;
+    const rect = banner.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop = rect.top;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    startX = clientX;
+    startY = clientY;
+    banner.style.transform = 'none';
+    banner.style.top = startTop + 'px';
+    banner.style.left = startLeft + 'px';
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    banner.style.top = (startTop + clientY - startY) + 'px';
+    banner.style.left = (startLeft + clientX - startX) + 'px';
+  }
+
+  function onEnd() { dragging = false; }
+
+  handle.addEventListener('mousedown', onStart);
+  handle.addEventListener('touchstart', onStart, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onEnd);
+  window.addEventListener('touchend', onEnd);
+})();
 
 // ═══════════════════════════════════════════
 // TEST HARNESS — Run in browser console: testHandEvaluator()

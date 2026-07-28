@@ -84,8 +84,7 @@ header.bx--header {
   justify-content: space-between;
   height: 48px;
   padding: 0 1rem;
-  background: rgba(10, 10, 30, 0.9);
-  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 30, 0.95);
   border-bottom: 1px solid rgba(139, 92, 246, 0.2);
   position: sticky;
   top: 0;
@@ -542,8 +541,7 @@ header .lang-toggle:hover {
   transition: all 0.3s;
 }
 .seat .seat-inner {
-  background: rgba(16, 16, 30, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(16, 16, 30, 0.92);
   border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 12px;
   padding: 8px 12px;
@@ -552,12 +550,20 @@ header .lang-toggle:hover {
 }
 .seat.active-turn .seat-inner {
   border-color: #fbbf24;
-  box-shadow: 0 0 24px rgba(251, 191, 36, 0.5), 0 0 48px rgba(245, 158, 11, 0.25);
+  position: relative;
+}
+.seat.active-turn .seat-inner::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  z-index: -1;
+  box-shadow: 0 0 36px rgba(251, 191, 36, 0.8), 0 0 72px rgba(245, 158, 11, 0.4);
   animation: pulseGlow 1.5s ease-in-out infinite;
 }
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 24px rgba(251, 191, 36, 0.5), 0 0 48px rgba(245, 158, 11, 0.25); }
-  50% { box-shadow: 0 0 36px rgba(251, 191, 36, 0.8), 0 0 72px rgba(245, 158, 11, 0.4); }
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 .seat.folded .seat-inner { opacity: 0.5; }
 .seat .player-name {
@@ -621,8 +627,7 @@ header .lang-toggle:hover {
 
 /* ── Controls ── */
 #controls {
-  background: rgba(10, 10, 30, 0.9);
-  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 30, 0.95);
   border-top: 1px solid rgba(139, 92, 246, 0.2);
   padding: 10px 16px;
   display: flex;
@@ -672,8 +677,7 @@ header .lang-toggle:hover {
 #game-log {
   width: 260px;
   flex-shrink: 0;
-  background: rgba(10, 10, 30, 0.85);
-  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 30, 0.92);
   border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 8px;
   padding: 10px;
@@ -2588,82 +2592,107 @@ class PokerGame {
 
   renderSeats() {
     const container = document.getElementById('seats-container');
-    container.innerHTML = '';
-
     const n = this.players.length;
-    if (n === 0) return;
+    if (n === 0) { container.innerHTML = ''; return; }
 
-    const tableEl = document.getElementById('table-area');
-    const tableW = tableEl.offsetWidth || tableEl.parentElement.offsetWidth || 800;
-    const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
-    const cx = tableW / 2;
-    const cy = tableH / 2;
-    // Push seats outward for more players to avoid overlapping community cards
-    const scale = 0.95 + n * 0.02;
-    const rx = tableW * (0.40 * scale);
-    const ry = tableH * (0.38 * scale);
+    // Check if player count changed — if so, full rebuild needed for positions
+    const seatCount = container.querySelectorAll('.seat').length;
+    if (seatCount !== n || !this._seatPositions) { container.innerHTML = ''; }
 
+    if (container.innerHTML === '') {
+      // Full position rebuild
+      this._seatPositions = [];
+      const tableEl = document.getElementById('table-area');
+      const tableW = tableEl.offsetWidth || tableEl.parentElement.offsetWidth || 800;
+      const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
+      const cx = tableW / 2;
+      const cy = tableH / 2;
+      const scale = 0.95 + n * 0.02;
+      const rx = tableW * (0.40 * scale);
+      const ry = tableH * (0.38 * scale);
+
+      for (let i = 0; i < n; i++) {
+        const angle = (Math.PI / 2) - i * (2 * Math.PI / n);
+        const x = cx + rx * Math.cos(angle);
+        const y = cy - ry * Math.sin(angle);
+
+        const seat = document.createElement('div');
+        seat.className = 'seat';
+        seat.dataset.idx = i;
+        seat.style.left = x + 'px';
+        seat.style.top = y + 'px';
+        seat.innerHTML = '<div class="seat-inner"><div class="player-name"></div><div class="hole-cards"></div><div class="chip-count"></div></div>';
+        container.appendChild(seat);
+        this._seatPositions.push({ x, y });
+      }
+    }
+
+    // Build blind info
+    const sbIdx = n === 2 ? this.dealerIdx : this.nextActiveSeat(this.dealerIdx);
+    const bbIdx = this.nextActiveSeat(sbIdx);
+    const showBlind = this.handNumber > 0 && this.phase !== 'IDLE';
+
+    // Update each seat content in place
+    const seats = container.querySelectorAll('.seat');
     for (let i = 0; i < n; i++) {
+      const seat = seats[i];
       const player = this.players[i];
-      // Angle: player 0 at bottom, going clockwise
-      const angle = (Math.PI / 2) - i * (2 * Math.PI / n);
-      const x = cx + rx * Math.cos(angle);
-      const y = cy - ry * Math.sin(angle); // minus because CSS y-axis is inverted
 
-      const seat = document.createElement('div');
-      seat.className = 'seat';
-      if (player.isHuman) seat.classList.add('you');
-      if (player.folded) seat.classList.add('folded');
-      if (i === this.currentPlayerIdx && this.phase !== 'IDLE' && this.phase !== 'GAME_OVER' && !player.folded) {
-        seat.classList.add('active-turn');
-      }
-      seat.style.left = x + 'px';
-      seat.style.top = y + 'px';
+      // Class names
+      const needsYou = player.isHuman;
+      const needsFolded = player.folded;
+      const needsActive = (i === this.currentPlayerIdx && this.phase !== 'IDLE' && this.phase !== 'GAME_OVER' && !player.folded);
 
-      // Blind indicators
+      if (seat.classList.contains('you') !== needsYou) seat.classList.toggle('you', needsYou);
+      if (seat.classList.contains('folded') !== needsFolded) seat.classList.toggle('folded', needsFolded);
+      if (seat.classList.contains('active-turn') !== needsActive) seat.classList.toggle('active-turn', needsActive);
+
+      const inner = seat.querySelector('.seat-inner');
+
+      // Player name + blinds
       let blindHTML = '';
-      if (this.phase !== 'IDLE' && this.communityCards.length === 0 && this.handNumber > 0) {
-        // Only show during pre-flop
-      }
-      // Always show dealer and blinds
-      if (this.handNumber > 0 && this.phase !== 'IDLE') {
-        if (i === this.dealerIdx) {
-          blindHTML += '<span class="dealer-chip">D</span>';
-        }
-        const sbIdx = n === 2 ? this.dealerIdx : this.nextActiveSeat(this.dealerIdx);
-        const bbIdx = this.nextActiveSeat(sbIdx);
+      if (showBlind) {
+        if (i === this.dealerIdx) blindHTML += '<span class="dealer-chip">D</span>';
         if (i === sbIdx) blindHTML += '<span class="blind-tag sb">SB</span>';
         if (i === bbIdx) blindHTML += '<span class="blind-tag bb">BB</span>';
       }
+      const nameEl = inner.querySelector('.player-name');
+      const nameHTML = blindHTML + player.name;
+      if (nameEl._lastHTML !== nameHTML) { nameEl.innerHTML = nameHTML; nameEl._lastHTML = nameHTML; }
 
-      let statusTag = '';
-      if (player.folded) statusTag = '<span class="status-tag folded-tag">' + t('ui.folded') + '</span>';
-      else if (player.allIn) statusTag = '<span class="status-tag allin-tag">ALL-IN</span>';
-
-      let holeHTML = '';
+      // Hole cards
       const shouldShow = player.isHuman || ((this.phase === 'SHOWDOWN' || this.phase === 'GAME_OVER') && !player.folded);
-      if (shouldShow) {
-        holeHTML = player.holeCards.map(c => cardHTML(c, false, true)).join(''); // always face-up, mini
+      const holeHTML = shouldShow
+        ? player.holeCards.map(c => cardHTML(c, false, true)).join('')
+        : '<div class="card face-down mini"></div><div class="card face-down mini"></div>';
+      const cardsEl = inner.querySelector('.hole-cards');
+      if (cardsEl._lastHTML !== holeHTML) { cardsEl.innerHTML = holeHTML; cardsEl._lastHTML = holeHTML; }
+
+      // Chips
+      const chipsEl = inner.querySelector('.chip-count');
+      const chipsText = '$' + player.chips;
+      if (chipsEl._lastText !== chipsText) { chipsEl.textContent = chipsText; chipsEl._lastText = chipsText; }
+
+      // Status tag + bet
+      let extraHTML = '';
+      if (player.folded) {
+        extraHTML = '<span class="status-tag folded-tag">' + t('ui.folded') + '</span>';
       } else {
-        holeHTML = '<div class="card face-down mini"></div><div class="card face-down mini"></div>';
+        if (player.allIn) extraHTML += '<span class="status-tag allin-tag">ALL-IN</span>';
+        if (player.roundBet > 0) extraHTML += '<div class="bet-amount">' + t('ui.bet') + player.roundBet + '</div>';
       }
-
-      let betHTML = '';
-      if (player.roundBet > 0) {
-        betHTML = '<div class="bet-amount">' + t('ui.bet') + player.roundBet + '</div>';
+      // Remove old status/bet elements, append fresh
+      const oldStatus = inner.querySelectorAll('.status-tag, .bet-amount');
+      const oldStatusHTML = Array.from(oldStatus).map(el => el.outerHTML).join('');
+      if (inner._lastExtra !== extraHTML) {
+        oldStatus.forEach(el => el.remove());
+        if (extraHTML) {
+          const extraContainer = document.createElement('div');
+          extraContainer.innerHTML = extraHTML;
+          while (extraContainer.firstChild) inner.appendChild(extraContainer.firstChild);
+        }
+        inner._lastExtra = extraHTML;
       }
-
-      seat.innerHTML = `
-        <div class="seat-inner">
-          <div class="player-name">${blindHTML}${player.name}</div>
-          <div class="hole-cards">${holeHTML}</div>
-          <div class="chip-count">$${player.chips}</div>
-          ${betHTML}
-          ${statusTag}
-        </div>
-      `;
-
-      container.appendChild(seat);
     }
   }
 
@@ -3066,19 +3095,23 @@ console.log('Texas Hold\'em Poker ready!');
 console.log('Run testHandEvaluator() in console to verify hand evaluation.');
 
 // ═══════════════════════════════════════════
-// 3D Starfield Background
+// 3D Starfield Background (event-driven, no continuous loop)
 // ═══════════════════════════════════════════
 (function() {
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
   let stars = [];
-  let animId;
+  let lastTime = 0;
 
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', () => {
+    resize();
+    createStars();
+    drawOnce(performance.now());
+  });
   resize();
 
   // Star layers: { depth, speed, count, size, opacity }
@@ -3102,7 +3135,6 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
           twinkle: layer.twinkle,
           twinklePhase: Math.random() * Math.PI * 2,
           twinkleSpeed: 0.01 + Math.random() * 0.03,
-          // Nebula colors: white, blue-white, gold-white
           hue: Math.random() < 0.15 ? 220 + Math.random() * 30 : Math.random() < 0.08 ? 40 + Math.random() * 15 : 0,
           saturation: Math.random() < 0.15 ? 30 : 0,
         });
@@ -3111,7 +3143,6 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
   }
   createStars();
 
-  // Track black hole center for lensing effect
   function getBlackHoleCenter() {
     const tableEl = document.getElementById('table-area');
     if (!tableEl) return { cx: canvas.width * 0.5, cy: canvas.height * 0.5, r: 180 };
@@ -3123,12 +3154,35 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
     };
   }
 
-  function draw(time) {
+  // Cache to avoid getBoundingClientRect() (forced reflow) every draw
+  let cachedBH = null;
+  function getBH() {
+    if (!cachedBH) cachedBH = getBlackHoleCenter();
+    return cachedBH;
+  }
+  // Recalculate on resize or after significant layout change
+  window.addEventListener('resize', function() { cachedBH = null; });
+  window.refreshBlackHoleCache = function() { cachedBH = null; };
+
+  function drawOnce(time) {
+    // Advance star positions based on elapsed time (clamp to avoid big jumps)
+    const dt = lastTime ? Math.min(time - lastTime, 200) : 16;
+    lastTime = time;
+
+    // Move stars (parallax scrolling)
+    for (const s of stars) {
+      s.y += s.speed * (dt / 16);
+      if (s.y > canvas.height + 5) {
+        s.y = -5;
+        s.x = Math.random() * canvas.width;
+      }
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const bh = getBlackHoleCenter();
+    const bh = getBH();
 
-    // ── Gravitational lensing halo: outer glow from bent disk light ──
+    // Gravitational lensing halo
     const haloGrad = ctx.createRadialGradient(bh.cx, bh.cy, bh.r * 0.88, bh.cx, bh.cy, bh.r * 1.35);
     haloGrad.addColorStop(0, 'transparent');
     haloGrad.addColorStop(0.25, 'rgba(120, 160, 230, 0.03)');
@@ -3139,9 +3193,7 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
     ctx.fillStyle = haloGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Einstein ring: razor-thin secondary image of the accretion disk,
-    // displaced outward by extreme gravitational lensing.
-    // Slightly off-center to create Doppler asymmetry (brighter on blue-shifted side).
+    // Einstein ring
     const erGrad = ctx.createRadialGradient(
       bh.cx - bh.r * 0.015, bh.cy - bh.r * 0.015, bh.r * 0.96,
       bh.cx, bh.cy, bh.r * 1.03
@@ -3155,7 +3207,7 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
     ctx.fillStyle = erGrad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw subtle nebula blobs (away from black hole)
+    // Nebula blobs
     const nebulaColors = [
       { x: canvas.width * 0.15, y: canvas.height * 0.2, r: 280, color: 'rgba(99, 102, 241, 0.025)' },
       { x: canvas.width * 0.85, y: canvas.height * 0.65, r: 240, color: 'rgba(139, 92, 246, 0.02)' },
@@ -3169,23 +3221,18 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw stars with gravitational lensing distortion near black hole
+    // Stars with gravitational lensing
     for (const s of stars) {
-      // Calculate distance from black hole center
       const dx = s.x - bh.cx;
       const dy = s.y - bh.cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       let sx = s.x, sy = s.y;
-      // Gravitational lensing: deflection angle ∝ 1 / impact_parameter²
-      // Stars passing close to the photon sphere (1.5× Schwarzschild radius)
-      // get their light bent outward dramatically — the Einstein ring effect.
       const photonSphere = bh.r * 0.88;
       if (dist < bh.r * 2.2 && dist > photonSphere) {
         const impact = (dist - photonSphere) / bh.r;
         const deflection = 1 + (0.25 / Math.max(impact * impact, 0.005));
-        const maxDeflect = 2.0;
-        const factor = Math.min(deflection, maxDeflect);
+        const factor = Math.min(deflection, 2.0);
         sx = bh.cx + dx * factor;
         sy = bh.cy + dy * factor;
       }
@@ -3194,7 +3241,6 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       if (s.twinkle) {
         alpha *= 0.6 + 0.4 * Math.sin(s.twinklePhase + time * s.twinkleSpeed * 0.001);
       }
-      // Stars behind the event horizon are invisible
       if (dist < bh.r * 0.78) {
         alpha = 0;
       } else if (dist < bh.r * 0.88) {
@@ -3210,7 +3256,6 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
       ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Bright stars get a glow (only if not behind the event horizon)
       if (s.r > 1.2 && dist > bh.r * 0.80) {
         const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.r * 3);
         glow.addColorStop(0, hsl);
@@ -3221,28 +3266,29 @@ console.log('Run testHandEvaluator() in console to verify hand evaluation.');
         ctx.fill();
       }
     }
+  }
 
-    // Move stars (parallax scrolling)
-    for (const s of stars) {
-      s.y += s.speed;
-      if (s.y > canvas.height + 5) {
-        s.y = -5;
-        s.x = Math.random() * canvas.width;
-      }
+  // Expose globally so game logic can trigger redraws
+  window.redrawStarfield = function() { drawOnce(performance.now()); };
+
+  // Draw on user interaction (throttled via rAF to avoid double-fires)
+  let pending = false;
+  function scheduleDraw() {
+    if (!pending) {
+      pending = true;
+      requestAnimationFrame(function(t) {
+        pending = false;
+        drawOnce(t);
+      });
     }
   }
 
-  function animate(time) {
-    draw(time);
-    animId = requestAnimationFrame(animate);
-  }
-
-  animId = requestAnimationFrame(animate);
-
-  // Re-create stars on resize
-  window.addEventListener('resize', () => {
-    createStars();
+  ['click', 'touchstart', 'scroll', 'mousemove'].forEach(function(evt) {
+    document.addEventListener(evt, scheduleDraw, { passive: true });
   });
+
+  // Initial draw
+  drawOnce(performance.now());
 })();
 </script>
 

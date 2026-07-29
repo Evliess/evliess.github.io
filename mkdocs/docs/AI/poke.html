@@ -1575,14 +1575,17 @@ class PokerGame {
       const human = this.players[0];
       if (!human) return;
       const raiseTo = parseInt(this.els.raiseSlider.value);
-      this.resolveAction(human, raiseTo >= human.chips ? 'allin' : 'raise', raiseTo);
+      const increment = raiseTo - human.roundBet;
+      this.resolveAction(human, increment >= human.chips ? 'allin' : 'raise', raiseTo);
     };
     this.els.btnAllin.onclick = () => {
       const human = this.players[0];
       if (human) this.resolveAction(human, 'allin', human.chips);
     };
     this.els.raiseSlider.oninput = () => {
-      this.els.raiseAmount.textContent = `$${this.els.raiseSlider.value}`;
+      const total = parseInt(this.els.raiseSlider.value);
+      const raiseSize = total - this.currentBet;
+      this.els.raiseAmount.textContent = `+$${raiseSize} → $${total}`;
     };
   }
 
@@ -1810,29 +1813,44 @@ class PokerGame {
           // amount is the TOTAL bet for this round, calculate increment
           const increment = amount - player.roundBet;
           if (increment <= 0) {
+            // Player attempted a raise to an amount <= current bet — treat as check
+            const toCheckAmt = this.currentBet - player.roundBet;
+            if (toCheckAmt > 0) {
+              // Under normal flow, this shouldn't happen; log the mismatch
+              this.addLog(player.name + ': invalid raise (amount <= current bet), treating as check', 'action-fold');
+            }
             this.addLog(t('log.check', player.name));
-          } else if (increment >= player.chips) {
-            // All-in (raise intent but short-stacked)
-            const allInAmt = player.chips;
-            const rOldCB = this.currentBet;
-            const rOldLR = this.lastRaiseAmount;
-            this.pot += player.contribute(allInAmt);
-            this.currentBet = Math.max(this.currentBet, player.roundBet);
-            if (player.roundBet > rOldCB) {
-              const raiseSize = player.roundBet - rOldCB;
+          } else {
+            const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
+            const allInTotal = player.roundBet + player.chips;
+
+            if (increment >= player.chips && allInTotal >= minTotal) {
+              // Valid all-in raise
+              const allInAmt = player.chips;
+              const rOldCB = this.currentBet;
+              const rOldLR = this.lastRaiseAmount;
+              this.pot += player.contribute(allInAmt);
+              this.currentBet = allInTotal;
+              const raiseSize = allInTotal - rOldCB;
               if (raiseSize >= rOldLR) {
                 this.lastRaiseAmount = Math.max(raiseSize, BB_AMOUNT);
                 this.canReRaise = true;
               } else {
                 this.canReRaise = false;
               }
-            }
-            this.lastAggressorIdx = player.seatIndex;
-            this.addLog(`${player.name} ALL-IN $${allInAmt}`, 'action-allin');
-          } else {
-            // Validate minimum raise
-            const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
-            if (amount < minTotal) {
+              this.lastAggressorIdx = player.seatIndex;
+              this.addLog(`${player.name} ALL-IN $${allInAmt}`, 'action-allin');
+            } else if (increment >= player.chips && allInTotal < minTotal) {
+              // All-in raise too small — treat as call
+              const callAmt = Math.min(this.currentBet - player.roundBet, player.chips);
+              this.pot += player.contribute(callAmt);
+              if (player.allIn) {
+                this.addLog(t('log.callAllIn', player.name, callAmt), 'action-allin');
+              } else {
+                this.addLog(t('log.call', player.name, callAmt));
+              }
+              this.addLog(player.name + ': all-in too small to raise, treated as call', 'action-fold');
+            } else if (amount < minTotal) {
               // Under-raise not allowed — treat as call
               const callAmt = Math.min(this.currentBet - player.roundBet, player.chips);
               this.pot += player.contribute(callAmt);
@@ -1841,6 +1859,7 @@ class PokerGame {
               } else {
                 this.addLog(t('log.call', player.name, callAmt));
               }
+              this.addLog(player.name + ': raise too small, treated as call', 'action-fold');
             } else {
               const oldCurrentBet = this.currentBet;
               this.pot += player.contribute(increment);
@@ -2101,6 +2120,12 @@ class PokerGame {
     total = Math.max(total, minTotal);
     total = Math.floor(Math.min(total, player.chips) / 10) * 10;
     if (total <= player.roundBet && player.chips > 0) {
+      // All-in — verify it actually raises the current bet
+      const allInTotal = player.roundBet + player.chips;
+      if (allInTotal <= this.currentBet) {
+        // Cannot raise with all-in; call all-in for less (side pot case)
+        return { action: 'call' };
+      }
       return { action: 'allin' };
     }
     if (total <= player.roundBet) return { action: 'check' };
@@ -2306,15 +2331,49 @@ class PokerGame {
     return { action: toCall === 0 ? 'check' : 'fold' };
   }
 
+  // Multi-opponent post-flop decision: EV-based with Monte Carlo equity
+  getMultiOppPostFlopAction(player, numOpp, canRaise) {
+    const toCall = this.currentBet - player.roundBet;
+    const pot = this.pot;
+    const effStack = player.chips;
+    const equity = this.calcEquity(player, numOpp);
+
+    // Normalize equity: multi-opp equity tends to be lower, adjust thresholds
+    const adjEquity = equity + (Math.random() - 0.5) * 0.03;
+    const potOdds = toCall > 0 ? toCall / (pot + toCall) : 0;
+    const stackRatio = toCall > 0 ? toCall / (player.chips + toCall) : 0;
+
+    if (toCall === 0) {
+      if (adjEquity > 0.65 && canRaise) return this.makeRaise(player, 0.50 + Math.random() * 0.50);
+      if (adjEquity > 0.48 && Math.random() < 0.50 && canRaise) return this.makeRaise(player, 0.25 + Math.random() * 0.30);
+      if (adjEquity > 0.25 && Math.random() < 0.25 && canRaise) return this.makeRaise(player, 0.15 + Math.random() * 0.15);
+      return { action: 'check' };
+    }
+
+    if (!canRaise) {
+      return adjEquity > potOdds - 0.03 ? { action: 'call' } : { action: 'fold' };
+    }
+
+    if (adjEquity > 0.62 && canRaise) return this.makeRaise(player, 0.50 + Math.random() * 0.50);
+    if (adjEquity > potOdds + 0.04 && canRaise && Math.random() < 0.30) return this.makeRaise(player, 0.30 + Math.random() * 0.30);
+    if (adjEquity > potOdds + 0.02) return { action: 'call' };
+    if (stackRatio < 0.10 && adjEquity > potOdds - 0.02) return { action: 'call' };
+    if (adjEquity > 0.15 && stackRatio < 0.05) return { action: 'call' };
+    return { action: 'fold' };
+  }
+
   // ── Main AI Decision Engine (EV-based, with DCFR for post-flop) ──
   getAIAction(player) {
     const toCall = this.currentBet - player.roundBet;
     const numOpp = Math.min(this.countPlayersInHand() - 1, 4);
     const canRaise = !player.hasActedThisRound || this.canReRaise || toCall === 0;
 
-    // Use DCFR solver for post-flop decisions (where it adds most value)
+    // Use DCFR solver for post-flop heads-up decisions
     if (this.communityCards.length >= 3) {
-      return this.dcfrGetAction(player, numOpp, canRaise);
+      if (numOpp <= 1) {
+        return this.dcfrGetAction(player, numOpp, canRaise);
+      }
+      return this.getMultiOppPostFlopAction(player, numOpp, canRaise);
     }
 
     // Pre-flop / early street: use EV-based logic
@@ -2488,11 +2547,16 @@ class PokerGame {
       totalAwarded += this.pot;
     }
 
-    // Any unclaimed chips (partial or none)
+    // Any unclaimed chips (partial or none) — distribute among active non-folded players
     if (totalAwarded < this.pot) {
       const active = results.filter(r => !r.player.folded);
       if (active.length > 0) {
-        active[0].player.chips += this.pot - totalAwarded;
+        const unclaimed = this.pot - totalAwarded;
+        const share = Math.floor(unclaimed / active.length);
+        const remainder = unclaimed - share * active.length;
+        for (let i = 0; i < active.length; i++) {
+          active[i].player.chips += share + (i < remainder ? 1 : 0);
+        }
       }
     }
   }
@@ -2913,7 +2977,8 @@ class PokerGame {
           slider.min = minRaise;
           slider.max = maxRaise;
           slider.value = Math.round(Math.max(minRaise, Math.min(human.roundBet + BB_AMOUNT * 2, maxRaise)) / 10) * 10;
-          this.els.raiseAmount.textContent = `$${slider.value}`;
+          const raiseSize = parseInt(slider.value) - this.currentBet;
+          this.els.raiseAmount.textContent = `+$${raiseSize} → $${slider.value}`;
           this.els.btnRaise.style.display = '';
         }
         this.els.btnAllin.style.display = human.chips > 0 ? '' : 'none';
@@ -3094,11 +3159,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-console.log('Texas Hold\'em Poker ready!');
-console.log('Texas Hold\'em Poker ready. node test.js to run tests.');
-
 // ═══════════════════════════════════════════
-// 3D Starfield Background (event-driven, no continuous loop)
+// 3D Starfield Background (continuous ~30fps animation)
 // ═══════════════════════════════════════════
 (function() {
   const canvas = document.getElementById('starfield');
@@ -3270,20 +3332,24 @@ console.log('Texas Hold\'em Poker ready. node test.js to run tests.');
   }
 
   // Expose globally so game logic can trigger redraws
-  // Draw on user interaction (throttled via rAF to avoid double-fires)
-  let pending = false;
-  function scheduleDraw() {
-    if (!pending) {
-      pending = true;
-      requestAnimationFrame(function(t) {
-        pending = false;
-        drawOnce(t);
-      });
+  let lastDrawTime = 0;
+  function scheduleDraw(t) {
+    if (t - lastDrawTime > 33) {
+      lastDrawTime = t;
+      drawOnce(t);
     }
   }
 
+  // Continuous animation loop (~30fps)
+  function animateLoop() {
+    scheduleDraw(performance.now());
+    requestAnimationFrame(animateLoop);
+  }
+  requestAnimationFrame(animateLoop);
+
+  // Event-driven redraws for responsive interaction
   ['click', 'touchstart', 'scroll', 'mousemove'].forEach(function(evt) {
-    document.addEventListener(evt, scheduleDraw, { passive: true });
+    document.addEventListener(evt, function() { lastDrawTime = 0; scheduleDraw(performance.now()); }, { passive: true });
   });
 
   // Initial draw

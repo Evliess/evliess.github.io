@@ -1841,15 +1841,17 @@ class PokerGame {
               this.lastAggressorIdx = player.seatIndex;
               this.addLog(`${player.name} ALL-IN $${allInAmt}`, 'action-allin');
             } else if (increment >= player.chips && allInTotal < minTotal) {
-              // All-in raise too small — treat as call
-              const callAmt = Math.min(this.currentBet - player.roundBet, player.chips);
-              this.pot += player.contribute(callAmt);
-              if (player.allIn) {
-                this.addLog(t('log.callAllIn', player.name, callAmt), 'action-allin');
-              } else {
-                this.addLog(t('log.call', player.name, callAmt));
+              // All-in raise too small — contribute ALL remaining chips (player is truly all-in)
+              const allInAmt = player.chips;
+              const rOldCB = this.currentBet;
+              this.pot += player.contribute(allInAmt);
+              this.currentBet = player.roundBet;
+              const raiseSize = player.roundBet - rOldCB;
+              if (raiseSize < this.lastRaiseAmount) {
+                this.canReRaise = false;
               }
-              this.addLog(player.name + ': all-in too small to raise, treated as call', 'action-fold');
+              this.lastAggressorIdx = player.seatIndex;
+              this.addLog(`${player.name} ALL-IN $${allInAmt} (too small to raise, call accepted)`, 'action-allin');
             } else if (amount < minTotal) {
               // Under-raise not allowed — treat as call
               const callAmt = Math.min(this.currentBet - player.roundBet, player.chips);

@@ -951,8 +951,8 @@ header .lang-toggle:hover {
   #result-banner .hand-name { font-size: 1.1rem; }
   #result-banner .result-players { max-height: 110px; }
   #result-banner .result-cards .card { width: 35px; height: 50px; }
-  #result-banner .result-cards .card .card-rank { font-size: 0.7rem; }
-  #result-banner .result-cards .card .card-suit { font-size: 0.65rem; }
+  #result-banner .result-cards .card-rank { font-size: 0.7rem; }
+  #result-banner .result-cards .card-suit { font-size: 0.65rem; }
 }
 </style>
 </head>
@@ -1610,7 +1610,10 @@ class PokerGame {
     this.lastAggressorIdx = -1;
 
     // Reset players
-    this.players.forEach(p => p.resetForNewHand());
+    this.players.forEach(p => {
+      p.resetForNewHand();
+      p.chipsBeforeHand = p.chips;
+    });
 
     // Remove busted players (chips === 0 = out of the game)
     const busted = this.players.filter(p => p.chips === 0);
@@ -1665,7 +1668,9 @@ class PokerGame {
     const bbActual = bbPlayer.contribute(Math.min(BB_AMOUNT, bbPlayer.chips));
     this.pot += bbActual;
 
-    this.currentBet = BB_AMOUNT;
+    // Current bet = actual max posted (not hardcoded BB_AMOUNT, so short-stacked
+    // BB doesn't inflate other players' toCall)
+    this.currentBet = Math.max(sbActual, bbActual);
     this.lastRaiseAmount = BB_AMOUNT;
     this.canReRaise = true;
 
@@ -2731,6 +2736,18 @@ class PokerGame {
       balEl.className = 'result-balance';
       balEl.textContent = t('ui.yourBalance') + ' $' + human.chips;
       potEl.appendChild(balEl);
+
+      // Show net win/loss for this hand (chips after - chips before hand)
+      if (typeof human.chipsBeforeHand === 'number') {
+        const netDelta = human.chips - human.chipsBeforeHand;
+        const netEl = document.createElement('div');
+        netEl.className = 'result-balance';
+        netEl.style.color = netDelta >= 0 ? 'var(--cds-support)' : 'var(--cds-error)';
+        const sign = netDelta >= 0 ? '+' : '';
+        netEl.textContent = (currentLang === 'zh' ? '本局盈亏: ' : 'This hand: ') + sign + '$' + netDelta;
+        potEl.appendChild(netEl);
+        human.chipsBeforeHand = undefined; // reset for next hand
+      }
     }
 
     banner.classList.remove('hidden');

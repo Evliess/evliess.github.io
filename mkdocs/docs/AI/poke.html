@@ -1616,6 +1616,7 @@ class PokerGame {
     });
 
     // Remove busted players (chips === 0 = out of the game)
+    let dealerBusted = false;
     const busted = this.players.filter(p => p.chips === 0);
     if (busted.length > 0) {
       this.addLog(busted.map(p => p.name).join(', ') + ' 已出局', 'action-fold');
@@ -1623,11 +1624,17 @@ class PokerGame {
       const oldDealer = this.players[oldDealerIdx];
       this.players = this.players.filter(p => p.chips > 0);
       const newIdx = this.players.indexOf(oldDealer);
-      this.dealerIdx = newIdx >= 0 ? newIdx : Math.min(oldDealerIdx, this.players.length - 1);
+      if (newIdx >= 0) {
+        this.dealerIdx = newIdx;
+      } else {
+        // Dead button: old dealer busted, button goes to first survivor clockwise
+        this.dealerIdx = Math.min(oldDealerIdx, this.players.length - 1);
+        dealerBusted = true;
+      }
     }
 
-    // Rotate dealer
-    if (this.handNumber > 1) {
+    // Rotate dealer (skip if dead button already advanced)
+    if (this.handNumber > 1 && !dealerBusted) {
       this.dealerIdx = (this.dealerIdx + 1) % this.players.length;
     }
 
@@ -1657,6 +1664,9 @@ class PokerGame {
       sbIdx = this.nextActiveSeat(this.dealerIdx);
       bbIdx = this.nextActiveSeat(sbIdx);
     }
+
+    this.sbIdx = sbIdx;
+    this.bbIdx = bbIdx;
 
     // Small blind
     const sbPlayer = this.players[sbIdx];
@@ -1792,6 +1802,72 @@ class PokerGame {
   }
 
   executeAction(player, action) {
+    // ═══════════════════════════════════════════
+    // Validate & normalize action (single enforcement point)
+    // ═══════════════════════════════════════════
+
+    // 1) Is it this player's turn?
+    if (player !== this.players[this.currentPlayerIdx]) {
+      console.warn(`executeAction: not ${player.name}'s turn`);
+      return;
+    }
+    // 2) Is the player able to act?
+    if (player.folded) { console.warn(`executeAction: ${player.name} already folded`); return; }
+    if (player.allIn || player.chips === 0) {
+      console.warn(`executeAction: ${player.name} all-in / no chips`);
+      return;
+    }
+
+    const toCall = this.currentBet - player.roundBet;
+
+    // 3) normalize check → call when money is owed
+    if (action.action === 'check' && toCall > 0) { action = { action: 'call' }; }
+    // Fold with nothing to call → check
+    if (action.action === 'fold' && toCall === 0) { action = { action: 'check' }; }
+    // Call with nothing to call → check
+    if (action.action === 'call' && toCall === 0) { action = { action: 'check' }; }
+
+    // 4) call amount is always clamped
+    if (action.action === 'call') { action.amount = Math.min(toCall, player.chips); }
+
+    // 5-6-7) raise / bet — validate target & distinguish all-in sub-types
+    if (action.action === 'raise' || action.action === 'bet') {
+      let amt = action.amount || 0;
+      const increment = amt - player.roundBet;
+      const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
+
+      if (increment <= 0) {
+        // cannot raise <= current bet
+        action = { action: toCall > 0 ? 'call' : 'check', amount: toCall > 0 ? Math.min(toCall, player.chips) : 0 };
+      } else if (increment >= player.chips) {
+        // going all-in
+        const allInTotal = player.roundBet + player.chips;
+        if (allInTotal < minTotal) {
+          // short all-in raise — contributes everything, doesn't reopen betting
+          action = { action: 'allin', amount: player.chips, _shortRaise: true };
+        } else {
+          // full all-in raise
+          action = { action: 'allin', amount: player.chips, _shortRaise: false };
+        }
+      } else if (amt < minTotal) {
+        // under-raise without all-in — treat as call
+        action = { action: 'call', amount: Math.min(toCall, player.chips) };
+      }
+    }
+
+    // 7) standalone allin: distinguish all-in-call from all-in-raise
+    if (action.action === 'allin') {
+      const allInTotal = player.roundBet + player.chips;
+      if (allInTotal <= this.currentBet) {
+        // all-in call: just calling with remaining chips
+        action = { action: 'call', amount: player.chips };
+      }
+      // else: true all-in raise
+    }
+
+    // ═══════════════════════════════════════════
+    // Execute (action is now guaranteed valid)
+    // ═══════════════════════════════════════════
     player.hasActedThisRound = true;
     const actionType = action.action;
     let amount = action.amount || 0;
@@ -1815,71 +1891,18 @@ class PokerGame {
         break;
       case 'raise':
       case 'bet': {
-          // amount is the TOTAL bet for this round, calculate increment
-          const increment = amount - player.roundBet;
-          if (increment <= 0) {
-            // Player attempted a raise to an amount <= current bet — treat as check
-            const toCheckAmt = this.currentBet - player.roundBet;
-            if (toCheckAmt > 0) {
-              // Under normal flow, this shouldn't happen; log the mismatch
-              this.addLog(player.name + ': invalid raise (amount <= current bet), treating as check', 'action-fold');
-            }
-            this.addLog(t('log.check', player.name));
-          } else {
-            const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
-            const allInTotal = player.roundBet + player.chips;
-
-            if (increment >= player.chips && allInTotal >= minTotal) {
-              // Valid all-in raise
-              const allInAmt = player.chips;
-              const rOldCB = this.currentBet;
-              const rOldLR = this.lastRaiseAmount;
-              this.pot += player.contribute(allInAmt);
-              this.currentBet = allInTotal;
-              const raiseSize = allInTotal - rOldCB;
-              if (raiseSize >= rOldLR) {
-                this.lastRaiseAmount = Math.max(raiseSize, BB_AMOUNT);
-                this.canReRaise = true;
-              } else {
-                this.canReRaise = false;
-              }
-              this.lastAggressorIdx = player.seatIndex;
-              this.addLog(`${player.name} ALL-IN $${allInAmt}`, 'action-allin');
-            } else if (increment >= player.chips && allInTotal < minTotal) {
-              // All-in raise too small — contribute ALL remaining chips (player is truly all-in)
-              const allInAmt = player.chips;
-              const rOldCB = this.currentBet;
-              this.pot += player.contribute(allInAmt);
-              this.currentBet = player.roundBet;
-              const raiseSize = player.roundBet - rOldCB;
-              if (raiseSize < this.lastRaiseAmount) {
-                this.canReRaise = false;
-              }
-              this.lastAggressorIdx = player.seatIndex;
-              this.addLog(`${player.name} ALL-IN $${allInAmt} (too small to raise, call accepted)`, 'action-allin');
-            } else if (amount < minTotal) {
-              // Under-raise not allowed — treat as call
-              const callAmt = Math.min(this.currentBet - player.roundBet, player.chips);
-              this.pot += player.contribute(callAmt);
-              if (player.allIn) {
-                this.addLog(t('log.callAllIn', player.name, callAmt), 'action-allin');
-              } else {
-                this.addLog(t('log.call', player.name, callAmt));
-              }
-              this.addLog(player.name + ': raise too small, treated as call', 'action-fold');
-            } else {
-              const oldCurrentBet = this.currentBet;
-              this.pot += player.contribute(increment);
-              this.currentBet = player.roundBet;
-              this.lastRaiseAmount = Math.max(player.roundBet - oldCurrentBet, BB_AMOUNT);
-              this.canReRaise = true;
-              this.lastAggressorIdx = player.seatIndex;
-              this.addLog(t('log.raiseTo', player.name, player.roundBet), 'action-raise');
-            }
-          }
-          break;
-        }
-      case 'allin':
+        // Normal raise (validation already verified: increment > 0, amount >= minTotal, not all-in)
+        const increment = amount - player.roundBet;
+        const oldCurrentBet = this.currentBet;
+        this.pot += player.contribute(increment);
+        this.currentBet = player.roundBet;
+        this.lastRaiseAmount = Math.max(player.roundBet - oldCurrentBet, BB_AMOUNT);
+        this.canReRaise = true;
+        this.lastAggressorIdx = player.seatIndex;
+        this.addLog(t('log.raiseTo', player.name, player.roundBet), 'action-raise');
+        break;
+      }
+      case 'allin': {
         amount = player.chips;
         const aOldCB = this.currentBet;
         const aOldLR = this.lastRaiseAmount;
@@ -1895,8 +1918,13 @@ class PokerGame {
           }
         }
         this.lastAggressorIdx = player.seatIndex;
-        this.addLog(`${player.name} ALL-IN $${amount}`, 'action-allin');
+        if (action._shortRaise) {
+          this.addLog(`${player.name} ALL-IN $${amount} (incomplete raise)`, 'action-allin');
+        } else {
+          this.addLog(`${player.name} ALL-IN $${amount}`, 'action-allin');
+        }
         break;
+      }
     }
   }
 
@@ -1967,7 +1995,7 @@ class PokerGame {
     }
 
     const needed = 5 - community.length;
-    let wins = 0;
+    let wins = 0, ties = 0;
 
     for (let t = 0; t < trials; t++) {
       // Fisher-Yates shuffle in-place (CSPRNG)
@@ -1986,17 +2014,19 @@ class PokerGame {
 
       const heroHand = evaluate7Hand([...hole, ...fullComm]);
 
-      let heroWins = true;
+      let heroLoses = false, heroTies = false;
       for (const opp of oppHands) {
-        if (compareResults(evaluate7Hand([...opp, ...fullComm]), heroHand) > 0) {
-          heroWins = false;
-          break;
-        }
+        const cmp = compareResults(evaluate7Hand([...opp, ...fullComm]), heroHand);
+        if (cmp > 0) { heroLoses = true; break; }
+        if (cmp === 0) heroTies = true;
       }
-      if (heroWins) wins++;
+      if (!heroLoses) {
+        if (heroTies) ties++;
+        else wins++;
+      }
     }
 
-    return wins / trials;
+    return (wins + ties * 0.5) / trials;
   }
 
   // Build pool of unknown cards (not in hero's hole or community)
@@ -2125,7 +2155,7 @@ class PokerGame {
     const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
     let total = player.roundBet + increment;
     total = Math.max(total, minTotal);
-    total = Math.floor(Math.min(total, player.chips) / 10) * 10;
+    total = Math.floor(Math.min(total, player.roundBet + player.chips) / 10) * 10;
     if (total <= player.roundBet && player.chips > 0) {
       // All-in — verify it actually raises the current bet
       const allInTotal = player.roundBet + player.chips;
@@ -2191,14 +2221,22 @@ class PokerGame {
     const pool = this.buildUnknownPool(hole, community);
     const ITER = 100;
 
-    // Terminal evaluator: estimate equity × pot via Monte Carlo sampling
-    const terminalEV = (extraBoard, finalPot, samples) => {
+    // Terminal evaluator: estimate equity × pot via Monte Carlo sampling.
+    // Deals remaining community cards so draws (flush, straight) are correctly valued.
+    const terminalEV = (finalPot, samples) => {
       let wins = 0, ties = 0;
+      const remaining = 5 - community.length; // cards still to come (flop→2, turn→1, river→0)
       for (let s = 0; s < samples; s++) {
-        const i = Math.floor(Math.random() * pool.length);
-        let j = Math.floor(Math.random() * (pool.length - 1));
-        if (j >= i) j++;
-        const oppHand = [pool[i], pool[j]];
+        // Draw opponent hand (2) + future board cards (remaining) without replacement
+        const drawn = [];
+        const used = new Set();
+        const needed = 2 + remaining;
+        while (drawn.length < needed) {
+          const idx = Math.floor(Math.random() * pool.length);
+          if (!used.has(idx)) { used.add(idx); drawn.push(pool[idx]); }
+        }
+        const oppHand = [drawn[0], drawn[1]];
+        const extraBoard = drawn.slice(2);
         const hero7 = [...hole, ...community, ...extraBoard];
         const opp7 = [...oppHand, ...community, ...extraBoard];
         const cmp = compareResults(evaluate7Hand(hero7), evaluate7Hand(opp7));
@@ -2252,25 +2290,27 @@ class PokerGame {
         if (act.type === 'fold') {
           val = 0;
         } else if (act.type === 'passive') {
+          // act.amt = toCall (or 0 for check). Net EV = equity * (pot+call) - call
           const finalPot = pot + act.amt;
-          val = terminalEV([], finalPot, samples);
+          val = terminalEV(finalPot, samples) - act.amt;
         } else {
-          // Aggressive: opponent responds with strategy
-          const betAmt = Math.min(
-            Math.floor(pot * act.mult) + toCall,
-            effStack
-          );
-          if (betAmt <= toCall) {
-            val = terminalEV([], pot + toCall, samples);
+          // Aggressive: hero bets/raises. betInc = NEW money hero puts in (on top of roundBet).
+          const betInc = Math.min(Math.floor(pot * act.mult), effStack - toCall);
+          if (betInc <= 0) {
+            val = terminalEV(pot + toCall, samples) - toCall;
           } else {
-            const potAfterBet = pot + betAmt;
-            const raiseAmt = Math.min(betAmt * 2, effStack);
+            // betInc > 0: hero puts betInc new money on top of matching currentBet
+            const heroTotal = player.roundBet + toCall + betInc; // total hero contributes this round
+            const potAfterBet = pot + toCall + betInc; // pot after hero's additional contribution
+            const raiseAmt = Math.min(heroTotal * 2, effStack); // opp's total if they re-raise
 
-            // Value of each opponent response (from hero's perspective)
+            // Opponent responses (values are NET from hero's current position)
             const oppNodeVals = new Array(numOA);
-            oppNodeVals[0] = pot; // opp folds → hero wins current pot
-            oppNodeVals[1] = terminalEV([], potAfterBet, samples); // opp calls
-            oppNodeVals[2] = terminalEV([], pot + raiseAmt, samples); // opp raises
+            oppNodeVals[0] = pot; // opp folds → hero wins current pot (net gain = pot)
+            // opp calls: final pot = potAfterBet + heroTotal, hero invested (toCall + betInc)
+            oppNodeVals[1] = terminalEV(potAfterBet + heroTotal, samples) - (toCall + betInc);
+            // opp raises: final pot = potAfterBet + raiseAmt, hero invested (toCall + betInc)
+            oppNodeVals[2] = terminalEV(potAfterBet + raiseAmt, samples) - (toCall + betInc);
 
             // Hero's value = Σ oppStrat[o] * heroValue[o]
             val = 0;
@@ -2372,7 +2412,7 @@ class PokerGame {
   // ── Main AI Decision Engine (EV-based, with DCFR for post-flop) ──
   getAIAction(player) {
     const toCall = this.currentBet - player.roundBet;
-    const numOpp = Math.min(this.countPlayersInHand() - 1, 4);
+    const numOpp = this.countPlayersInHand() - 1;
     const canRaise = !player.hasActedThisRound || this.canReRaise || toCall === 0;
 
     // Use DCFR solver for post-flop heads-up decisions
@@ -2474,16 +2514,15 @@ class PokerGame {
   }
 
   calculateSidePots() {
-    // Include ALL players (even folded) for contribution amounts — folded money is still in pot
+    // Store all player contributions keyed by stable seatIndex (not array index)
     const allByContrib = this.players
-      .map((p, i) => ({ idx: i, contributed: p.totalBetThisHand }))
+      .map(p => ({ seatIndex: p.seatIndex, contributed: p.totalBetThisHand }))
       .filter(x => x.contributed > 0)
       .sort((a, b) => a.contributed - b.contributed);
 
     const checkers = this.players
-      .map((p, i) => ({ idx: i, contributed: p.totalBetThisHand }))
-      .filter(x => !this.players[x.idx].folded && x.contributed === 0)
-      .map(x => x.idx);
+      .filter(p => !p.folded && p.totalBetThisHand === 0)
+      .map(p => p.seatIndex);
 
     this.sidePots = [];
     let prevLevel = 0;
@@ -2492,11 +2531,14 @@ class PokerGame {
       const level = entry.contributed;
       const increment = level - prevLevel;
       if (increment > 0) {
-        // Count ALL players (including folded) for pot amount
         const atLevel = allByContrib.filter(e => e.contributed >= level);
         const potAmount = increment * atLevel.length;
-        // Only non-folded players are eligible to win
-        const eligible = atLevel.filter(e => !this.players[e.idx].folded).map(e => e.idx);
+        const eligible = atLevel
+          .filter(e => {
+            const p = this.players.find(p => p.seatIndex === e.seatIndex);
+            return p && !p.folded;
+          })
+          .map(e => e.seatIndex);
         if (this.sidePots.length === 0 && checkers.length > 0) {
           eligible.push(...checkers);
         }
@@ -2512,23 +2554,36 @@ class PokerGame {
       resultMap[r.player.seatIndex] = r;
     }
 
+    // Build clockwise order from button-left: player at (dealerIdx+1) gets order 0, then clockwise
+    const btnOrder = {};
+    for (let i = 0; i < this.players.length; i++) {
+      const idx = (this.dealerIdx + 1 + i) % this.players.length;
+      btnOrder[this.players[idx].seatIndex] = i;
+    }
+
     let totalAwarded = 0;
 
     for (const sidePot of this.sidePots) {
-      // Find best hand among eligible players
       let bestResult = null;
       const eligibleWinners = [];
-      for (const idx of sidePot.eligibleIndices) {
-        if (resultMap[idx] && this.players[idx] && !this.players[idx].folded) {
-          const r = resultMap[idx];
-          if (!bestResult || compareResults(r.hand, bestResult) > 0) {
-            bestResult = r.hand;
-            eligibleWinners.length = 0;
-            eligibleWinners.push(idx);
-          } else if (bestResult && compareResults(r.hand, bestResult) === 0) {
-            eligibleWinners.push(idx);
+      for (const seatIdx of sidePot.eligibleIndices) {
+        if (resultMap[seatIdx]) {
+          const player = resultMap[seatIdx].player;
+          if (player && !player.folded) {
+            const r = resultMap[seatIdx];
+            if (!bestResult || compareResults(r.hand, bestResult) > 0) {
+              bestResult = r.hand;
+              eligibleWinners.length = 0;
+              eligibleWinners.push(seatIdx);
+            } else if (bestResult && compareResults(r.hand, bestResult) === 0) {
+              eligibleWinners.push(seatIdx);
+            }
           }
         }
+      }
+
+      if (eligibleWinners.length > 1) {
+        eligibleWinners.sort((a, b) => (btnOrder[a] ?? 999) - (btnOrder[b] ?? 999));
       }
 
       if (eligibleWinners.length > 0) {
@@ -2536,7 +2591,8 @@ class PokerGame {
         const remainder = sidePot.amount - share * eligibleWinners.length;
         for (let i = 0; i < eligibleWinners.length; i++) {
           const bonus = i < remainder ? 1 : 0;
-          this.players[eligibleWinners[i]].chips += share + bonus;
+          const player = this.players.find(p => p.seatIndex === eligibleWinners[i]);
+          if (player) player.chips += share + bonus;
         }
         totalAwarded += sidePot.amount;
       }
@@ -2546,6 +2602,7 @@ class PokerGame {
     if (this.sidePots.length === 0 && this.pot > 0) {
       const bestResult = results[0].hand;
       const topPlayers = results.filter(r => compareResults(r.hand, bestResult) === 0).map(r => r.player);
+      topPlayers.sort((a, b) => (btnOrder[a.seatIndex] ?? 999) - (btnOrder[b.seatIndex] ?? 999));
       const share = Math.floor(this.pot / topPlayers.length);
       const remainder = this.pot - share * topPlayers.length;
       for (let i = 0; i < topPlayers.length; i++) {
@@ -2557,6 +2614,7 @@ class PokerGame {
     // Any unclaimed chips (partial or none) — distribute among active non-folded players
     if (totalAwarded < this.pot) {
       const active = results.filter(r => !r.player.folded);
+      active.sort((a, b) => (btnOrder[a.player.seatIndex] ?? 999) - (btnOrder[b.player.seatIndex] ?? 999));
       if (active.length > 0) {
         const unclaimed = this.pot - totalAwarded;
         const share = Math.floor(unclaimed / active.length);
@@ -2609,7 +2667,7 @@ class PokerGame {
     this.pot = 0;
     this.phase = 'GAME_OVER';
     this.render();
-    this.showResultBanner(result);
+    this.showResultBanner(result, potBeforeDistribute);
     this.addLog(t('log.potDistributed', potBeforeDistribute), 'phase-change');
     } catch (e) {
       console.error('Game error:', e);
@@ -2626,14 +2684,15 @@ class PokerGame {
   async endHandEarly() {
     let winner = this.players.find(p => !p.folded);
     if (!winner) winner = this.players.find(p => p.chips > 0);
+    const potAmount = this.pot;
     if (winner) {
-      winner.chips += this.pot;
-      this.addLog(t('log.winsPot', winner.name, this.pot), 'winner');
+      winner.chips += potAmount;
+      this.addLog(t('log.winsPot', winner.name, potAmount), 'winner');
     }
     this.pot = 0;
     this.phase = 'GAME_OVER';
     this.render();
-    this.showResultBanner({ winners: winner ? [winner] : [], bestHand: null, results: [], earlyWin: true });
+    this.showResultBanner({ winners: winner ? [winner] : [], bestHand: null, results: [], earlyWin: true }, potAmount);
   }
 
   // ── UI Helpers ──
@@ -2653,7 +2712,7 @@ class PokerGame {
     }
   }
 
-  showResultBanner(result) {
+  showResultBanner(result, potAmount) {
     const banner = this.els.resultBanner;
     const titleEl = this.els.resultTitle;
     const winnerEl = this.els.resultWinner;
@@ -2727,7 +2786,7 @@ class PokerGame {
       playersEl.innerHTML = '';
     }
 
-    potEl.innerHTML = t('ui.pot') + this.pot;
+    potEl.innerHTML = t('ui.pot') + potAmount;
 
     // Show human player's balance
     const human = this.players[0];
@@ -2860,9 +2919,7 @@ class PokerGame {
       }
     }
 
-    // Build blind info
-    const sbIdx = n === 2 ? this.dealerIdx : this.nextActiveSeat(this.dealerIdx);
-    const bbIdx = this.nextActiveSeat(sbIdx);
+    // Blind labels use saved positions from postBlinds (stable for entire hand)
     const showBlind = this.handNumber > 0 && this.phase !== 'IDLE';
 
     // Update each seat content in place
@@ -2886,8 +2943,8 @@ class PokerGame {
       let blindHTML = '';
       if (showBlind) {
         if (i === this.dealerIdx) blindHTML += '<span class="dealer-chip">D</span>';
-        if (i === sbIdx) blindHTML += '<span class="blind-tag sb">SB</span>';
-        if (i === bbIdx) blindHTML += '<span class="blind-tag bb">BB</span>';
+        if (i === this.sbIdx) blindHTML += '<span class="blind-tag sb">SB</span>';
+        if (i === this.bbIdx) blindHTML += '<span class="blind-tag bb">BB</span>';
       }
       const nameEl = inner.querySelector('.player-name');
       const nameHTML = blindHTML + player.name;

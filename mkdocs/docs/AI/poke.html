@@ -745,18 +745,27 @@ header .lang-toggle:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
   background: rgba(16, 16, 35, 0.95);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(251, 191, 36, 0.4);
   border-radius: 16px;
-  padding: 24px 36px;
+  padding: 24px 36px 20px;
   text-align: center;
   z-index: 600;
   box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 60px rgba(139, 92, 246, 0.2);
   user-select: none;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
   width: 90vw;
+}
+/* Scrollable body — only this region scrolls, so the "下一局" button is
+   always visible at the bottom instead of being pushed off-screen */
+#result-banner .rb-body {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
 }
 #result-banner .drag-handle {
   position: absolute;
@@ -787,7 +796,7 @@ header .lang-toggle:hover {
 #result-banner .winner-name { color: var(--cds-link); font-size: 1.1rem; }
 #result-banner .pot-info { font-size: 0.9rem; color: var(--cds-text-secondary); margin: 6px 0; }
 #result-banner .result-balance { font-size: 1rem; font-weight: 600; color: var(--cds-warning); margin-top: 4px; }
-#result-banner .btn { margin-top: 16px; }
+#result-banner .btn { flex-shrink: 0; margin-top: 16px; }
 #result-banner .result-cards {
   display: flex;
   gap: 8px;
@@ -1060,12 +1069,14 @@ header .lang-toggle:hover {
   <!-- Result Banner -->
   <div id="result-banner" class="hidden">
     <div class="drag-handle" id="result-drag-handle"></div>
-    <h3 id="result-title"></h3>
-    <div class="winner-name" id="result-winner"></div>
-    <div class="hand-name" id="result-hand"></div>
-    <div class="result-cards" id="result-cards"></div>
-    <div class="result-players" id="result-players"></div>
-    <div class="pot-info" id="result-pot"></div>
+    <div class="rb-body" id="result-body">
+      <h3 id="result-title"></h3>
+      <div class="winner-name" id="result-winner"></div>
+      <div class="hand-name" id="result-hand"></div>
+      <div class="result-cards" id="result-cards"></div>
+      <div class="result-players" id="result-players"></div>
+      <div class="pot-info" id="result-pot"></div>
+    </div>
     <button class="btn btn-primary btn-lg" id="btn-next-hand" data-i18n="btn.nextHand">下一局</button>
   </div>
 </div>
@@ -1327,6 +1338,13 @@ function secureRandomInt(max) {
   return buf[0] % max;
 }
 
+// CSPRNG: cryptographically secure random float in [0, 1)
+function secureRandom() {
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  return buf[0] / 0x100000000;
+}
+
 // Fisher-Yates shuffle with CSPRNG
 function shuffleDeck(deck) {
   for (let i = deck.length - 1; i > 0; i--) {
@@ -1459,7 +1477,7 @@ Object.assign(Poker, {
   get currentLang() { return currentLang; },
   I18N, HAND_NAME_KEYS, PHASE_KEYS,
   t, getHandName, applyI18n, setLang,
-  createCard, cardIsRed, buildDeck, secureRandomInt, shuffleDeck,
+  createCard, cardIsRed, buildDeck, secureRandom, secureRandomInt, shuffleDeck,
   getCombinations, evaluate5Hand, evaluate7Hand, compareResults
 });
 
@@ -2079,8 +2097,8 @@ class PokerGame {
 
       const maxS = Math.min(samplesPerRiver, subPool.length * (subPool.length - 1) / 2);
       for (let s = 0; s < maxS; s++) {
-        const a = Math.floor(Math.random() * subPool.length);
-        let b = Math.floor(Math.random() * (subPool.length - 1));
+        const a = secureRandomInt(subPool.length);
+        let b = secureRandomInt(subPool.length - 1);
         if (b >= a) b++;
 
         const oppBest = evaluate7Hand([subPool[a], subPool[b], ...fullComm]);
@@ -2113,8 +2131,8 @@ class PokerGame {
 
         const maxS = Math.min(samplesPerBoard, subPool.length * (subPool.length - 1) / 2);
         for (let s = 0; s < maxS; s++) {
-          const a = Math.floor(Math.random() * subPool.length);
-          let b = Math.floor(Math.random() * (subPool.length - 1));
+          const a = secureRandomInt(subPool.length);
+          let b = secureRandomInt(subPool.length - 1);
           if (b >= a) b++;
 
           const oppBest = evaluate7Hand([subPool[a], subPool[b], ...fullComm]);
@@ -2232,7 +2250,7 @@ class PokerGame {
         const used = new Set();
         const needed = 2 + remaining;
         while (drawn.length < needed) {
-          const idx = Math.floor(Math.random() * pool.length);
+          const idx = secureRandomInt(pool.length);
           if (!used.has(idx)) { used.add(idx); drawn.push(pool[idx]); }
         }
         const oppHand = [drawn[0], drawn[1]];
@@ -2358,7 +2376,7 @@ class PokerGame {
     }
 
     // ── Sample action from strategy ──
-    const r = Math.random();
+    const r = secureRandom();
     let cum = 0;
     for (let a = 0; a < numHA; a++) {
       cum += finalStrat[a];
@@ -2386,14 +2404,14 @@ class PokerGame {
     const equity = this.calcEquity(player, numOpp);
 
     // Normalize equity: multi-opp equity tends to be lower, adjust thresholds
-    const adjEquity = equity + (Math.random() - 0.5) * 0.03;
+    const adjEquity = equity + (secureRandom() - 0.5) * 0.03;
     const potOdds = toCall > 0 ? toCall / (pot + toCall) : 0;
     const stackRatio = toCall > 0 ? toCall / (player.chips + toCall) : 0;
 
     if (toCall === 0) {
-      if (adjEquity > 0.65 && canRaise) return this.makeRaise(player, 0.50 + Math.random() * 0.50);
-      if (adjEquity > 0.48 && Math.random() < 0.50 && canRaise) return this.makeRaise(player, 0.25 + Math.random() * 0.30);
-      if (adjEquity > 0.25 && Math.random() < 0.25 && canRaise) return this.makeRaise(player, 0.15 + Math.random() * 0.15);
+      if (adjEquity > 0.65 && canRaise) return this.makeRaise(player, 0.50 + secureRandom() * 0.50);
+      if (adjEquity > 0.48 && secureRandom() < 0.50 && canRaise) return this.makeRaise(player, 0.25 + secureRandom() * 0.30);
+      if (adjEquity > 0.25 && secureRandom() < 0.25 && canRaise) return this.makeRaise(player, 0.15 + secureRandom() * 0.15);
       return { action: 'check' };
     }
 
@@ -2401,8 +2419,8 @@ class PokerGame {
       return adjEquity > potOdds - 0.03 ? { action: 'call' } : { action: 'fold' };
     }
 
-    if (adjEquity > 0.62 && canRaise) return this.makeRaise(player, 0.50 + Math.random() * 0.50);
-    if (adjEquity > potOdds + 0.04 && canRaise && Math.random() < 0.30) return this.makeRaise(player, 0.30 + Math.random() * 0.30);
+    if (adjEquity > 0.62 && canRaise) return this.makeRaise(player, 0.50 + secureRandom() * 0.50);
+    if (adjEquity > potOdds + 0.04 && canRaise && secureRandom() < 0.30) return this.makeRaise(player, 0.30 + secureRandom() * 0.30);
     if (adjEquity > potOdds + 0.02) return { action: 'call' };
     if (stackRatio < 0.10 && adjEquity > potOdds - 0.02) return { action: 'call' };
     if (adjEquity > 0.15 && stackRatio < 0.05) return { action: 'call' };
@@ -2425,13 +2443,13 @@ class PokerGame {
 
     // Pre-flop / early street: use EV-based logic
     let equity = this.calcEquity(player, numOpp);
-    equity += (Math.random() - 0.5) * 0.04;
+    equity += (secureRandom() - 0.5) * 0.04;
     equity = Math.max(0.03, Math.min(0.97, equity));
 
     if (toCall === 0) {
-      if (equity > 0.75) return this.makeRaise(player, 0.70 + Math.random() * 0.50);
-      if (equity > 0.58) return this.makeRaise(player, 0.35 + Math.random() * 0.40);
-      if (equity > 0.38 && Math.random() < 0.40) return this.makeRaise(player, 0.20 + Math.random() * 0.25);
+      if (equity > 0.75) return this.makeRaise(player, 0.70 + secureRandom() * 0.50);
+      if (equity > 0.58) return this.makeRaise(player, 0.35 + secureRandom() * 0.40);
+      if (equity > 0.38 && secureRandom() < 0.40) return this.makeRaise(player, 0.20 + secureRandom() * 0.25);
       return { action: 'check' };
     }
 
@@ -2447,11 +2465,11 @@ class PokerGame {
     const stackRatio = toCall / (player.chips + toCall);
 
     if (equity > 0.72) {
-      const pf = equity > 0.84 ? 0.65 + Math.random() * 0.55 : 0.40 + Math.random() * 0.40;
+      const pf = equity > 0.84 ? 0.65 + secureRandom() * 0.55 : 0.40 + secureRandom() * 0.40;
       return this.makeRaise(player, pf);
     }
     if (equity > potOdds + 0.05) {
-      if (equity > 0.55 && Math.random() < 0.20) return this.makeRaise(player, 0.30 + Math.random() * 0.30);
+      if (equity > 0.55 && secureRandom() < 0.20) return this.makeRaise(player, 0.30 + secureRandom() * 0.30);
       return { action: 'call' };
     }
     if (equity > potOdds - 0.02 && stackRatio < 0.12) return { action: 'call' };
@@ -2881,42 +2899,37 @@ class PokerGame {
   renderSeats() {
     const container = this.els.seatsContainer;
     const n = this.players.length;
-    if (n === 0) { container.innerHTML = ''; return; }
+    if (n === 0) { container.innerHTML = ''; this._seatPositions = null; this._seatDims = null; return; }
 
-    // Check if player count changed — if so, full rebuild needed for positions
+    const tableEl = this.els.tableArea;
+    const tableW = tableEl.offsetWidth || tableEl.parentElement.offsetWidth || 800;
+    const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
+    const dims = tableW + 'x' + tableH;
+
+    // Recompute positions when the player count changes OR the table is resized —
+    // seats are absolutely positioned in px, so they must track the table's size
     const seatCount = container.querySelectorAll('.seat').length;
-    if (seatCount !== n || !this._seatPositions) { container.innerHTML = ''; }
+    if (seatCount !== n || !this._seatPositions || this._seatDims !== dims) {
+      this._seatPositions = this._computeSeatPositions(n, tableW, tableH);
+      this._seatDims = dims;
 
-    if (container.innerHTML === '') {
-      // Full position rebuild
-      this._seatPositions = [];
-      const tableEl = this.els.tableArea;
-      const tableW = tableEl.offsetWidth || tableEl.parentElement.offsetWidth || 800;
-      const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
-      const cx = tableW / 2;
-      const cy = tableH / 2;
-      // Reduce vertical radius to keep seats from overlapping header/controls.
-      // Seat height ≈ 70px; reserve 45px padding on top and bottom edges.
-      const vPadding = 45;
-      const maxRy = (tableH / 2) - vPadding;
-      const rawRy = tableH * (0.38 * (0.95 + n * 0.02));
-      const rx = tableW * (0.40 * (0.95 + n * 0.02));
-      const ry = Math.min(rawRy, maxRy);
-
+      // Reuse existing seat elements so the CSS transition animates the move;
+      // only create new ones when the player count grew
+      const existing = container.querySelectorAll('.seat');
       for (let i = 0; i < n; i++) {
-        const angle = (Math.PI / 2) - i * (2 * Math.PI / n);
-        const x = cx + rx * Math.cos(angle);
-        const y = cy - ry * Math.sin(angle);
-
-        const seat = document.createElement('div');
-        seat.className = 'seat';
-        seat.dataset.idx = i;
-        seat.style.left = x + 'px';
-        seat.style.top = y + 'px';
-        seat.innerHTML = '<div class="seat-inner"><div class="player-name"></div><div class="hole-cards"></div><div class="chip-count"></div></div>';
-        container.appendChild(seat);
-        this._seatPositions.push({ x, y });
+        let seat = existing[i];
+        if (!seat) {
+          seat = document.createElement('div');
+          seat.className = 'seat';
+          seat.dataset.idx = i;
+          seat.innerHTML = '<div class="seat-inner"><div class="player-name"></div><div class="hole-cards"></div><div class="chip-count"></div></div>';
+          container.appendChild(seat);
+        }
+        seat.style.left = this._seatPositions[i].x + 'px';
+        seat.style.top = this._seatPositions[i].y + 'px';
       }
+      // Remove leftover seats when the player count shrank
+      while (container.children.length > n) container.removeChild(container.lastChild);
     }
 
     // Blind labels use saved positions from postBlinds (stable for entire hand)
@@ -2984,6 +2997,28 @@ class PokerGame {
         inner._lastExtra = extraHTML;
       }
     }
+  }
+
+  _computeSeatPositions(n, tableW, tableH) {
+    const cx = tableW / 2;
+    const cy = tableH / 2;
+    // Reduce vertical radius to keep seats from overlapping header/controls.
+    // Seat height ≈ 70px; reserve 45px padding on top and bottom edges.
+    const vPadding = 45;
+    const maxRy = (tableH / 2) - vPadding;
+    const rawRy = tableH * (0.38 * (0.95 + n * 0.02));
+    const rx = tableW * (0.40 * (0.95 + n * 0.02));
+    const ry = Math.min(rawRy, maxRy);
+
+    const positions = [];
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI / 2) - i * (2 * Math.PI / n);
+      positions.push({
+        x: cx + rx * Math.cos(angle),
+        y: cy - ry * Math.sin(angle)
+      });
+    }
+    return positions;
   }
 
   updateAllText() {
@@ -3264,12 +3299,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createStars() {
     stars = [];
+    // Scale star density & size with viewport area so large desktop screens
+    // get a visible starfield; small screens keep the original look.
+    const area = canvas.width * canvas.height;
+    const densityScale = Math.min(3.5, Math.pow(area / 250000, 0.5));
+    const sizeScale = Math.min(2.5, Math.pow(area / 250000, 0.3));
     for (const layer of layers) {
-      for (let i = 0; i < layer.count; i++) {
+      const count = Math.round(layer.count * Math.max(1, densityScale));
+      for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          r: layer.minSize + Math.random() * (layer.maxSize - layer.minSize),
+          r: (layer.minSize + Math.random() * (layer.maxSize - layer.minSize)) * sizeScale,
           depth: layer.depth,
           speed: layer.speed,
           opacity: layer.opacity * (0.5 + Math.random() * 0.5),
@@ -3416,12 +3457,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Continuous animation loop (~30fps)
-  function animateLoop() {
+  // Low-frequency heartbeat (~1Hz): keeps stars gently drifting during idle
+  // without a continuous 30fps rAF loop. Events below force immediate redraws.
+  setInterval(function() {
     scheduleDraw(performance.now());
-    requestAnimationFrame(animateLoop);
-  }
-  requestAnimationFrame(animateLoop);
+  }, 1000);
 
   // Event-driven redraws for responsive interaction
   ['click', 'touchstart', 'scroll', 'mousemove'].forEach(function(evt) {

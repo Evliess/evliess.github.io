@@ -914,7 +914,24 @@ header .lang-toggle:hover {
     min-height: 0;
     max-height: none;
   }
-  .log-toggle { display: flex; }
+  /* Compact controls: buttons wrap into one row, the raise slider takes its
+     own full-width row, and the log toggle its own row below it. Keeps every
+     control on-screen even when the opponent is all-in. */
+  #controls {
+    margin-top: 8px;
+    padding: 6px 8px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+    gap: 4px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  #controls .your-hand { margin-right: 4px; }
+  #controls .btn-row { gap: 12px; }
+  #btn-check, #btn-fold-call-row, #btn-allin { order: 1; }
+  #controls .raise-input-group { order: 2; flex: 1 1 100%; justify-content: center; }
+  /* Log toggle — its own full-width row below the controls. Lives outside
+     #controls so it stays visible even when the buttons are hidden. */
+  .log-toggle { display: flex; margin: 0; height: 34px; }
   .seat .seat-inner { min-width: 100px; padding: 5px 7px; }
   .seat .player-name { font-size: 0.7rem; }
   .seat .chip-count { font-size: 0.65rem; }
@@ -928,14 +945,6 @@ header .lang-toggle:hover {
   #table-area { top: 4px; right: 4px; bottom: 4px; left: 4px; }
   #game-log { font-size: 0.7rem; padding: 6px; max-height: 150px; }
   #game-log .log-entry { padding: 3px 0; }
-  /* Compact 2-row layout: action buttons wrap into one row, the raise
-     slider takes its own full-width row. Keeps all buttons on-screen even
-     when the opponent is all-in and every control is shown. */
-  #controls { padding: 6px 8px; padding-bottom: max(10px, env(safe-area-inset-bottom, 10px)); gap: 4px; flex-direction: row; flex-wrap: wrap; }
-  #controls .your-hand { margin-right: 4px; }
-  #controls .btn-row { gap: 12px; }
-  #btn-check, #btn-fold-call-row, #btn-allin { order: 1; }
-  #controls .raise-input-group { order: 2; flex: 1 1 100%; justify-content: center; }
   .btn { height: 34px; padding: 0 10px; font-size: 0.7rem; }
   .btn .ico { font-size: 0.9rem; }
   #controls input[type="range"] { width: 80px; }
@@ -1067,6 +1076,13 @@ header .lang-toggle:hover {
       <button class="btn btn-danger" id="btn-allin"><span class="ico">⚡</span> <span data-i18n="btn.allin">全下</span></button>
     </div>
 
+    <!-- Mobile log toggle — always visible, even when the action buttons are
+         hidden (not your turn). Sits right below the controls, so when buttons
+         are shown it appears as the row below the raise row. -->
+    <button class="log-toggle" id="log-toggle-mobile">
+      <span class="ico">☰</span> <span data-i18n="ui.gameLog">游戏日志</span>
+    </button>
+
     <!-- Game Log Sidebar -->
     <div id="game-log">
       <div class="log-header">
@@ -1077,11 +1093,6 @@ header .lang-toggle:hover {
       </div>
     </div>
   </div>
-
-  <!-- Mobile log toggle (visible below 800px) -->
-  <button class="log-toggle" id="log-toggle-mobile">
-    <span class="ico">☰</span> <span data-i18n="ui.gameLog">游戏日志</span>
-  </button>
 
   <!-- Result Banner -->
   <div id="result-banner" class="hidden">

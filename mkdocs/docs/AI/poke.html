@@ -894,7 +894,7 @@ header .lang-toggle:hover {
   }
   :root { --card-width: 48px; --card-height: 70px; }
   #table-wrapper {
-    min-height: 280px;
+    min-height: 340px;
     flex: none;
   }
   #table-area { top: 6px; right: 6px; bottom: 6px; left: 6px; }
@@ -914,18 +914,12 @@ header .lang-toggle:hover {
 @media (max-width: 480px) {
   .main-content { padding: 4px; gap: 4px; }
   :root { --card-width: 40px; --card-height: 56px; }
-  #table-wrapper { min-height: 240px; }
+  #table-wrapper { min-height: 300px; }
   #table-area { top: 4px; right: 4px; bottom: 4px; left: 4px; }
   #game-log { font-size: 0.7rem; padding: 6px; max-height: 100px; }
   #game-log .log-entry { padding: 3px 0; }
-  /* Compact 2-row layout: action buttons wrap into one row, the raise
-     slider takes its own full-width row. Keeps all buttons on-screen even
-     when the opponent is all-in and every control is shown. */
-  #controls { padding: 6px 8px; padding-bottom: max(10px, env(safe-area-inset-bottom, 10px)); gap: 4px; flex-direction: row; flex-wrap: wrap; }
-  #controls .your-hand { margin-right: 4px; }
-  #controls .btn-row { gap: 12px; }
-  #btn-check, #btn-fold-call-row, #btn-allin { order: 1; }
-  #controls .raise-input-group { order: 2; flex: 1 1 100%; justify-content: center; }
+  #controls { padding: 8px 10px; padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)); gap: 6px; flex-direction: column; }
+  #controls .your-hand { margin-right: 0; }
   .btn { height: 34px; padding: 0 10px; font-size: 0.7rem; }
   .btn .ico { font-size: 0.9rem; }
   #controls input[type="range"] { width: 80px; }
@@ -953,7 +947,7 @@ header .lang-toggle:hover {
 /* Tiny phones */
 @media (max-width: 360px) {
   :root { --card-width: 34px; --card-height: 48px; }
-  #table-wrapper { min-height: 200px; }
+  #table-wrapper { min-height: 260px; }
   #table-area { top: 3px; right: 3px; bottom: 3px; left: 3px; }
   .card.mini { width: 24px; height: 34px; }
   .card.mini .card-rank { font-size: 0.55rem; }

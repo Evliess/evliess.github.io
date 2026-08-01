@@ -1,0 +1,3505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texas Hold'em Poker</title>
+<style>
+:root {
+  --cds-layer: #0a0a12;
+  --cds-layer-accent: #10101e;
+  --cds-layer-hover: #1a1a30;
+  --cds-text-primary: #e8e8f0;
+  --cds-text-secondary: #9898b8;
+  --cds-border-subtle: #2a2a40;
+  --cds-focus: #7c5cff;
+  --cds-link: #a78bfa;
+  --cds-danger: #ff4d6a;
+  --cds-success: #4ade80;
+  --cds-warning: #fbbf24;
+  --accretion-orange: #f59e0b;
+  --accretion-gold: #fbbf24;
+  --event-horizon: #050510;
+  --lensing-blue: #6366f1;
+  --card-width: 70px;
+  --card-height: 100px;
+  --font-ibm: system-ui, -apple-system, 'Segoe UI', 'Noto Sans SC', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.hidden { display: none !important; }
+
+/* ── Starfield Canvas ── */
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at center, #0d0d24 0%, #020210 100%);
+}
+
+body {
+  font-family: var(--font-ibm);
+  color: var(--cds-text-primary);
+  height: 100vh;
+  overflow: hidden;
+  background: #020210;
+}
+
+#app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+#app > * { pointer-events: auto; }
+
+/* ── Main Content: table + sidebar ── */
+.main-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
+  flex: 1;
+  overflow: hidden;
+  padding: 12px;
+  gap: 12px;
+  min-height: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#table-wrapper {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  min-width: 0;
+  min-height: 360px;
+}
+
+/* ── Header ── */
+header.bx--header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 1rem;
+  background: rgba(10, 10, 30, 0.95);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header .title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.16px;
+}
+header .phase-badge {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--cds-focus);
+  color: #fff;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+header .hand-counter {
+  font-size: 0.8rem;
+  color: var(--cds-text-secondary);
+}
+header .lang-toggle {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--cds-text-primary);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: var(--font-ibm);
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+header .lang-toggle:hover {
+  background: rgba(139, 92, 246, 0.35);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+/* ── Setup Overlay (Carbon Modal style) ── */
+#setup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.setup-dialog {
+  background: rgba(16, 16, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  min-width: 360px;
+  max-width: 440px;
+  box-shadow: 0 0 60px rgba(99, 102, 241, 0.15);
+}
+.setup-dialog h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-ibm);
+}
+.setup-dialog .desc {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
+  margin-bottom: 1.5rem;
+}
+.setup-dialog .field {
+  margin-bottom: 1.5rem;
+}
+.setup-dialog label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.32px;
+  color: var(--cds-text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.setup-dialog input[type="range"] {
+  width: 100%;
+  accent-color: var(--cds-focus);
+  margin-bottom: 0.25rem;
+}
+.setup-dialog .range-val {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--cds-link);
+}
+.setup-dialog .range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--cds-text-secondary);
+}
+.setup-dialog .setup-input {
+  background: rgba(10, 10, 30, 0.8);
+  color: var(--cds-text-primary);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  font-family: var(--font-ibm);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.setup-dialog .setup-input::placeholder { color: rgba(232, 232, 240, 0.45); }
+.setup-hint { font-size: 0.7rem; color: var(--cds-text-secondary); margin-top: 12px; }
+.log-placeholder { color: var(--cds-text-secondary); }
+
+/* ── Carbon Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: var(--font-ibm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  letter-spacing: 0.16px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary { background: var(--cds-focus); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #0043ce; }
+.btn-danger { background: var(--cds-danger); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #d1272e; }
+.btn-secondary { background: var(--cds-layer-hover); color: var(--cds-text-primary); border-color: var(--cds-border-subtle); }
+.btn-secondary:hover:not(:disabled) { background: #4c4c4c; }
+.btn-success { background: var(--cds-success); color: #fff; }
+.btn-success:hover:not(:disabled) { background: #2d8f4b; }
+.btn-lg { height: 48px; padding: 0 24px; font-size: 1rem; }
+.btn-full { width: 100%; }
+
+/* ═══════════════════════════════════════════
+   Gargantua Black Hole Table — Interstellar film look
+   Key visual signatures from the movie:
+   - Perfectly black, hard-edged event horizon (the "shadow")
+   - Razor-thin accretion disk blazing at millions of degrees
+   - Extreme Doppler asymmetry: brilliant white-blue approaching,
+     dim orange/red receding
+   - Gravitational lensing: the rear disk appears as a complete
+     ring bent over BOTH top and bottom of the shadow
+   - Thin photon ring at the innermost stable circular orbit
+   - Faint Einstein ring (secondary lensed image) further out
+   ═══════════════════════════════════════════ */
+
+#table-area {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  left: 10px;
+  border-radius: 50%;
+  overflow: visible;
+  /* Event horizon: ABSOLUTE black with abrupt edge — no soft fade */
+  background: radial-gradient(circle at 50% 50%,
+    #000000 0%,
+    #000000 73%,
+    #000003 76%,
+    #010108 79%,
+    #030315 83%,
+    #0a0a28 88%,
+    #151535 92%,
+    #1e1e42 96%,
+    transparent 100%
+  );
+  box-shadow:
+    /* Distant gravitational glow — very subtle */
+    0 0 60px 20px rgba(60, 80, 180, 0.12),
+    0 0 120px 50px rgba(30, 40, 130, 0.06),
+    0 0 200px 80px rgba(5, 5, 25, 0.6);
+}
+
+/* ── Rear accretion disk: the complete ring visible via gravitational lensing ──
+   In Interstellar, light from the disk BEHIND the black hole is bent around it,
+   creating a full ring around the shadow. This layer sits UNDER the event horizon. */
+.bh-disk-rear {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  /* The disk orbits counter-clockwise.
+     Left side (≈0°) = approaching = Doppler blue-shifted = blazing white-blue.
+     Right side (≈180°) = receding = Doppler red-shifted = dim orange/brown. */
+  background: conic-gradient(
+    from 215deg,
+    /* ── Far side: barely visible ── */
+    transparent 0deg,
+    transparent 8deg,
+    /* ── Approaching limb (left): INTENSE blue-white ── */
+    rgba(140, 190, 255, 0.10) 12deg,
+    rgba(100, 160, 255, 0.30) 22deg,
+    rgba(140, 195, 255, 0.65) 32deg,
+    rgba(200, 230, 255, 0.92) 40deg,
+    rgba(230, 245, 255, 1.00) 45deg,     /* ★ Peak brilliance */
+    rgba(200, 230, 255, 0.92) 50deg,
+    rgba(140, 195, 255, 0.60) 60deg,
+    rgba(160, 200, 240, 0.35) 72deg,
+    rgba(200, 220, 240, 0.18) 85deg,
+    /* ── Receding limb (right): dim orange/red ── */
+    rgba(255, 210, 140, 0.10) 100deg,
+    rgba(255, 180, 100, 0.20) 115deg,
+    rgba(255, 150, 70, 0.12) 130deg,
+    rgba(200, 110, 45, 0.05) 150deg,
+    rgba(150, 80, 30, 0.02) 170deg,
+    transparent 195deg,
+    /* ── Far side resumes ── */
+    transparent 280deg,
+    rgba(150, 80, 30, 0.015) 310deg,
+    rgba(200, 110, 45, 0.03) 335deg,
+    rgba(255, 150, 70, 0.06) 350deg,
+    transparent 360deg
+  );
+  mask-image: radial-gradient(circle,
+    transparent 72%,
+    rgba(0,0,0,0.10) 78%,
+    rgba(0,0,0,0.50) 82%,
+    rgba(0,0,0,1.00) 85%,
+    rgba(0,0,0,0.50) 88%,
+    rgba(0,0,0,0.10) 92%,
+    transparent 96%
+  );
+}
+
+/* ── Photon shell glow: faint inner glow at the event horizon boundary ── */
+#table-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  background: transparent;
+  box-shadow:
+    /* Inner photon ring — bluish light bent at the photon sphere */
+    inset 0 0 2px 1px rgba(140, 180, 240, 0.30),
+    inset 0 0 6px 2px rgba(100, 150, 220, 0.10),
+    /* Outer photon ring glow */
+    0 0 1px 1px rgba(160, 210, 255, 0.45),
+    0 0 4px 2px rgba(130, 180, 240, 0.20),
+    0 0 12px 5px rgba(100, 150, 230, 0.08);
+}
+
+/* ── Lensed front disk: the accretion disk warps OVER the event horizon ──
+   Gravitational lensing bends light from the disk so it appears to arch
+   over BOTH the top AND bottom of the black hole shadow. This is THE
+   signature visual from Interstellar. */
+.bh-disk-front {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    /* ── Top arc (lensed disk arching over the north pole) ── */
+    transparent 12deg,
+    rgba(180, 215, 255, 0.15) 22deg,
+    rgba(140, 190, 255, 0.38) 32deg,
+    rgba(200, 230, 255, 0.72) 42deg,
+    rgba(235, 245, 255, 0.95) 48deg,     /* Peak: lensed brilliance */
+    rgba(210, 235, 255, 0.72) 54deg,
+    rgba(255, 235, 200, 0.45) 64deg,
+    rgba(255, 200, 130, 0.22) 76deg,
+    rgba(255, 160, 80, 0.08) 92deg,
+    transparent 110deg,
+    /* ── Middle: gap (sides of the disk are edge-on) ── */
+    transparent 140deg,
+    /* ── Bottom arc (lensed disk arching under the south pole) ── */
+    transparent 165deg,
+    rgba(255, 160, 80, 0.04) 175deg,
+    rgba(255, 200, 130, 0.15) 188deg,
+    rgba(255, 230, 190, 0.35) 200deg,
+    rgba(210, 235, 255, 0.55) 212deg,
+    rgba(180, 215, 255, 0.30) 224deg,
+    rgba(140, 190, 255, 0.12) 236deg,
+    rgba(180, 215, 255, 0.05) 248deg,
+    transparent 265deg,
+    transparent 360deg
+  );
+  /* Mask: show only the thin ring bands at top and bottom */
+  /* Top band: the lensed disk bending OVER the shadow.
+     Bottom band: the lensed disk bending UNDER the shadow. */
+  mask-image: radial-gradient(circle,
+    transparent 70%,
+    rgba(0,0,0,0.05) 76%,
+    rgba(0,0,0,0.40) 80%,
+    rgba(0,0,0,0.80) 83%,
+    rgba(0,0,0,1.00) 86%,
+    rgba(0,0,0,0.80) 89%,
+    rgba(0,0,0,0.40) 92%,
+    rgba(0,0,0,0.05) 96%,
+    transparent 100%
+  );
+}
+
+/* ── Photon ring: ultra-thin bright filament at the innermost stable orbit ── */
+.bh-photon-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  border: 1px solid rgba(170, 210, 255, 0.30);
+  box-shadow:
+    0 0 2px 1px rgba(180, 215, 255, 0.35),
+    0 0 6px 2px rgba(130, 170, 240, 0.12),
+    inset 0 0 2px 1px rgba(180, 215, 255, 0.18);
+  animation: photonPulse 4s ease-in-out infinite;
+}
+
+/* ── Einstein ring: faint secondary image from extreme lensing ── */
+.bh-lens-flare {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  z-index: 4;
+  pointer-events: none;
+  /* The Einstein ring is a thin circle of bent light further out.
+     We use two ellipses to suggest the brightest lensed spots. */
+  background:
+    radial-gradient(ellipse at 35% 22%,
+      rgba(180, 215, 255, 0.10) 0%,
+      rgba(130, 170, 240, 0.04) 25%,
+      transparent 50%
+    ),
+    radial-gradient(ellipse at 68% 78%,
+      rgba(255, 200, 140, 0.06) 0%,
+      rgba(255, 170, 100, 0.02) 30%,
+      transparent 55%
+    ),
+    radial-gradient(circle at 50% 50%,
+      transparent 82%,
+      rgba(140, 180, 240, 0.04) 86%,
+      rgba(160, 200, 255, 0.08) 88%,
+      rgba(140, 180, 240, 0.04) 90%,
+      transparent 94%
+    );
+}
+
+@keyframes photonPulse {
+  0%, 100% { opacity: 0.65; }
+  50% { opacity: 1; }
+}
+
+/* Community Cards */
+.community-area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  text-align: center;
+  z-index: 15;
+}
+.community-cards {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.community-cards .card-slot {
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 8px;
+  border: 2px dashed rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+}
+.community-cards .card-slot.filled { border: none; background: none; }
+.pot-display {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fbbf24;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ico { font-style: normal; display: inline-block; vertical-align: middle; line-height: 1; }
+.pot-display .ico { font-size: 1.2rem; }
+
+/* ── Playing Cards (Material-inspired) ── */
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 8px;
+  background: #fff;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ibm);
+  font-weight: 700;
+  user-select: none;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 6px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.25), 0 8px 20px rgba(0,0,0,0.2); }
+.card .card-rank { font-size: 1.3rem; line-height: 1; }
+.card .card-suit { font-size: 1.2rem; line-height: 1; margin-top: 2px; }
+.card.red  { color: #d32f2f; }
+.card.black { color: #212121; }
+.card.face-down {
+  background: linear-gradient(135deg, #4c1d95 25%, #2d1060 25%, #2d1060 50%, #4c1d95 50%, #4c1d95 75%, #2d1060 75%);
+  background-size: 12px 12px;
+  color: transparent;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+}
+.card.face-down:hover { transform: none; }
+
+.card.mini { width: 45px; height: 65px; border-radius: 5px; }
+.card.mini .card-rank { font-size: 0.85rem; }
+.card.mini .card-suit { font-size: 0.8rem; }
+
+/* ── Player Seats ── */
+.seat {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  transition: all 0.3s;
+}
+.seat .seat-inner {
+  background: rgba(16, 16, 30, 0.92);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 140px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 20px rgba(99, 102, 241, 0.1);
+}
+.seat.active-turn .seat-inner {
+  border-color: #fbbf24;
+  position: relative;
+}
+.seat.active-turn .seat-inner::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  z-index: -1;
+  box-shadow: 0 0 36px rgba(251, 191, 36, 0.8), 0 0 72px rgba(245, 158, 11, 0.4);
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.seat.folded .seat-inner { opacity: 0.5; }
+.seat .player-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.seat .player-name .dealer-chip {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  color: #161616;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.seat .player-name .blind-tag {
+  display: inline-block;
+  font-size: 0.55rem;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.seat .player-name .blind-tag.sb { background: #f1c21b; color: #161616; }
+.seat .player-name .blind-tag.bb { background: #fa4d56; color: #fff; }
+.seat .hole-cards { display: flex; gap: 4px; justify-content: center; margin-bottom: 4px; }
+.seat .chip-count {
+  font-size: 0.75rem;
+  color: #fbbf24;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+}
+.seat .status-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.seat .status-tag.folded-tag { background: rgba(250,77,86,0.2); color: var(--cds-danger); }
+.seat .status-tag.allin-tag { background: rgba(241,194,27,0.2); color: var(--cds-warning); }
+.seat .status-tag.winner-tag { background: rgba(66,190,101,0.2); color: var(--cds-success); }
+.seat .bet-amount {
+  font-size: 0.7rem;
+  color: var(--cds-text-secondary);
+  margin-top: 2px;
+}
+
+/* You tag */
+.seat.you .seat-inner { border-color: var(--cds-link); }
+
+/* ── Controls ── */
+#controls {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: rgba(10, 10, 30, 0.95);
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+#controls .btn-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+#controls .raise-input-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#controls input[type="range"] {
+  width: 120px;
+  accent-color: var(--cds-focus);
+}
+#controls .raise-amount {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cds-link);
+  min-width: 50px;
+  text-align: center;
+}
+#controls .your-hand {
+  display: flex;
+  gap: 6px;
+  margin-right: 16px;
+  align-items: center;
+}
+#controls .your-hand-label {
+  font-size: 0.7rem;
+  color: var(--cds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+/* ── Game Log Sidebar ── */
+#game-log {
+  grid-column: 2;
+  grid-row: 1;
+  width: 260px;
+  min-height: 0;
+  background: rgba(10, 10, 30, 0.92);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+}
+#game-log .log-header {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cds-text-secondary);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Mobile log toggle button */
+.log-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: var(--font-ibm);
+  background: var(--cds-layer-accent);
+  color: var(--cds-text-secondary);
+  border: 1px solid var(--cds-border-subtle);
+  cursor: pointer;
+  margin: 0 12px;
+}
+.log-toggle .ico { font-size: 1rem; }
+#game-log .log-entry {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  color: var(--cds-text-secondary);
+  font-family: var(--font-ibm);
+  line-height: 1.4;
+}
+#game-log .log-entry .ico {
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+#game-log .log-entry.action-fold { color: var(--cds-danger); }
+#game-log .log-entry.action-raise { color: var(--cds-success); }
+#game-log .log-entry.action-allin { color: var(--cds-warning); }
+#game-log .log-entry.phase-change { color: var(--cds-link); font-weight: 600; }
+#game-log .log-entry.winner { color: #ffd700; font-weight: 600; }
+
+/* ── Toast Notification ── */
+.toast {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cds-layer-hover);
+  border: 1px solid var(--cds-border-subtle);
+  border-left: 4px solid var(--cds-focus);
+  padding: 12px 20px;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Result Banner ── */
+#result-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  background: rgba(16, 16, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 16px;
+  padding: 24px 36px 20px;
+  text-align: center;
+  z-index: 600;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 60px rgba(139, 92, 246, 0.2);
+  user-select: none;
+  max-height: calc(100vh - 24px);
+  overflow: hidden;
+  width: 90vw;
+}
+/* Scrollable body — only this region scrolls, so the "下一局" button is
+   always visible at the bottom instead of being pushed off-screen */
+#result-banner .rb-body {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+#result-banner .drag-handle {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 28px;
+  cursor: grab;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#result-banner .drag-handle:active { cursor: grabbing; }
+#result-banner .drag-handle::after {
+  content: '';
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 6px 0 rgba(255,255,255,0.25), 0 -6px 0 rgba(255,255,255,0.25);
+}
+#result-banner h3 { font-size: 1.1rem; margin-bottom: 4px; }
+#result-banner .hand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin: 8px 0;
+}
+#result-banner .winner-name { color: var(--cds-link); font-size: 1.1rem; }
+#result-banner .pot-info { font-size: 0.9rem; color: var(--cds-text-secondary); margin: 6px 0; }
+#result-banner .result-balance { font-size: 1rem; font-weight: 600; color: var(--cds-warning); margin-top: 4px; }
+#result-banner .btn { flex-shrink: 0; margin-top: 16px; }
+#result-banner .result-cards {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+#result-banner .result-cards .card {
+  width: 50px;
+  height: 72px;
+  border-radius: 6px;
+}
+#result-banner .result-cards .card .card-rank { font-size: 1rem; }
+#result-banner .result-cards .card .card-suit { font-size: 0.9rem; }
+#result-banner .result-label {
+  font-size: 0.7rem;
+  color: var(--cds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 10px 0 6px;
+  width: 100%;
+}
+#result-banner .result-players {
+  max-height: 150px;
+  overflow-y: auto;
+  margin: 10px 0;
+  text-align: left;
+  flex-shrink: 0;
+}
+.result-players .player-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+  flex-wrap: wrap;
+}
+.result-players .player-row.winner-row {
+  background: rgba(251, 191, 36, 0.08);
+  border-radius: 6px;
+  border-bottom-color: rgba(251, 191, 36, 0.3);
+}
+.result-players .player-row .p-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-width: 70px;
+  color: var(--cds-text-primary);
+}
+.result-players .player-row.winner-row .p-name {
+  color: #fbbf24;
+}
+.result-players .player-row .p-cards {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.result-players .player-row .p-cards .card {
+  width: 36px;
+  height: 52px;
+  border-radius: 4px;
+}
+.result-players .player-row .p-cards .card .card-rank { font-size: 0.7rem; }
+.result-players .player-row .p-cards .card .card-suit { font-size: 0.65rem; }
+.result-players .player-row .p-hand {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--cds-text-secondary);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.result-players .player-row.winner-row .p-hand {
+  color: #fbbf24;
+}
+.result-players .player-row .p-folded {
+  font-size: 0.7rem;
+  color: var(--cds-danger);
+  font-style: italic;
+}
+
+/* ── Responsive ── */
+/* Tablet: narrower sidebar, smaller cards */
+@media (max-width: 1024px) {
+  :root { --card-width: 55px; --card-height: 80px; }
+  #table-area { top: 8px; right: 8px; bottom: 8px; left: 8px; }
+  #game-log { width: 210px; font-size: 0.72rem; }
+  .seat .seat-inner { min-width: 110px; padding: 6px 8px; }
+  .card.mini { width: 36px; height: 52px; }
+}
+/* Small tablet / large phone: collapse sidebar below table.
+   Column order = table → controls (buttons) → game log, so the action
+   buttons always stay on-screen; any overflow clips the log, not the buttons. */
+@media (max-width: 800px) {
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 6px;
+  }
+  :root { --card-width: 48px; --card-height: 70px; }
+  #table-wrapper {
+    min-height: 280px;
+    flex: none;
+  }
+  #table-area { top: 6px; right: 6px; bottom: 6px; left: 6px; }
+  #game-log {
+    width: 100%;
+    flex-shrink: 1;
+    min-height: 0;
+    max-height: none;
+  }
+  /* Compact controls: buttons wrap into one row, the raise slider takes its
+     own full-width row, and the log toggle its own row below it. Keeps every
+     control on-screen even when the opponent is all-in. */
+  #controls {
+    margin-top: 8px;
+    padding: 6px 8px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+    gap: 4px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  #controls .your-hand { margin-right: 4px; }
+  #controls .btn-row { gap: 12px; }
+  #btn-check, #btn-fold-call-row, #btn-allin { order: 1; }
+  #controls .raise-input-group { order: 2; flex: 1 1 100%; justify-content: center; }
+  /* Log toggle — its own full-width row below the controls. Lives outside
+     #controls so it stays visible even when the buttons are hidden. */
+  .log-toggle { display: flex; margin: 0; height: 34px; }
+  .seat .seat-inner { min-width: 100px; padding: 5px 7px; }
+  .seat .player-name { font-size: 0.7rem; }
+  .seat .chip-count { font-size: 0.65rem; }
+  .card.mini { width: 32px; height: 46px; }
+}
+/* Phone: compact layout */
+@media (max-width: 480px) {
+  .main-content { padding: 4px; gap: 4px; }
+  :root { --card-width: 40px; --card-height: 56px; }
+  #table-wrapper { min-height: 240px; }
+  #table-area { top: 4px; right: 4px; bottom: 4px; left: 4px; }
+  #game-log { font-size: 0.7rem; padding: 6px; max-height: 150px; }
+  #game-log .log-entry { padding: 3px 0; }
+  .btn { height: 34px; padding: 0 10px; font-size: 0.7rem; }
+  .btn .ico { font-size: 0.9rem; }
+  #controls input[type="range"] { width: 80px; }
+  .seat .seat-inner { min-width: 80px; padding: 4px 6px; border-radius: 8px; }
+  .seat .player-name { font-size: 0.65rem; }
+  .seat .chip-count { font-size: 0.6rem; }
+  .seat .hole-cards { gap: 2px; }
+  .card.mini { width: 28px; height: 40px; border-radius: 4px; }
+  .card.mini .card-rank { font-size: 0.65rem; }
+  .card.mini .card-suit { font-size: 0.6rem; }
+  .community-cards { gap: 4px; }
+  .pot-display { font-size: 0.75rem; }
+  #result-banner { padding: 14px 8px; border-radius: 12px; }
+  #result-cards > div { gap: 4px !important; }
+  #result-banner h3 { font-size: 0.95rem; }
+  #result-banner .hand-name { font-size: 1.2rem; }
+  #result-banner .winner-name { font-size: 0.95rem; }
+  #result-banner .pot-info { font-size: 0.8rem; }
+  #result-banner .result-players { max-height: 130px; }
+  #result-banner .result-cards .card { width: 42px; height: 60px; }
+  #result-banner .result-cards .card .card-rank { font-size: 0.85rem; }
+  #result-banner .result-cards .card .card-suit { font-size: 0.75rem; }
+  #result-banner .btn { margin-top: 10px; }
+}
+/* Tiny phones */
+@media (max-width: 360px) {
+  :root { --card-width: 34px; --card-height: 48px; }
+  #table-wrapper { min-height: 200px; }
+  #table-area { top: 3px; right: 3px; bottom: 3px; left: 3px; }
+  .card.mini { width: 24px; height: 34px; }
+  .card.mini .card-rank { font-size: 0.55rem; }
+  .card.mini .card-suit { font-size: 0.5rem; }
+  .btn { height: 30px; padding: 0 8px; font-size: 0.65rem; }
+  .seat .seat-inner { min-width: 65px; padding: 3px 5px; }
+  #result-banner { padding: 12px 6px; border-radius: 10px; }
+  #result-cards > div { gap: 3px !important; }
+  #result-banner h3 { font-size: 0.85rem; }
+  #result-banner .hand-name { font-size: 1.1rem; }
+  #result-banner .result-players { max-height: 110px; }
+  #result-banner .result-cards .card { width: 35px; height: 50px; }
+  #result-banner .result-cards .card-rank { font-size: 0.7rem; }
+  #result-banner .result-cards .card-suit { font-size: 0.65rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<div id="app">
+  <!-- Setup Overlay -->
+  <div id="setup-overlay">
+    <div class="setup-dialog">
+      <h2>Texas Hold'em Poker</h2>
+      <p class="desc" data-i18n="setup.desc">输入玩家人数开始游戏（包含你在内）。默认为6人桌，AI 机器人会根据手牌强度自动下注。</p>
+      <div class="field">
+        <label data-i18n="setup.players">玩家人数</label>
+        <input type="range" id="player-count-slider" min="2" max="9" value="6" step="1">
+        <div class="range-val" id="player-count-display">6</div>
+        <div class="range-labels"><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="setup.name">你的名字</label>
+        <div class="bx--form-item">
+          <input type="text" id="player-name-input" class="setup-input" value="You" maxlength="12">
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="setup.chips">初始金额</label>
+        <select id="chips-select" class="setup-input">
+          <option value="500">$500</option>
+          <option value="1000" selected>$1,000</option>
+          <option value="2000">$2,000</option>
+          <option value="5000">$5,000</option>
+          <option value="10000">$10,000</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-lg btn-full" id="start-btn">
+        <span class="ico">▶</span> <span data-i18n="setup.start">开始游戏</span>
+      </button>
+      <p class="setup-hint" data-i18n="setup.browser">
+        仅用于学习和娱乐！洗牌使用 Fisher-Yates + CSPRNG 算法。</p>
+      </p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bx--header">
+    <span class="title">♠ Texas Hold'em</span>
+    <span class="phase-badge" id="phase-badge" data-i18n="phase.waiting">等待开始</span>
+    <span class="hand-counter" id="hand-counter"></span>
+    <button class="lang-toggle" id="lang-toggle" title="Switch Language">中/EN</button>
+  </header>
+
+  <!-- Main Content: Table + Sidebar -->
+  <div class="main-content">
+    <div id="table-wrapper">
+      <div id="table-area">
+        <!-- Gargantua black hole visual layers -->
+        <div class="bh-disk bh-disk-rear"></div>
+        <div class="bh-disk bh-disk-front"></div>
+        <div class="bh-photon-ring"></div>
+        <div class="bh-lens-flare"></div>
+        <div class="community-area">
+          <div class="community-cards" id="community-cards"></div>
+          <div class="pot-display">
+            <span class="ico">♠</span>
+            <span data-i18n="ui.pot">底池: $</span><span id="pot-amount">0</span>
+          </div>
+        </div>
+        <div class="seats-container" id="seats-container"></div>
+      </div>
+    </div>
+
+    <!-- Controls (action buttons) — sits above the game log so the buttons
+         stay on-screen on mobile even when the opponent is all-in -->
+    <div id="controls" class="hidden">
+      <div class="your-hand" id="your-hand-display"></div>
+      <button class="btn btn-secondary" id="btn-check"><span class="ico">✓</span> <span data-i18n="btn.check">过牌</span></button>
+      <div class="btn-row" id="btn-fold-call-row">
+        <button class="btn btn-danger" id="btn-fold"><span class="ico">✕</span> <span data-i18n="btn.fold">弃牌</span></button>
+        <button class="btn btn-primary" id="btn-call"><span class="ico">↗</span> <span data-i18n="btn.call">跟注</span><span class="call-amount"></span></button>
+      </div>
+      <div class="raise-input-group">
+        <input type="range" id="raise-slider" min="0" max="100" value="0" step="10">
+        <span class="raise-amount" id="raise-amount">$0</span>
+        <button class="btn btn-success" id="btn-raise"><span class="ico">↑</span> <span data-i18n="btn.raise">加注</span></button>
+      </div>
+      <button class="btn btn-danger" id="btn-allin"><span class="ico">⚡</span> <span data-i18n="btn.allin">全下</span></button>
+    </div>
+
+    <!-- Mobile log toggle — always visible, even when the action buttons are
+         hidden (not your turn). Sits right below the controls, so when buttons
+         are shown it appears as the row below the raise row. -->
+    <button class="log-toggle" id="log-toggle-mobile">
+      <span class="ico">☰</span> <span data-i18n="ui.gameLog">游戏日志</span>
+    </button>
+
+    <!-- Game Log Sidebar -->
+    <div id="game-log">
+      <div class="log-header">
+        <span data-i18n="ui.gameLog">游戏日志</span>
+      </div>
+      <div style="flex:1;overflow-y:auto;" id="log-entries">
+        <div class="log-placeholder" data-i18n="ui.clickToStart">点击开始游戏...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Banner -->
+  <div id="result-banner" class="hidden">
+    <div class="drag-handle" id="result-drag-handle"></div>
+    <div class="rb-body" id="result-body">
+      <h3 id="result-title"></h3>
+      <div class="winner-name" id="result-winner"></div>
+      <div class="hand-name" id="result-hand"></div>
+      <div class="result-cards" id="result-cards"></div>
+      <div class="result-players" id="result-players"></div>
+      <div class="pot-info" id="result-pot"></div>
+    </div>
+    <button class="btn btn-primary btn-lg" id="btn-next-hand" data-i18n="btn.nextHand">下一局</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// Texas Hold'em Poker — Single Page App
+// ═══════════════════════════════════════════
+
+const Poker = {};
+
+const SUITS = ['H','D','C','S'];
+const SUIT_NAMES = { H: 'Hearts', D: 'Diamonds', C: 'Clubs', S: 'Spades' };
+const SUIT_SYMBOLS = { H: '♥', D: '♦', C: '♣', S: '♠' };
+const RANK_NAMES = { 2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'10',11:'J',12:'Q',13:'K',14:'A' };
+const RED_SUITS = new Set(['H','D']);
+const BLACK_SUITS = new Set(['C','S']);
+
+const HAND_NAMES = [
+  '高牌', '一对', '两对', '三条', '顺子', '同花',
+  '葫芦', '四条', '同花顺', '皇家同花顺'
+];
+
+const PHASES = ['IDLE','PRE_FLOP','FLOP','TURN','RIVER','SHOWDOWN','GAME_OVER'];
+const SB_AMOUNT = 10;
+const BB_AMOUNT = 20;
+let STARTING_CHIPS = 1000;
+
+// ═══════════════════════════════════════════
+// i18n System (Chinese / English)
+// ═══════════════════════════════════════════
+let currentLang = 'zh';
+
+const I18N = {
+  zh: {
+    'setup.desc': '输入玩家人数开始游戏（包含你在内）。默认为6人桌，AI 机器人会根据手牌强度自动下注。',
+    'setup.players': '玩家人数',
+    'setup.chips': '初始金额',
+    'setup.name': '你的名字',
+    'setup.start': '开始游戏',
+    'setup.browser': '仅用于学习目的。洗牌使用 Fisher-Yates + CSPRNG 算法。',
+
+    'phase.waiting': '等待开始',
+    'phase.preFlop': '翻牌前',
+    'phase.flop': '翻牌',
+    'phase.turn': '转牌',
+    'phase.river': '河牌',
+    'phase.showdown': '摊牌',
+    'phase.gameOver': '游戏结束',
+
+    'hand.highCard': '高牌',
+    'hand.onePair': '一对',
+    'hand.twoPair': '两对',
+    'hand.threeOfAKind': '三条',
+    'hand.straight': '顺子',
+    'hand.flush': '同花',
+    'hand.fullHouse': '葫芦',
+    'hand.fourOfAKind': '四条',
+    'hand.straightFlush': '同花顺',
+    'hand.royalFlush': '皇家同花顺',
+
+    'btn.fold': '弃牌',
+    'btn.check': '过牌',
+    'btn.call': '跟注',
+    'btn.raise': '加注',
+    'btn.allin': '全下',
+    'btn.nextHand': '下一局',
+    'btn.newGame': '新游戏',
+
+    'log.fold': '{0} 弃牌',
+    'log.check': '{0} 过牌',
+    'log.call': '{0} 跟注 ${1}',
+    'log.callAllIn': '{0} 跟注 ALL-IN ${1}',
+    'log.raiseTo': '{0} 加注到 ${1}',
+    'log.allIn': '{0} ALL-IN ${1}',
+    'log.wins': '{0} 胜出: {1}',
+    'log.winsPot': '{0} 赢得底池 ${1} (其他玩家弃牌)',
+    'log.gameStart': '游戏开始！{0} 名玩家，初始筹码 ${1}',
+    'log.handStart': '── 第 {0} 局开始 ──',
+    'log.preFlopBetting': '翻牌前下注轮',
+    'log.flop': '── 翻牌 (Flop) ──',
+    'log.turn': '── 转牌 (Turn) ──',
+    'log.river': '── 河牌 (River) ──',
+    'log.potDistributed': '底池 ${0} 已分配',
+    'log.gameError': '游戏出错: {0}',
+    'log.refresh': '请刷新页面重试',
+    'log.winsGame': '{0} 赢得游戏！',
+    'log.busted': '你的筹码已用完，游戏结束！',
+    'log.gameOver': '游戏结束',
+
+    'ui.pot': '底池: $',
+    'ui.yourBalance': '我的余额',
+    'ui.gameLog': '游戏日志',
+    'ui.clickToStart': '点击开始游戏...',
+    'ui.yourHand': '你的手牌',
+    'ui.bestHand': '最佳牌组',
+    'ui.communityCards': '公共牌',
+    'ui.playerHands': '玩家手牌',
+    'ui.folded': '弃牌',
+    'ui.bet': '下注: $',
+    'ui.allInBadge': 'ALL-IN',
+    'ui.callAmount': '跟注 $',
+    'ui.everyoneFolded': '所有人弃牌！',
+    'ui.showdownResult': '摊牌结果',
+    'ui.winsPot': '{0} 赢得底池',
+    'ui.wins': '{0} 胜出',
+    'ui.gameOverTitle': '游戏结束',
+    'ui.hand': '第 {0} 局',
+  },
+
+  en: {
+    'setup.desc': 'Select the number of players (including yourself). Default is 6-handed. AI bots bet based on hand strength.',
+    'setup.players': 'Players',
+    'setup.chips': 'Starting Chips',
+    'setup.name': 'Your Name',
+    'setup.start': 'Start Game',
+    'setup.browser': 'For educational purposes only. Shuffled with Fisher-Yates + CSPRNG.',
+
+    'phase.waiting': 'Waiting',
+    'phase.preFlop': 'Pre-Flop',
+    'phase.flop': 'Flop',
+    'phase.turn': 'Turn',
+    'phase.river': 'River',
+    'phase.showdown': 'Showdown',
+    'phase.gameOver': 'Game Over',
+
+    'hand.highCard': 'High Card',
+    'hand.onePair': 'One Pair',
+    'hand.twoPair': 'Two Pair',
+    'hand.threeOfAKind': 'Three of a Kind',
+    'hand.straight': 'Straight',
+    'hand.flush': 'Flush',
+    'hand.fullHouse': 'Full House',
+    'hand.fourOfAKind': 'Four of a Kind',
+    'hand.straightFlush': 'Straight Flush',
+    'hand.royalFlush': 'Royal Flush',
+
+    'btn.fold': 'Fold',
+    'btn.check': 'Check',
+    'btn.call': 'Call',
+    'btn.raise': 'Raise',
+    'btn.allin': 'All-In',
+    'btn.nextHand': 'Next Hand',
+    'btn.newGame': 'New Game',
+
+    'log.fold': '{0} folds',
+    'log.check': '{0} checks',
+    'log.call': '{0} calls ${1}',
+    'log.callAllIn': '{0} calls ALL-IN ${1}',
+    'log.raiseTo': '{0} raises to ${1}',
+    'log.allIn': '{0} ALL-IN ${1}',
+    'log.wins': '{0} wins: {1}',
+    'log.winsPot': '{0} wins pot $ {1} (others folded)',
+    'log.gameStart': 'Game started! {0} players, starting chips ${1}',
+    'log.handStart': '── Hand #{0} begins ──',
+    'log.preFlopBetting': 'Pre-flop betting round',
+    'log.flop': '── Flop ──',
+    'log.turn': '── Turn ──',
+    'log.river': '── River ──',
+    'log.potDistributed': 'Pot ${0} distributed',
+    'log.gameError': 'Game error: {0}',
+    'log.refresh': 'Please refresh the page',
+    'log.winsGame': '{0} wins the game!',
+    'log.busted': 'You are out of chips! Game Over.',
+    'log.gameOver': 'Game Over',
+
+    'ui.pot': 'Pot: $',
+    'ui.yourBalance': 'Your Balance',
+    'ui.gameLog': 'Game Log',
+    'ui.clickToStart': 'Click Start Game to begin...',
+    'ui.yourHand': 'Your Hand',
+    'ui.bestHand': 'Best Hand',
+    'ui.communityCards': 'Community Cards',
+    'ui.playerHands': 'Player Hands',
+    'ui.folded': 'Folded',
+    'ui.bet': 'Bet: $',
+    'ui.allInBadge': 'ALL-IN',
+    'ui.callAmount': 'Call $',
+    'ui.everyoneFolded': 'Everyone folded!',
+    'ui.showdownResult': 'Showdown Result',
+    'ui.winsPot': '{0} wins the pot',
+    'ui.wins': '{0} wins',
+    'ui.gameOverTitle': 'Game Over',
+    'ui.hand': 'Hand #{0}',
+  }
+};
+
+const HAND_NAME_KEYS = [
+  'hand.highCard', 'hand.onePair', 'hand.twoPair', 'hand.threeOfAKind',
+  'hand.straight', 'hand.flush', 'hand.fullHouse', 'hand.fourOfAKind',
+  'hand.straightFlush', 'hand.royalFlush'
+];
+
+const PHASE_KEYS = {
+  'IDLE': 'phase.waiting', 'PRE_FLOP': 'phase.preFlop', 'FLOP': 'phase.flop',
+  'TURN': 'phase.turn', 'RIVER': 'phase.river', 'SHOWDOWN': 'phase.showdown',
+  'GAME_OVER': 'phase.gameOver'
+};
+
+function t(key, ...args) {
+  let template = I18N[currentLang] && I18N[currentLang][key];
+  if (template === undefined) return key;
+  for (let i = 0; i < args.length; i++) {
+    template = template.replace('{' + i + '}', args[i]);
+  }
+  return template;
+}
+
+function getHandName(level) {
+  return t(HAND_NAME_KEYS[level] || 'hand.highCard');
+}
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (key) el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (key) el.placeholder = t(key);
+  });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  try { localStorage.setItem('poker-lang', lang); } catch(e) {}
+  applyI18n();
+  if (window.game) {
+    window.game.render();
+    window.game.updateAllText();
+  }
+}
+
+// ── Card ──
+function createCard(suit, rank) {
+  return { suit, rank, name: RANK_NAMES[rank] };
+}
+
+function cardIsRed(c) { return RED_SUITS.has(c.suit); }
+
+// ── Deck ──
+function buildDeck() {
+  const deck = [];
+  for (const suit of SUITS) {
+    for (let rank = 2; rank <= 14; rank++) {
+      deck.push(createCard(suit, rank));
+    }
+  }
+  return deck;
+}
+
+// CSPRNG: cryptographically secure random integer in [0, max)
+function secureRandomInt(max) {
+  const buf = new Uint32Array(1);
+  // Rejection sampling to eliminate modulo bias
+  const limit = 0x100000000 - (0x100000000 % max);
+  do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
+  return buf[0] % max;
+}
+
+// CSPRNG: cryptographically secure random float in [0, 1)
+function secureRandom() {
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  return buf[0] / 0x100000000;
+}
+
+// Fisher-Yates shuffle with CSPRNG
+function shuffleDeck(deck) {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
+// ── Combinations C(n,k) ──
+function getCombinations(arr, k) {
+  if (k === 0) return [[]];
+  if (arr.length === 0) return [];
+  const result = [];
+  const first = arr[0];
+  const rest = arr.slice(1);
+  for (const combo of getCombinations(rest, k - 1)) {
+    result.push([first, ...combo]);
+  }
+  for (const combo of getCombinations(rest, k)) {
+    result.push(combo);
+  }
+  return result;
+}
+
+// ── Hand Evaluator ──
+function evaluate5Hand(cards) {
+  const sorted = cards.slice().sort((a, b) => a.rank - b.rank);
+  const ranks = sorted.map(c => c.rank);
+  const suits = sorted.map(c => c.suit);
+
+  const isFlush = suits.every(s => s === suits[0]);
+
+  // Check straight
+  let isStraight = true;
+  let straightHigh = ranks[4];
+  for (let i = 0; i < 4; i++) {
+    if (ranks[i + 1] !== ranks[i] + 1) { isStraight = false; break; }
+  }
+  // Wheel: A-2-3-4-5
+  const isWheel = ranks[0] === 2 && ranks[1] === 3 && ranks[2] === 4 && ranks[3] === 5 && ranks[4] === 14;
+  if (isWheel) { isStraight = true; straightHigh = 5; }
+
+  // Frequency count
+  const freq = {};
+  for (const r of ranks) { freq[r] = (freq[r] || 0) + 1; }
+  const freqEntries = Object.entries(freq).map(([r, c]) => [parseInt(r), c]);
+  const freqCounts = freqEntries.map(e => e[1]).sort((a, b) => b - a);
+
+  function getKeyOfValue(targetCount) {
+    const matches = freqEntries.filter(e => e[1] === targetCount).map(e => e[0]);
+    return matches;
+  }
+
+  // Royal Flush
+  if (isFlush && isStraight && ranks[0] === 10 && ranks[4] === 14) {
+    return { rank: 9, name: getHandName(9), kickers: [14,13,12,11,10], cards: sorted };
+  }
+  // Straight Flush
+  if (isFlush && isStraight) {
+    return { rank: 8, name: getHandName(8), kickers: [straightHigh,4,3,2,1], cards: sorted };
+  }
+  // Four of a Kind
+  if (freqCounts[0] === 4) {
+    const quad = getKeyOfValue(4)[0];
+    const kicker = getKeyOfValue(1)[0];
+    return { rank: 7, name: getHandName(7), kickers: [quad, kicker], cards: sorted };
+  }
+  // Full House
+  if (freqCounts[0] === 3 && freqCounts[1] === 2) {
+    const trips = getKeyOfValue(3)[0];
+    const pair = getKeyOfValue(2)[0];
+    return { rank: 6, name: getHandName(6), kickers: [trips, pair], cards: sorted };
+  }
+  // Flush
+  if (isFlush) {
+    return { rank: 5, name: getHandName(5), kickers: ranks.slice().reverse(), cards: sorted };
+  }
+  // Straight
+  if (isStraight) {
+    return { rank: 4, name: getHandName(4), kickers: [straightHigh,4,3,2,1], cards: sorted };
+  }
+  // Three of a Kind
+  if (freqCounts[0] === 3 && freqCounts[1] === 1) {
+    const trips = getKeyOfValue(3)[0];
+    const singles = ranks.filter(r => r !== trips).reverse();
+    return { rank: 3, name: getHandName(3), kickers: [trips, ...singles], cards: sorted };
+  }
+  // Two Pair
+  if (freqCounts[0] === 2 && freqCounts[1] === 2) {
+    const pairs = getKeyOfValue(2).sort((a, b) => b - a);
+    const single = getKeyOfValue(1)[0];
+    return { rank: 2, name: getHandName(2), kickers: [...pairs, single], cards: sorted };
+  }
+  // One Pair
+  if (freqCounts[0] === 2) {
+    const pair = getKeyOfValue(2)[0];
+    const singles = ranks.filter(r => r !== pair).reverse();
+    return { rank: 1, name: getHandName(1), kickers: [pair, ...singles], cards: sorted };
+  }
+  // High Card
+  return { rank: 0, name: getHandName(0), kickers: ranks.slice().reverse(), cards: sorted };
+}
+
+function evaluate7Hand(sevenCards) {
+  const combos = getCombinations(sevenCards, 5);
+  let best = null;
+  for (const combo of combos) {
+    const result = evaluate5Hand(combo);
+    if (!best || compareResults(result, best) > 0) {
+      best = result;
+    }
+  }
+  return best;
+}
+
+function compareResults(a, b) {
+  if (a.rank !== b.rank) return a.rank - b.rank;
+  for (let i = 0; i < Math.min(a.kickers.length, b.kickers.length); i++) {
+    if (a.kickers[i] !== b.kickers[i]) return a.kickers[i] - b.kickers[i];
+  }
+  return 0;
+}
+
+// ── Namespace exports ──
+Object.assign(Poker, {
+  SUITS, SUIT_NAMES, SUIT_SYMBOLS, RANK_NAMES, RED_SUITS, BLACK_SUITS,
+  HAND_NAMES, PHASES, SB_AMOUNT, BB_AMOUNT,
+  get STARTING_CHIPS() { return STARTING_CHIPS; },
+  get currentLang() { return currentLang; },
+  I18N, HAND_NAME_KEYS, PHASE_KEYS,
+  t, getHandName, applyI18n, setLang,
+  createCard, cardIsRed, buildDeck, secureRandom, secureRandomInt, shuffleDeck,
+  getCombinations, evaluate5Hand, evaluate7Hand, compareResults
+});
+
+// ── Player ──
+class Player {
+  constructor(name, isHuman, seatIndex) {
+    this.name = name;
+    this.isHuman = isHuman;
+    this.seatIndex = seatIndex;
+    this.chips = STARTING_CHIPS;
+    this.holeCards = [];
+    this.folded = false;
+    this.allIn = false;
+    this.roundBet = 0;
+    this.totalBetThisHand = 0;
+    this.hasActedThisRound = false;
+  }
+
+  resetForNewHand() {
+    this.holeCards = [];
+    this.folded = false;
+    this.allIn = false;
+    this.roundBet = 0;
+    this.totalBetThisHand = 0;
+    this.hasActedThisRound = false;
+  }
+
+  isActive() { return !this.folded && !this.allIn && this.chips > 0; }
+
+  contribute(amount) {
+    const actual = Math.min(amount, this.chips);
+    this.chips -= actual;
+    this.roundBet += actual;
+    this.totalBetThisHand += actual;
+    if (this.chips === 0) this.allIn = true;
+    return actual;
+  }
+}
+
+// ── Poker Game ──
+class PokerGame {
+  constructor() {
+    this.players = [];
+    this.deck = [];
+    this.communityCards = [];
+    this.pot = 0;
+    this.currentBet = 0;
+    this.dealerIdx = 0;
+    this.currentPlayerIdx = 0;
+    this.phase = 'IDLE';
+    this.handNumber = 0;
+    this.lastRaiseAmount = BB_AMOUNT;
+    this.canReRaise = true;
+    this.lastAggressorIdx = -1;
+    this.actionResolver = null;
+    this.sidePots = [];
+    this.busy = false;
+    this.els = {};
+    this.cacheDOM();
+  }
+
+  cacheDOM() {
+    const $ = (id) => document.getElementById(id);
+    this.els = {
+      controls: $('controls'),
+      phaseBadge: $('phase-badge'),
+      handCounter: $('hand-counter'),
+      communityCards: $('community-cards'),
+      potAmount: $('pot-amount'),
+      seatsContainer: $('seats-container'),
+      tableArea: $('table-area'),
+      yourHandDisplay: $('your-hand-display'),
+      btnFold: $('btn-fold'),
+      btnCheck: $('btn-check'),
+      btnCall: $('btn-call'),
+      btnFoldCallRow: $('btn-fold-call-row'),
+      btnRaise: $('btn-raise'),
+      btnAllin: $('btn-allin'),
+      raiseSlider: $('raise-slider'),
+      raiseAmount: $('raise-amount'),
+      resultBanner: $('result-banner'),
+      resultTitle: $('result-title'),
+      resultCards: $('result-cards'),
+      resultPlayers: $('result-players'),
+      setupOverlay: $('setup-overlay'),
+      gameLog: $('game-log'),
+      playerNameInput: $('player-name-input'),
+      chipsSelect: $('chips-select'),
+      startBtn: $('start-btn'),
+      logEntries: $('log-entries'),
+      btnNextHand: $('btn-next-hand'),
+      resultWinner: $('result-winner'),
+      resultHand: $('result-hand'),
+      resultPot: $('result-pot')
+    };
+    // Button handlers — bind once, compute state dynamically at click time
+    this.els.btnFold.onclick = () => {
+      const human = this.players[0];
+      if (human) this.resolveAction(human, 'fold', 0);
+    };
+    this.els.btnCheck.onclick = () => {
+      const human = this.players[0];
+      if (human) this.resolveAction(human, 'check', 0);
+    };
+    this.els.btnCall.onclick = () => {
+      const human = this.players[0];
+      if (!human) return;
+      const toCall = this.currentBet - human.roundBet;
+      const callAmt = Math.min(toCall, human.chips);
+      this.resolveAction(human, callAmt >= human.chips ? 'allin' : 'call', callAmt);
+    };
+    this.els.btnRaise.onclick = () => {
+      const human = this.players[0];
+      if (!human) return;
+      const raiseTo = parseInt(this.els.raiseSlider.value);
+      const increment = raiseTo - human.roundBet;
+      this.resolveAction(human, increment >= human.chips ? 'allin' : 'raise', raiseTo);
+    };
+    this.els.btnAllin.onclick = () => {
+      const human = this.players[0];
+      if (human) this.resolveAction(human, 'allin', human.chips);
+    };
+    this.els.raiseSlider.oninput = () => {
+      const total = parseInt(this.els.raiseSlider.value);
+      const raiseSize = total - this.currentBet;
+      this.els.raiseAmount.textContent = `+$${raiseSize} → $${total}`;
+    };
+  }
+
+  initPlayers(count, humanName) {
+    this.players = [];
+    this.players.push(new Player(humanName || 'You', true, 0));
+    const aiNames = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel'];
+    for (let i = 1; i < count; i++) {
+      this.players.push(new Player(aiNames[i - 1], false, i));
+    }
+    this.dealerIdx = 0;
+    this.handNumber = 0;
+  }
+
+  startNewHand() {
+    this.handNumber++;
+    this.phase = 'PRE_FLOP';
+    this.communityCards = [];
+    this.pot = 0;
+    this.currentBet = 0;
+    this.sidePots = [];
+    this.lastAggressorIdx = -1;
+
+    // Reset players
+    this.players.forEach(p => {
+      p.resetForNewHand();
+      p.chipsBeforeHand = p.chips;
+    });
+
+    // Remove busted players (chips === 0 = out of the game)
+    let dealerBusted = false;
+    const busted = this.players.filter(p => p.chips === 0);
+    if (busted.length > 0) {
+      this.addLog(busted.map(p => p.name).join(', ') + ' 已出局', 'action-fold');
+      const oldDealerIdx = this.dealerIdx;
+      const oldDealer = this.players[oldDealerIdx];
+      this.players = this.players.filter(p => p.chips > 0);
+      const newIdx = this.players.indexOf(oldDealer);
+      if (newIdx >= 0) {
+        this.dealerIdx = newIdx;
+      } else {
+        // Dead button: old dealer busted, button goes to first survivor clockwise
+        this.dealerIdx = Math.min(oldDealerIdx, this.players.length - 1);
+        dealerBusted = true;
+      }
+    }
+
+    // Rotate dealer (skip if dead button already advanced)
+    if (this.handNumber > 1 && !dealerBusted) {
+      this.dealerIdx = (this.dealerIdx + 1) % this.players.length;
+    }
+
+    // Build and shuffle deck
+    this.deck = shuffleDeck(buildDeck());
+
+    // Deal hole cards
+    for (const player of this.players) {
+      player.holeCards = [this.deck.pop(), this.deck.pop()];
+    }
+
+    // Post blinds
+    this.postBlinds();
+  }
+
+  postBlinds() {
+    const livePlayers = this.players.filter(p => p.chips > 0);
+    if (livePlayers.length < 2) return;
+
+    let sbIdx, bbIdx;
+
+    if (this.players.length === 2) {
+      // Heads-up: dealer IS the small blind
+      sbIdx = this.dealerIdx;
+      bbIdx = this.nextActiveSeat(sbIdx);
+    } else {
+      sbIdx = this.nextActiveSeat(this.dealerIdx);
+      bbIdx = this.nextActiveSeat(sbIdx);
+    }
+
+    this.sbIdx = sbIdx;
+    this.bbIdx = bbIdx;
+
+    // Small blind
+    const sbPlayer = this.players[sbIdx];
+    const sbActual = sbPlayer.contribute(Math.min(SB_AMOUNT, sbPlayer.chips));
+    this.pot += sbActual;
+
+    // Big blind
+    const bbPlayer = this.players[bbIdx];
+    const bbActual = bbPlayer.contribute(Math.min(BB_AMOUNT, bbPlayer.chips));
+    this.pot += bbActual;
+
+    // Current bet = actual max posted (not hardcoded BB_AMOUNT, so short-stacked
+    // BB doesn't inflate other players' toCall)
+    this.currentBet = Math.max(sbActual, bbActual);
+    this.lastRaiseAmount = BB_AMOUNT;
+    this.canReRaise = true;
+
+    // First to act pre-flop
+    if (this.players.length === 2) {
+      // Heads-up: dealer/SB acts first pre-flop
+      this.currentPlayerIdx = this.dealerIdx;
+    } else {
+      // UTG (left of BB) acts first
+      this.currentPlayerIdx = this.nextActiveSeat(bbIdx);
+    }
+  }
+
+  dealCommunity(count) {
+    // Burn a card (pop and discard)
+    this.deck.pop();
+    for (let i = 0; i < count; i++) {
+      this.communityCards.push(this.deck.pop());
+    }
+  }
+
+  getFirstToActPostFlop() {
+    // First active player left of dealer
+    return this.nextActiveSeat(this.dealerIdx);
+  }
+
+  nextActiveSeat(fromIdx) {
+    if (this.players.length === 0) return 0;
+    let idx = (fromIdx + 1) % this.players.length;
+    let safety = 0;
+    while ((this.players[idx].chips === 0 || this.players[idx].folded) && safety < this.players.length * 2) {
+      idx = (idx + 1) % this.players.length;
+      safety++;
+    }
+    return idx;
+  }
+
+  countActivePlayers() {
+    return this.players.filter(p => !p.folded && p.chips > 0).length;
+  }
+
+  countPlayersInHand() {
+    return this.players.filter(p => !p.folded).length;
+  }
+
+  // ── Betting Round ──
+  async runBettingRound() {
+    // Do NOT reset roundBets here — for pre-flop, blinds are already posted.
+    // For post-flop rounds, the end of the previous round already did the reset.
+
+    // If only 1 player left, skip
+    if (this.countPlayersInHand() <= 1) return;
+
+    let safety = 0;
+    const maxIterations = this.players.length * 10;
+
+    while (safety < maxIterations) {
+      safety++;
+
+      // If only 1 player remains
+      if (this.countPlayersInHand() <= 1) break;
+
+      // Check if round is complete
+      if (this.isBettingRoundComplete()) break;
+
+      const player = this.players[this.currentPlayerIdx];
+
+      // Skip inactive players
+      if (player.folded || player.allIn || player.chips === 0) {
+        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+        continue;
+      }
+
+      const toCall = this.currentBet - player.roundBet;
+
+      // Player has matched and already acted
+      if (toCall === 0 && player.hasActedThisRound) {
+        this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+        continue;
+      }
+
+      // Player must act
+      // Render BEFORE waiting to ensure controls reflect current player
+      this.render();
+
+      let action;
+      if (player.isHuman) {
+        action = await this.waitForHumanAction(player);
+      } else {
+        await this.delay(400 + Math.random() * 700);
+        action = this.getAIAction(player);
+      }
+      this.executeAction(player, action);
+
+      this.currentPlayerIdx = (this.currentPlayerIdx + 1) % this.players.length;
+    }
+
+    // Collect round bets into pot (they're already contributed, but let's ensure)
+    // Reset round state for next betting round
+    this.players.forEach(p => { p.roundBet = 0; p.hasActedThisRound = false; });
+    this.currentBet = 0;
+  }
+
+  isBettingRoundComplete() {
+    let allMatched = true;
+    let someoneNeedsToAct = false;
+    for (const p of this.players) {
+      if (p.folded || p.allIn || p.chips === 0) continue;
+      const toCall = this.currentBet - p.roundBet;
+      if (toCall !== 0) {
+        allMatched = false;
+        break;
+      }
+      if (!p.hasActedThisRound) {
+        someoneNeedsToAct = true;
+      }
+    }
+    return allMatched && !someoneNeedsToAct;
+  }
+
+  executeAction(player, action) {
+    // ═══════════════════════════════════════════
+    // Validate & normalize action (single enforcement point)
+    // ═══════════════════════════════════════════
+
+    // 1) Is it this player's turn?
+    if (player !== this.players[this.currentPlayerIdx]) {
+      console.warn(`executeAction: not ${player.name}'s turn`);
+      return;
+    }
+    // 2) Is the player able to act?
+    if (player.folded) { console.warn(`executeAction: ${player.name} already folded`); return; }
+    if (player.allIn || player.chips === 0) {
+      console.warn(`executeAction: ${player.name} all-in / no chips`);
+      return;
+    }
+
+    const toCall = this.currentBet - player.roundBet;
+
+    // 3) normalize check → call when money is owed
+    if (action.action === 'check' && toCall > 0) { action = { action: 'call' }; }
+    // Fold with nothing to call → check
+    if (action.action === 'fold' && toCall === 0) { action = { action: 'check' }; }
+    // Call with nothing to call → check
+    if (action.action === 'call' && toCall === 0) { action = { action: 'check' }; }
+
+    // 4) call amount is always clamped
+    if (action.action === 'call') { action.amount = Math.min(toCall, player.chips); }
+
+    // 5-6-7) raise / bet — validate target & distinguish all-in sub-types
+    if (action.action === 'raise' || action.action === 'bet') {
+      let amt = action.amount || 0;
+      const increment = amt - player.roundBet;
+      const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
+
+      if (increment <= 0) {
+        // cannot raise <= current bet
+        action = { action: toCall > 0 ? 'call' : 'check', amount: toCall > 0 ? Math.min(toCall, player.chips) : 0 };
+      } else if (increment >= player.chips) {
+        // going all-in
+        const allInTotal = player.roundBet + player.chips;
+        if (allInTotal < minTotal) {
+          // short all-in raise — contributes everything, doesn't reopen betting
+          action = { action: 'allin', amount: player.chips, _shortRaise: true };
+        } else {
+          // full all-in raise
+          action = { action: 'allin', amount: player.chips, _shortRaise: false };
+        }
+      } else if (amt < minTotal) {
+        // under-raise without all-in — treat as call
+        action = { action: 'call', amount: Math.min(toCall, player.chips) };
+      }
+    }
+
+    // 7) standalone allin: distinguish all-in-call from all-in-raise
+    if (action.action === 'allin') {
+      const allInTotal = player.roundBet + player.chips;
+      if (allInTotal <= this.currentBet) {
+        // all-in call: just calling with remaining chips
+        action = { action: 'call', amount: player.chips };
+      }
+      // else: true all-in raise
+    }
+
+    // ═══════════════════════════════════════════
+    // Execute (action is now guaranteed valid)
+    // ═══════════════════════════════════════════
+    player.hasActedThisRound = true;
+    const actionType = action.action;
+    let amount = action.amount || 0;
+
+    switch (actionType) {
+      case 'fold':
+        player.folded = true;
+        this.addLog(t('log.fold', player.name), 'action-fold');
+        break;
+      case 'check':
+        this.addLog(t('log.check', player.name));
+        break;
+      case 'call':
+        amount = Math.min(this.currentBet - player.roundBet, player.chips);
+        this.pot += player.contribute(amount);
+        if (player.allIn) {
+          this.addLog(t('log.callAllIn', player.name, amount), 'action-allin');
+        } else {
+          this.addLog(t('log.call', player.name, amount));
+        }
+        break;
+      case 'raise':
+      case 'bet': {
+        // Normal raise (validation already verified: increment > 0, amount >= minTotal, not all-in)
+        const increment = amount - player.roundBet;
+        const oldCurrentBet = this.currentBet;
+        this.pot += player.contribute(increment);
+        this.currentBet = player.roundBet;
+        this.lastRaiseAmount = Math.max(player.roundBet - oldCurrentBet, BB_AMOUNT);
+        this.canReRaise = true;
+        this.lastAggressorIdx = player.seatIndex;
+        this.addLog(t('log.raiseTo', player.name, player.roundBet), 'action-raise');
+        break;
+      }
+      case 'allin': {
+        amount = player.chips;
+        const aOldCB = this.currentBet;
+        const aOldLR = this.lastRaiseAmount;
+        this.pot += player.contribute(amount);
+        this.currentBet = Math.max(this.currentBet, player.roundBet);
+        if (player.roundBet > aOldCB) {
+          const raiseSize = player.roundBet - aOldCB;
+          if (raiseSize >= aOldLR) {
+            this.lastRaiseAmount = Math.max(raiseSize, BB_AMOUNT);
+            this.canReRaise = true;
+          } else {
+            this.canReRaise = false;
+          }
+        }
+        this.lastAggressorIdx = player.seatIndex;
+        if (action._shortRaise) {
+          this.addLog(`${player.name} ALL-IN $${amount} (incomplete raise)`, 'action-allin');
+        } else {
+          this.addLog(`${player.name} ALL-IN $${amount}`, 'action-allin');
+        }
+        break;
+      }
+    }
+  }
+
+  waitForHumanAction(player) {
+    return new Promise(resolve => {
+      this.actionResolver = resolve;
+    });
+  }
+
+  resolveAction(player, action, amount) {
+    if (this.actionResolver) {
+      this.actionResolver({ action, amount });
+      this.actionResolver = null;
+    }
+  }
+
+  // ═══════════════════════════════════════════
+  // Quantitative AI System
+  // ═══════════════════════════════════════════
+
+  // Chen formula: mathematical pre-flop hand valuation (Bill Chen, "Mathematics of Poker")
+  chenScore(hole) {
+    const rankVal = { 14:10, 13:8, 12:7, 11:6, 10:5, 9:4.5, 8:4, 7:3.5, 6:3, 5:2.5, 4:2, 3:1.5, 2:1 };
+    const high = Math.max(hole[0].rank, hole[1].rank);
+    const low = Math.min(hole[0].rank, hole[1].rank);
+    const gap = high - low;
+    const suited = hole[0].suit === hole[1].suit;
+
+    let score = rankVal[high];
+
+    // Pocket pair: double, floor 5
+    if (gap === 0) score = Math.max(score * 2, 5);
+
+    // Suited bonus: +2
+    if (suited) score += 2;
+
+    // Gap penalty: wider gap = less straight potential
+    const gapPen = [0, 0, 1, 2, 4, 5, 5, 5, 5, 5, 5, 5, 5];
+    score -= gapPen[Math.min(gap, 12)];
+
+    // Connected bonus: +1 for 0 or 1 gap
+    if (gap <= 1) score += 1;
+
+    return score; // Range: ~ -2 (72o) to 20 (AA)
+  }
+
+  // Convert Chen score → equity vs N opponents (logistic model)
+  preFlopEquity(hole, numOpp) {
+    const chen = this.chenScore(hole);
+    // Logistic: percentile rank among 1326 starting hands
+    const percentile = 1 / (1 + Math.exp(-0.42 * (chen - 4.5)));
+    // Equity decays with opponents: p ^ exponent
+    const equity = Math.pow(percentile, 0.70 + 0.30 * numOpp);
+    return Math.min(0.95, Math.max(0.06, equity));
+  }
+
+  // Monte Carlo simulation for post-flop equity
+  monteCarloEquity(hole, community, numOpp, trials) {
+    if (trials === undefined) trials = Math.min(150, 40 + numOpp * 30);
+
+    // Pool = all cards NOT in hero's hole or community (AI's uncertain cards)
+    const known = new Set([...hole, ...community].map(c => c.suit + '|' + c.rank));
+    const pool = [];
+    for (const suit of SUITS) {
+      for (let rank = 2; rank <= 14; rank++) {
+        if (!known.has(suit + '|' + rank)) pool.push(createCard(suit, rank));
+      }
+    }
+
+    const needed = 5 - community.length;
+    let wins = 0, ties = 0;
+
+    for (let t = 0; t < trials; t++) {
+      // Fisher-Yates shuffle in-place (CSPRNG)
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = secureRandomInt(i + 1);
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+
+      let idx = 0;
+      const oppHands = [];
+      for (let o = 0; o < numOpp; o++) oppHands.push([pool[idx++], pool[idx++]]);
+
+      const extraComm = [];
+      for (let c = 0; c < needed; c++) extraComm.push(pool[idx++]);
+      const fullComm = [...community, ...extraComm];
+
+      const heroHand = evaluate7Hand([...hole, ...fullComm]);
+
+      let heroLoses = false, heroTies = false;
+      for (const opp of oppHands) {
+        const cmp = compareResults(evaluate7Hand([...opp, ...fullComm]), heroHand);
+        if (cmp > 0) { heroLoses = true; break; }
+        if (cmp === 0) heroTies = true;
+      }
+      if (!heroLoses) {
+        if (heroTies) ties++;
+        else wins++;
+      }
+    }
+
+    return (wins + ties * 0.5) / trials;
+  }
+
+  // Build pool of unknown cards (not in hero's hole or community)
+  buildUnknownPool(hole, community) {
+    const known = new Set([...hole, ...community].map(c => c.suit + '|' + c.rank));
+    const pool = [];
+    for (const suit of SUITS) {
+      for (let rank = 2; rank <= 14; rank++) {
+        if (!known.has(suit + '|' + rank)) pool.push(createCard(suit, rank));
+      }
+    }
+    return pool;
+  }
+
+  // Exact enumeration: river (5 community) vs 1 opponent
+  // Enumerate all C(45,2)=990 opponent hands exactly
+  enumerateRiver(hole, community) {
+    const pool = this.buildUnknownPool(hole, community);
+    const heroBest = evaluate7Hand([...hole, ...community]);
+    let wins = 0, ties = 0;
+    const n = pool.length;
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const oppBest = evaluate7Hand([pool[i], pool[j], ...community]);
+        const cmp = compareResults(heroBest, oppBest);
+        if (cmp > 0) wins++;
+        else if (cmp === 0) ties++;
+      }
+    }
+    const total = n * (n - 1) / 2;
+    return (wins + ties / 2) / total;
+  }
+
+  // Hybrid: turn (4 community) vs 1 opponent
+  // Enumerate all 46 river cards, sample ~100 opponent hands each
+  enumerateTurn(hole, community) {
+    const pool = this.buildUnknownPool(hole, community);
+    const samplesPerRiver = 100;
+    let totalWins = 0, totalTies = 0, totalSamples = 0;
+
+    for (let r = 0; r < pool.length; r++) {
+      const riverCard = pool[r];
+      const fullComm = [...community, riverCard];
+      const heroBest = evaluate7Hand([...hole, ...fullComm]);
+
+      const subPool = [];
+      for (let k = 0; k < pool.length; k++) {
+        if (k !== r) subPool.push(pool[k]);
+      }
+
+      const maxS = Math.min(samplesPerRiver, subPool.length * (subPool.length - 1) / 2);
+      for (let s = 0; s < maxS; s++) {
+        const a = secureRandomInt(subPool.length);
+        let b = secureRandomInt(subPool.length - 1);
+        if (b >= a) b++;
+
+        const oppBest = evaluate7Hand([subPool[a], subPool[b], ...fullComm]);
+        const cmp = compareResults(heroBest, oppBest);
+        if (cmp > 0) totalWins++;
+        else if (cmp === 0) totalTies++;
+        totalSamples++;
+      }
+    }
+    return totalSamples === 0 ? 0.5 : (totalWins + totalTies / 2) / totalSamples;
+  }
+
+  // Hybrid: flop (3 community) vs 1 opponent
+  // Enumerate all C(47,2)=1081 turn+river boards, sample ~25 opponent hands each
+  enumerateFlop(hole, community) {
+    const pool = this.buildUnknownPool(hole, community);
+    const samplesPerBoard = 25;
+    let totalWins = 0, totalTies = 0, totalSamples = 0;
+    const n = pool.length;
+
+    for (let i = 0; i < n - 1; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const fullComm = [...community, pool[i], pool[j]];
+        const heroBest = evaluate7Hand([...hole, ...fullComm]);
+
+        const subPool = [];
+        for (let k = 0; k < n; k++) {
+          if (k !== i && k !== j) subPool.push(pool[k]);
+        }
+
+        const maxS = Math.min(samplesPerBoard, subPool.length * (subPool.length - 1) / 2);
+        for (let s = 0; s < maxS; s++) {
+          const a = secureRandomInt(subPool.length);
+          let b = secureRandomInt(subPool.length - 1);
+          if (b >= a) b++;
+
+          const oppBest = evaluate7Hand([subPool[a], subPool[b], ...fullComm]);
+          const cmp = compareResults(heroBest, oppBest);
+          if (cmp > 0) totalWins++;
+          else if (cmp === 0) totalTies++;
+          totalSamples++;
+        }
+      }
+    }
+    return totalSamples === 0 ? 0.5 : (totalWins + totalTies / 2) / totalSamples;
+  }
+
+  // Unified equity calculator with partition enumeration + Monte Carlo hybrid
+  calcEquity(player, numOpp) {
+    if (this.communityCards.length === 0) {
+      return this.preFlopEquity(player.holeCards, numOpp);
+    }
+    // Single opponent: use partition enumeration (exact or hybrid)
+    if (numOpp === 1) {
+      if (this.communityCards.length === 5) {
+        return this.enumerateRiver(player.holeCards, this.communityCards);
+      }
+      if (this.communityCards.length === 4) {
+        return this.enumerateTurn(player.holeCards, this.communityCards);
+      }
+      if (this.communityCards.length === 3) {
+        return this.enumerateFlop(player.holeCards, this.communityCards);
+      }
+    }
+    // Multi-opponent or pre-flop: Monte Carlo fallback
+    return this.monteCarloEquity(player.holeCards, this.communityCards, numOpp);
+  }
+
+  // Pot-percentage based raise sizing
+  makeRaise(player, potFrac) {
+    const increment = Math.floor(this.pot * potFrac);
+    const minTotal = this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount);
+    let total = player.roundBet + increment;
+    total = Math.max(total, minTotal);
+    total = Math.floor(Math.min(total, player.roundBet + player.chips) / 10) * 10;
+    if (total <= player.roundBet && player.chips > 0) {
+      // All-in — verify it actually raises the current bet
+      const allInTotal = player.roundBet + player.chips;
+      if (allInTotal <= this.currentBet) {
+        // Cannot raise with all-in; call all-in for less (side pot case)
+        return { action: 'call' };
+      }
+      return { action: 'allin' };
+    }
+    if (total <= player.roundBet) return { action: 'check' };
+    return { action: 'raise', amount: total };
+  }
+
+  // ═══════════════════════════════════════════
+  // DCFR (Discounted Counterfactual Regret Minimization) Solver
+  // Models a 2-player subgame for the current street
+  // ═══════════════════════════════════════════
+
+  dcfrGetAction(player, numOpp, canRaise) {
+    const toCall = this.currentBet - player.roundBet;
+    const pot = this.pot;
+    const hole = player.holeCards;
+    const community = this.communityCards;
+    const effStack = player.chips;
+
+    // ── Define abstract actions for hero ──
+    let heroActions;
+    if (toCall === 0) {
+      heroActions = [
+        { name: 'check', type: 'passive', amt: 0 },
+        { name: 'bet33', type: 'aggressive', mult: 0.33 },
+        { name: 'bet67', type: 'aggressive', mult: 0.67 },
+        { name: 'bet100', type: 'aggressive', mult: 1.0 }
+      ];
+    } else {
+      const callAllIn = toCall >= effStack;
+      heroActions = [
+        { name: 'fold', type: 'fold', amt: 0 },
+        { name: 'call', type: 'passive', amt: toCall }
+      ];
+      if (!callAllIn && canRaise) {
+        heroActions.push({ name: 'raise50', type: 'aggressive', mult: 0.50 });
+        heroActions.push({ name: 'raise100', type: 'aggressive', mult: 1.0 });
+      }
+    }
+    const numHA = heroActions.length;
+
+    // ── Opponent response actions (when hero bets/raises) ──
+    const oppActions = [
+      { name: 'fold', type: 'fold' },
+      { name: 'call', type: 'call' },
+      { name: 'raise', type: 'raise' }
+    ];
+    const numOA = oppActions.length;
+
+    // Regret accumulators
+    const heroRegrets = new Array(numHA).fill(0);
+    const heroStratSum = new Array(numHA).fill(0);
+    const oppRegrets = new Array(numOA).fill(0);
+    const oppStratSum = new Array(numOA).fill(0);
+
+    // Pool of unknown cards (hero doesn't know opponent's hand)
+    const pool = this.buildUnknownPool(hole, community);
+    const ITER = 100;
+
+    // Terminal evaluator: estimate equity × pot via Monte Carlo sampling.
+    // Deals remaining community cards so draws (flush, straight) are correctly valued.
+    const terminalEV = (finalPot, samples) => {
+      let wins = 0, ties = 0;
+      const remaining = 5 - community.length; // cards still to come (flop→2, turn→1, river→0)
+      for (let s = 0; s < samples; s++) {
+        // Draw opponent hand (2) + future board cards (remaining) without replacement
+        const drawn = [];
+        const used = new Set();
+        const needed = 2 + remaining;
+        while (drawn.length < needed) {
+          const idx = secureRandomInt(pool.length);
+          if (!used.has(idx)) { used.add(idx); drawn.push(pool[idx]); }
+        }
+        const oppHand = [drawn[0], drawn[1]];
+        const extraBoard = drawn.slice(2);
+        const hero7 = [...hole, ...community, ...extraBoard];
+        const opp7 = [...oppHand, ...community, ...extraBoard];
+        const cmp = compareResults(evaluate7Hand(hero7), evaluate7Hand(opp7));
+        if (cmp > 0) wins++;
+        else if (cmp === 0) ties++;
+      }
+      return ((wins + ties / 2) / samples) * finalPot;
+    };
+
+    // CFR iteration loop
+    for (let t = 0; t < ITER; t++) {
+      const t1 = t + 1;
+
+      // ── Regret matching for hero strategy ──
+      const heroStrat = new Array(numHA);
+      let posSum = 0;
+      for (let a = 0; a < numHA; a++) {
+        heroStrat[a] = Math.max(heroRegrets[a], 0);
+        posSum += heroStrat[a];
+      }
+      if (posSum > 1e-9) {
+        for (let a = 0; a < numHA; a++) heroStrat[a] /= posSum;
+      } else {
+        for (let a = 0; a < numHA; a++) heroStrat[a] = 1 / numHA;
+      }
+      for (let a = 0; a < numHA; a++) heroStratSum[a] += heroStrat[a];
+
+      // ── Regret matching for opponent strategy ──
+      const oppStrat = new Array(numOA);
+      posSum = 0;
+      for (let a = 0; a < numOA; a++) {
+        oppStrat[a] = Math.max(oppRegrets[a], 0);
+        posSum += oppStrat[a];
+      }
+      if (posSum > 1e-9) {
+        for (let a = 0; a < numOA; a++) oppStrat[a] /= posSum;
+      } else {
+        for (let a = 0; a < numOA; a++) oppStrat[a] = 1 / numOA;
+      }
+      for (let a = 0; a < numOA; a++) oppStratSum[a] += oppStrat[a];
+
+      // ── Counterfactual values for each hero action ──
+      const heroVals = new Array(numHA);
+      let heroEV = 0;
+      const samples = 25;
+
+      for (let a = 0; a < numHA; a++) {
+        const act = heroActions[a];
+        let val;
+
+        if (act.type === 'fold') {
+          val = 0;
+        } else if (act.type === 'passive') {
+          // act.amt = toCall (or 0 for check). Net EV = equity * (pot+call) - call
+          const finalPot = pot + act.amt;
+          val = terminalEV(finalPot, samples) - act.amt;
+        } else {
+          // Aggressive: hero bets/raises. betInc = NEW money hero puts in (on top of roundBet).
+          const betInc = Math.min(Math.floor(pot * act.mult), effStack - toCall);
+          if (betInc <= 0) {
+            val = terminalEV(pot + toCall, samples) - toCall;
+          } else {
+            // betInc > 0: hero puts betInc new money on top of matching currentBet
+            const heroTotal = player.roundBet + toCall + betInc; // total hero contributes this round
+            const potAfterBet = pot + toCall + betInc; // pot after hero's additional contribution
+            const raiseAmt = Math.min(heroTotal * 2, effStack); // opp's total if they re-raise
+
+            // Opponent responses (values are NET from hero's current position)
+            const oppNodeVals = new Array(numOA);
+            oppNodeVals[0] = pot; // opp folds → hero wins current pot (net gain = pot)
+            // opp calls: final pot = potAfterBet + heroTotal, hero invested (toCall + betInc)
+            oppNodeVals[1] = terminalEV(potAfterBet + heroTotal, samples) - (toCall + betInc);
+            // opp raises: final pot = potAfterBet + raiseAmt, hero invested (toCall + betInc)
+            oppNodeVals[2] = terminalEV(potAfterBet + raiseAmt, samples) - (toCall + betInc);
+
+            // Hero's value = Σ oppStrat[o] * heroValue[o]
+            val = 0;
+            for (let o = 0; o < numOA; o++) {
+              val += oppStrat[o] * oppNodeVals[o];
+            }
+
+            // Update opponent regrets
+            let oppEV = 0;
+            for (let o = 0; o < numOA; o++) {
+              oppEV += oppStrat[o] * (-oppNodeVals[o]);
+            }
+            for (let o = 0; o < numOA; o++) {
+              oppRegrets[o] += (-oppNodeVals[o] - oppEV) * heroStrat[a];
+            }
+          }
+        }
+
+        heroVals[a] = val;
+        heroEV += heroStrat[a] * val;
+      }
+
+      // ── Update hero regrets ──
+      for (let a = 0; a < numHA; a++) {
+        heroRegrets[a] += heroVals[a] - heroEV;
+      }
+
+      // ── DCFR discounting ──
+      const posDisc = Math.pow(t1 / (t1 + 1), 1.5);
+      const negDisc = Math.pow(t1 / (t1 + 1), 2.0);
+      for (let a = 0; a < numHA; a++) {
+        heroRegrets[a] *= (heroRegrets[a] > 0) ? posDisc : negDisc;
+      }
+      for (let a = 0; a < numOA; a++) {
+        oppRegrets[a] *= (oppRegrets[a] > 0) ? posDisc : negDisc;
+      }
+    }
+
+    // ── Build final averaged strategy ──
+    let totalSum = 0;
+    for (let a = 0; a < numHA; a++) totalSum += heroStratSum[a];
+    const finalStrat = new Array(numHA);
+    for (let a = 0; a < numHA; a++) {
+      finalStrat[a] = totalSum > 0 ? heroStratSum[a] / totalSum : 1 / numHA;
+    }
+
+    // ── Sample action from strategy ──
+    const r = secureRandom();
+    let cum = 0;
+    for (let a = 0; a < numHA; a++) {
+      cum += finalStrat[a];
+      if (r <= cum || a === numHA - 1) {
+        const chosen = heroActions[a];
+        if (chosen.type === 'fold') return { action: 'fold' };
+        if (chosen.type === 'passive') {
+          return toCall === 0 ? { action: 'check' } : { action: 'call' };
+        }
+        const betAmt = Math.round(Math.min(Math.floor(pot * chosen.mult) + toCall, effStack) / 10) * 10;
+        if (betAmt >= effStack) return { action: 'allin' };
+        if (betAmt <= toCall) return { action: 'call' };
+        return { action: 'raise', amount: betAmt };
+      }
+    }
+
+    return { action: toCall === 0 ? 'check' : 'fold' };
+  }
+
+  // Multi-opponent post-flop decision: EV-based with Monte Carlo equity
+  getMultiOppPostFlopAction(player, numOpp, canRaise) {
+    const toCall = this.currentBet - player.roundBet;
+    const pot = this.pot;
+    const effStack = player.chips;
+    const equity = this.calcEquity(player, numOpp);
+
+    // Normalize equity: multi-opp equity tends to be lower, adjust thresholds
+    const adjEquity = equity + (secureRandom() - 0.5) * 0.03;
+    const potOdds = toCall > 0 ? toCall / (pot + toCall) : 0;
+    const stackRatio = toCall > 0 ? toCall / (player.chips + toCall) : 0;
+
+    if (toCall === 0) {
+      if (adjEquity > 0.65 && canRaise) return this.makeRaise(player, 0.50 + secureRandom() * 0.50);
+      if (adjEquity > 0.48 && secureRandom() < 0.50 && canRaise) return this.makeRaise(player, 0.25 + secureRandom() * 0.30);
+      if (adjEquity > 0.25 && secureRandom() < 0.25 && canRaise) return this.makeRaise(player, 0.15 + secureRandom() * 0.15);
+      return { action: 'check' };
+    }
+
+    if (!canRaise) {
+      return adjEquity > potOdds - 0.03 ? { action: 'call' } : { action: 'fold' };
+    }
+
+    if (adjEquity > 0.62 && canRaise) return this.makeRaise(player, 0.50 + secureRandom() * 0.50);
+    if (adjEquity > potOdds + 0.04 && canRaise && secureRandom() < 0.30) return this.makeRaise(player, 0.30 + secureRandom() * 0.30);
+    if (adjEquity > potOdds + 0.02) return { action: 'call' };
+    if (stackRatio < 0.10 && adjEquity > potOdds - 0.02) return { action: 'call' };
+    if (adjEquity > 0.15 && stackRatio < 0.05) return { action: 'call' };
+    return { action: 'fold' };
+  }
+
+  // ── Main AI Decision Engine (EV-based, with DCFR for post-flop) ──
+  getAIAction(player) {
+    const toCall = this.currentBet - player.roundBet;
+    const numOpp = this.countPlayersInHand() - 1;
+    const canRaise = !player.hasActedThisRound || this.canReRaise || toCall === 0;
+
+    // Use DCFR solver for post-flop heads-up decisions
+    if (this.communityCards.length >= 3) {
+      if (numOpp <= 1) {
+        return this.dcfrGetAction(player, numOpp, canRaise);
+      }
+      return this.getMultiOppPostFlopAction(player, numOpp, canRaise);
+    }
+
+    // Pre-flop / early street: use EV-based logic
+    let equity = this.calcEquity(player, numOpp);
+    equity += (secureRandom() - 0.5) * 0.04;
+    equity = Math.max(0.03, Math.min(0.97, equity));
+
+    if (toCall === 0) {
+      if (equity > 0.75) return this.makeRaise(player, 0.70 + secureRandom() * 0.50);
+      if (equity > 0.58) return this.makeRaise(player, 0.35 + secureRandom() * 0.40);
+      if (equity > 0.38 && secureRandom() < 0.40) return this.makeRaise(player, 0.20 + secureRandom() * 0.25);
+      return { action: 'check' };
+    }
+
+    // Cannot re-raise after under-raise — only fold or call
+    if (!canRaise) {
+      const potAfterCall = this.pot + toCall;
+      const potOdds = toCall / potAfterCall;
+      return equity > potOdds - 0.02 ? { action: 'call' } : { action: 'fold' };
+    }
+
+    const potAfterCall = this.pot + toCall;
+    const potOdds = toCall / potAfterCall;
+    const stackRatio = toCall / (player.chips + toCall);
+
+    if (equity > 0.72) {
+      const pf = equity > 0.84 ? 0.65 + secureRandom() * 0.55 : 0.40 + secureRandom() * 0.40;
+      return this.makeRaise(player, pf);
+    }
+    if (equity > potOdds + 0.05) {
+      if (equity > 0.55 && secureRandom() < 0.20) return this.makeRaise(player, 0.30 + secureRandom() * 0.30);
+      return { action: 'call' };
+    }
+    if (equity > potOdds - 0.02 && stackRatio < 0.12) return { action: 'call' };
+    if (stackRatio < 0.06 && equity > 0.18) return { action: 'call' };
+    return { action: 'fold' };
+  }
+
+  // ── Showdown ──
+  showdown() {
+    // Recalculate side pots based on total contributions
+    this.calculateSidePots();
+
+    const results = [];
+
+    // Determine reveal order: last aggressor first, then clockwise
+    const revealOrder = [];
+    const startIdx = this.lastAggressorIdx >= 0
+      ? this.players.findIndex(p => p.seatIndex === this.lastAggressorIdx && !p.folded)
+      : -1;
+    if (startIdx >= 0) {
+      for (let i = 0; i < this.players.length; i++) {
+        const p = this.players[(startIdx + i) % this.players.length];
+        if (!p.folded) revealOrder.push(p);
+      }
+    } else {
+      // No aggressor (everyone checked): first active left of dealer
+      for (let i = 0; i < this.players.length; i++) {
+        const p = this.players[(this.dealerIdx + 1 + i) % this.players.length];
+        if (!p.folded) revealOrder.push(p);
+      }
+    }
+
+    for (const player of revealOrder) {
+      const allCards = [...player.holeCards, ...this.communityCards];
+      const hand = evaluate7Hand(allCards);
+      results.push({ player, hand });
+      this.addLog(`${player.name}: ${hand.name}`, 'action-info');
+    }
+
+    results.sort((a, b) => compareResults(b.hand, a.hand));
+
+    // Group winners
+    const winners = [results[0].player];
+    for (let i = 1; i < results.length; i++) {
+      if (compareResults(results[0].hand, results[i].hand) === 0) {
+        winners.push(results[i].player);
+      } else {
+        break;
+      }
+    }
+
+    // Distribute pots
+    this.distributePots(results);
+
+    // Log results
+    const bestHand = results[0].hand;
+    this.addLog(t('log.wins', winners.map(w => w.name).join(', '), bestHand.name), 'winner');
+
+    return { winners, results, bestHand };
+  }
+
+  calculateSidePots() {
+    // Store all player contributions keyed by stable seatIndex (not array index)
+    const allByContrib = this.players
+      .map(p => ({ seatIndex: p.seatIndex, contributed: p.totalBetThisHand }))
+      .filter(x => x.contributed > 0)
+      .sort((a, b) => a.contributed - b.contributed);
+
+    const checkers = this.players
+      .filter(p => !p.folded && p.totalBetThisHand === 0)
+      .map(p => p.seatIndex);
+
+    this.sidePots = [];
+    let prevLevel = 0;
+
+    for (const entry of allByContrib) {
+      const level = entry.contributed;
+      const increment = level - prevLevel;
+      if (increment > 0) {
+        const atLevel = allByContrib.filter(e => e.contributed >= level);
+        const potAmount = increment * atLevel.length;
+        const eligible = atLevel
+          .filter(e => {
+            const p = this.players.find(p => p.seatIndex === e.seatIndex);
+            return p && !p.folded;
+          })
+          .map(e => e.seatIndex);
+        if (this.sidePots.length === 0 && checkers.length > 0) {
+          eligible.push(...checkers);
+        }
+        this.sidePots.push({ amount: potAmount, eligibleIndices: eligible });
+        prevLevel = level;
+      }
+    }
+  }
+
+  distributePots(results) {
+    const resultMap = {};
+    for (const r of results) {
+      resultMap[r.player.seatIndex] = r;
+    }
+
+    // Build clockwise order from button-left: player at (dealerIdx+1) gets order 0, then clockwise
+    const btnOrder = {};
+    for (let i = 0; i < this.players.length; i++) {
+      const idx = (this.dealerIdx + 1 + i) % this.players.length;
+      btnOrder[this.players[idx].seatIndex] = i;
+    }
+
+    let totalAwarded = 0;
+
+    for (const sidePot of this.sidePots) {
+      let bestResult = null;
+      const eligibleWinners = [];
+      for (const seatIdx of sidePot.eligibleIndices) {
+        if (resultMap[seatIdx]) {
+          const player = resultMap[seatIdx].player;
+          if (player && !player.folded) {
+            const r = resultMap[seatIdx];
+            if (!bestResult || compareResults(r.hand, bestResult) > 0) {
+              bestResult = r.hand;
+              eligibleWinners.length = 0;
+              eligibleWinners.push(seatIdx);
+            } else if (bestResult && compareResults(r.hand, bestResult) === 0) {
+              eligibleWinners.push(seatIdx);
+            }
+          }
+        }
+      }
+
+      if (eligibleWinners.length > 1) {
+        eligibleWinners.sort((a, b) => (btnOrder[a] ?? 999) - (btnOrder[b] ?? 999));
+      }
+
+      if (eligibleWinners.length > 0) {
+        const share = Math.floor(sidePot.amount / eligibleWinners.length);
+        const remainder = sidePot.amount - share * eligibleWinners.length;
+        for (let i = 0; i < eligibleWinners.length; i++) {
+          const bonus = i < remainder ? 1 : 0;
+          const player = this.players.find(p => p.seatIndex === eligibleWinners[i]);
+          if (player) player.chips += share + bonus;
+        }
+        totalAwarded += sidePot.amount;
+      }
+    }
+
+    // If no side pots calculated, give all to winners
+    if (this.sidePots.length === 0 && this.pot > 0) {
+      const bestResult = results[0].hand;
+      const topPlayers = results.filter(r => compareResults(r.hand, bestResult) === 0).map(r => r.player);
+      topPlayers.sort((a, b) => (btnOrder[a.seatIndex] ?? 999) - (btnOrder[b.seatIndex] ?? 999));
+      const share = Math.floor(this.pot / topPlayers.length);
+      const remainder = this.pot - share * topPlayers.length;
+      for (let i = 0; i < topPlayers.length; i++) {
+        topPlayers[i].chips += share + (i < remainder ? 1 : 0);
+      }
+      totalAwarded += this.pot;
+    }
+
+    // Any unclaimed chips (partial or none) — distribute among active non-folded players
+    if (totalAwarded < this.pot) {
+      const active = results.filter(r => !r.player.folded);
+      active.sort((a, b) => (btnOrder[a.player.seatIndex] ?? 999) - (btnOrder[b.player.seatIndex] ?? 999));
+      if (active.length > 0) {
+        const unclaimed = this.pot - totalAwarded;
+        const share = Math.floor(unclaimed / active.length);
+        const remainder = unclaimed - share * active.length;
+        for (let i = 0; i < active.length; i++) {
+          active[i].player.chips += share + (i < remainder ? 1 : 0);
+        }
+      }
+    }
+  }
+
+  // ── Full Game Flow ──
+  async playHand() {
+    if (this.busy) return;
+    this.busy = true;
+    try {
+    this.startNewHand();
+    this.render();
+    this.addLog(t('log.handStart', this.handNumber), 'phase-change');
+
+    await this.delay(300);
+
+    // Pre-flop betting
+    this.addLog(t('log.preFlopBetting'), 'phase-change');
+    await this.runBettingRound();
+    if (this.countPlayersInHand() <= 1) return this.endHandEarly();
+
+    const streets = [['FLOP','log.flop',3],['TURN','log.turn',1],['RIVER','log.river',1]];
+    for (const [phase, logKey, count] of streets) {
+      this.phase = phase;
+      this.dealCommunity(count);
+      this.currentPlayerIdx = this.getFirstToActPostFlop();
+      this.currentBet = 0;
+      this.lastRaiseAmount = BB_AMOUNT;
+      this.canReRaise = true;
+      this.addLog(t(logKey), 'phase-change');
+      this.render();
+      await this.delay(400);
+      await this.runBettingRound();
+      if (this.countPlayersInHand() <= 1) return this.endHandEarly();
+    }
+
+    // Showdown
+    this.phase = 'SHOWDOWN';
+    this.render();
+    await this.delay(500);
+
+    const potBeforeDistribute = this.pot;
+    const result = this.showdown();
+    this.pot = 0;
+    this.phase = 'GAME_OVER';
+    this.render();
+    this.showResultBanner(result, potBeforeDistribute);
+    this.addLog(t('log.potDistributed', potBeforeDistribute), 'phase-change');
+    } catch (e) {
+      console.error('Game error:', e);
+      const msg = (e && e.message) || String(e);
+      this.addLog(t('log.gameError', msg), 'action-fold');
+      this.addLog(t('log.refresh'), 'action-fold');
+      this.phase = 'IDLE';
+      this.render();
+    } finally {
+      this.busy = false;
+    }
+  }
+
+  async endHandEarly() {
+    let winner = this.players.find(p => !p.folded);
+    if (!winner) winner = this.players.find(p => p.chips > 0);
+    const potAmount = this.pot;
+    if (winner) {
+      winner.chips += potAmount;
+      this.addLog(t('log.winsPot', winner.name, potAmount), 'winner');
+    }
+    this.pot = 0;
+    this.phase = 'GAME_OVER';
+    this.render();
+    this.showResultBanner({ winners: winner ? [winner] : [], bestHand: null, results: [], earlyWin: true }, potAmount);
+  }
+
+  // ── UI Helpers ──
+  delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  addLog(msg, cssClass) {
+    const logEl = this.els.logEntries;
+    if (!logEl) return;
+    const entry = document.createElement('div');
+    entry.className = 'log-entry' + (cssClass ? ' ' + cssClass : '');
+    entry.textContent = msg;
+    logEl.insertBefore(entry, logEl.firstChild);
+    while (logEl.children.length > 100) {
+      logEl.removeChild(logEl.lastChild);
+    }
+  }
+
+  showResultBanner(result, potAmount) {
+    const banner = this.els.resultBanner;
+    const titleEl = this.els.resultTitle;
+    const winnerEl = this.els.resultWinner;
+    const handEl = this.els.resultHand;
+    const potEl = this.els.resultPot;
+    const cardsEl = this.els.resultCards;
+    const playersEl = this.els.resultPlayers;
+
+    if (result.earlyWin) {
+      titleEl.textContent = t('ui.everyoneFolded');
+      winnerEl.textContent = result.winners[0] ? t('ui.winsPot', result.winners[0].name) : '';
+      handEl.textContent = '';
+      cardsEl.innerHTML = '';
+      playersEl.innerHTML = '';
+    } else if (result.bestHand) {
+      titleEl.textContent = t('ui.showdownResult');
+      winnerEl.textContent = t('ui.wins', result.winners.map(w => w.name).join(', '));
+      handEl.textContent = result.bestHand.name;
+
+      // Community cards (table cards)
+      let cardsHTML = '<div class="result-label">' + t('ui.communityCards') + '</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">';
+      for (const c of this.communityCards) {
+        cardsHTML += cardHTML(c, false, false);
+      }
+      cardsHTML += '</div>';
+
+      // Best 5-card combination (winning hand)
+      const bestCards = result.bestHand.cards || [];
+      cardsHTML += '<div class="result-label">' + t('ui.bestHand') + '</div><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">';
+      for (const c of bestCards) {
+        cardsHTML += cardHTML(c, false, false);
+      }
+      cardsHTML += '</div>';
+      cardsEl.innerHTML = cardsHTML;
+
+      // All players at showdown
+      const winnerSet = new Set(result.winners.map(w => w.seatIndex));
+      let playersHTML = '<div class="result-label">' + t('ui.playerHands') + '</div>';
+
+      // Show active (non-folded) players sorted by hand strength
+      for (const r of result.results) {
+        const isWinner = winnerSet.has(r.player.seatIndex);
+        playersHTML += '<div class="player-row' + (isWinner ? ' winner-row' : '') + '">';
+        playersHTML += `<span class="p-name">${isWinner ? '★ ' : ''}${r.player.name}</span>`;
+        playersHTML += '<span class="p-cards">';
+        playersHTML += r.player.holeCards.map(c => cardHTML(c, false, true)).join('');
+        playersHTML += '</span>';
+        playersHTML += `<span class="p-hand">${r.hand.name}</span>`;
+        playersHTML += '</div>';
+      }
+
+      // Show folded players
+      for (const p of this.players) {
+        if (p.folded) {
+          playersHTML += '<div class="player-row">';
+          playersHTML += `<span class="p-name">${p.name}</span>`;
+          playersHTML += '<span class="p-cards">';
+          playersHTML += p.holeCards.map(c => cardHTML(c, false, true)).join('');
+          playersHTML += '</span>';
+          playersHTML += '<span class="p-folded">' + t('ui.folded') + '</span>';
+          playersHTML += '</div>';
+        }
+      }
+
+      playersEl.innerHTML = playersHTML;
+    } else {
+      titleEl.textContent = t('ui.gameOverTitle');
+      winnerEl.textContent = '';
+      handEl.textContent = '';
+      cardsEl.innerHTML = '';
+      playersEl.innerHTML = '';
+    }
+
+    potEl.innerHTML = t('ui.pot') + potAmount;
+
+    // Show human player's balance
+    const human = this.players[0];
+    if (human) {
+      const balEl = document.createElement('div');
+      balEl.className = 'result-balance';
+      balEl.textContent = t('ui.yourBalance') + ' $' + human.chips;
+      potEl.appendChild(balEl);
+
+      // Show net win/loss for this hand (chips after - chips before hand)
+      if (typeof human.chipsBeforeHand === 'number') {
+        const netDelta = human.chips - human.chipsBeforeHand;
+        const netEl = document.createElement('div');
+        netEl.className = 'result-balance';
+        netEl.style.color = netDelta >= 0 ? 'var(--cds-support)' : 'var(--cds-error)';
+        const sign = netDelta >= 0 ? '+' : '';
+        netEl.textContent = (currentLang === 'zh' ? '本局盈亏: ' : 'This hand: ') + sign + '$' + netDelta;
+        potEl.appendChild(netEl);
+        human.chipsBeforeHand = undefined; // reset for next hand
+      }
+    }
+
+    banner.classList.remove('hidden');
+
+    this.els.btnNextHand.onclick = () => {
+      banner.classList.add('hidden');
+      this.checkGameOver();
+    };
+  }
+
+  checkGameOver() {
+    const playersWithChips = this.players.filter(p => p.chips > 0);
+    const human = this.players[0];
+    const humanBusted = human && human.chips === 0;
+
+    if (playersWithChips.length <= 1 || humanBusted) {
+      this.phase = 'IDLE';
+      this.render();
+      if (humanBusted) {
+        this.addLog(t('log.busted'), 'action-fold');
+      }
+      this.addLog(playersWithChips.length === 1
+        ? t('log.winsGame', playersWithChips[0].name)
+        : t('log.gameOver'), 'winner');
+      this.els.controls.classList.add('hidden');
+      this.els.phaseBadge.textContent = t('phase.gameOver');
+      this.els.setupOverlay.classList.remove('hidden');
+      const nextBtn = this.els.btnNextHand;
+      nextBtn.setAttribute('data-i18n', 'btn.newGame');
+      nextBtn.textContent = t('btn.newGame');
+    } else {
+      this.playHand();
+    }
+  }
+
+  // ── Render ──
+  render() {
+    try {
+      this.renderPhase();
+      this.renderCommunityCards();
+      this.renderSeats();
+      this.renderControls();
+      this.renderPot();
+    } catch (e) {
+      console.error('Render error:', e);
+    }
+  }
+
+  renderPhase() {
+    this.els.phaseBadge.textContent = t(PHASE_KEYS[this.phase] || 'phase.waiting');
+    this.els.handCounter.textContent = this.handNumber > 0 ? t('ui.hand', this.handNumber) : '';
+  }
+
+  renderCommunityCards() {
+    const container = this.els.communityCards;
+    container.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'card-slot';
+      if (i < this.communityCards.length) {
+        slot.classList.add('filled');
+        slot.innerHTML = cardHTML(this.communityCards[i]);
+      }
+      container.appendChild(slot);
+    }
+  }
+
+  renderPot() {
+    this.els.potAmount.textContent = this.pot;
+  }
+
+  renderSeats() {
+    const container = this.els.seatsContainer;
+    const n = this.players.length;
+    if (n === 0) { container.innerHTML = ''; this._seatPositions = null; this._seatDims = null; return; }
+
+    const tableEl = this.els.tableArea;
+    const tableW = tableEl.offsetWidth || tableEl.parentElement.offsetWidth || 800;
+    const tableH = tableEl.offsetHeight || tableEl.parentElement.offsetHeight || 500;
+    const dims = tableW + 'x' + tableH;
+
+    // Recompute positions when the player count changes OR the table is resized —
+    // seats are absolutely positioned in px, so they must track the table's size
+    const seatCount = container.querySelectorAll('.seat').length;
+    if (seatCount !== n || !this._seatPositions || this._seatDims !== dims) {
+      this._seatPositions = this._computeSeatPositions(n, tableW, tableH);
+      this._seatDims = dims;
+
+      // Reuse existing seat elements so the CSS transition animates the move;
+      // only create new ones when the player count grew
+      const existing = container.querySelectorAll('.seat');
+      for (let i = 0; i < n; i++) {
+        let seat = existing[i];
+        if (!seat) {
+          seat = document.createElement('div');
+          seat.className = 'seat';
+          seat.dataset.idx = i;
+          seat.innerHTML = '<div class="seat-inner"><div class="player-name"></div><div class="hole-cards"></div><div class="chip-count"></div></div>';
+          container.appendChild(seat);
+        }
+        seat.style.left = this._seatPositions[i].x + 'px';
+        seat.style.top = this._seatPositions[i].y + 'px';
+      }
+      // Remove leftover seats when the player count shrank
+      while (container.children.length > n) container.removeChild(container.lastChild);
+    }
+
+    // Blind labels use saved positions from postBlinds (stable for entire hand)
+    const showBlind = this.handNumber > 0 && this.phase !== 'IDLE';
+
+    // Update each seat content in place
+    const seats = container.querySelectorAll('.seat');
+    for (let i = 0; i < n; i++) {
+      const seat = seats[i];
+      const player = this.players[i];
+
+      // Class names
+      const needsYou = player.isHuman;
+      const needsFolded = player.folded;
+      const needsActive = (i === this.currentPlayerIdx && this.phase !== 'IDLE' && this.phase !== 'GAME_OVER' && !player.folded);
+
+      if (seat.classList.contains('you') !== needsYou) seat.classList.toggle('you', needsYou);
+      if (seat.classList.contains('folded') !== needsFolded) seat.classList.toggle('folded', needsFolded);
+      if (seat.classList.contains('active-turn') !== needsActive) seat.classList.toggle('active-turn', needsActive);
+
+      const inner = seat.querySelector('.seat-inner');
+
+      // Player name + blinds
+      let blindHTML = '';
+      if (showBlind) {
+        if (i === this.dealerIdx) blindHTML += '<span class="dealer-chip">D</span>';
+        if (i === this.sbIdx) blindHTML += '<span class="blind-tag sb">SB</span>';
+        if (i === this.bbIdx) blindHTML += '<span class="blind-tag bb">BB</span>';
+      }
+      const nameEl = inner.querySelector('.player-name');
+      const nameHTML = blindHTML + player.name;
+      if (nameEl._lastHTML !== nameHTML) { nameEl.innerHTML = nameHTML; nameEl._lastHTML = nameHTML; }
+
+      // Hole cards
+      const shouldShow = player.isHuman || ((this.phase === 'SHOWDOWN' || this.phase === 'GAME_OVER') && !player.folded);
+      const holeHTML = shouldShow
+        ? player.holeCards.map(c => cardHTML(c, false, true)).join('')
+        : '<div class="card face-down mini"></div><div class="card face-down mini"></div>';
+      const cardsEl = inner.querySelector('.hole-cards');
+      if (cardsEl._lastHTML !== holeHTML) { cardsEl.innerHTML = holeHTML; cardsEl._lastHTML = holeHTML; }
+
+      // Chips
+      const chipsEl = inner.querySelector('.chip-count');
+      const chipsText = '$' + player.chips;
+      if (chipsEl._lastText !== chipsText) { chipsEl.textContent = chipsText; chipsEl._lastText = chipsText; }
+
+      // Status tag + bet
+      let extraHTML = '';
+      if (player.folded) {
+        extraHTML = '<span class="status-tag folded-tag">' + t('ui.folded') + '</span>';
+      } else {
+        if (player.allIn) extraHTML += '<span class="status-tag allin-tag">ALL-IN</span>';
+        if (player.roundBet > 0) extraHTML += '<div class="bet-amount">' + t('ui.bet') + player.roundBet + '</div>';
+      }
+      // Remove old status/bet elements, append fresh
+      const oldStatus = inner.querySelectorAll('.status-tag, .bet-amount');
+      const oldStatusHTML = Array.from(oldStatus).map(el => el.outerHTML).join('');
+      if (inner._lastExtra !== extraHTML) {
+        oldStatus.forEach(el => el.remove());
+        if (extraHTML) {
+          const extraContainer = document.createElement('div');
+          extraContainer.innerHTML = extraHTML;
+          while (extraContainer.firstChild) inner.appendChild(extraContainer.firstChild);
+        }
+        inner._lastExtra = extraHTML;
+      }
+    }
+  }
+
+  _computeSeatPositions(n, tableW, tableH) {
+    const cx = tableW / 2;
+    const cy = tableH / 2;
+    // Reduce vertical radius to keep seats from overlapping header/controls.
+    // Seat height ≈ 70px; reserve 45px padding on top and bottom edges.
+    const vPadding = 45;
+    const maxRy = (tableH / 2) - vPadding;
+    const rawRy = tableH * (0.38 * (0.95 + n * 0.02));
+    const rx = tableW * (0.40 * (0.95 + n * 0.02));
+    const ry = Math.min(rawRy, maxRy);
+
+    const positions = [];
+    for (let i = 0; i < n; i++) {
+      const angle = (Math.PI / 2) - i * (2 * Math.PI / n);
+      positions.push({
+        x: cx + rx * Math.cos(angle),
+        y: cy - ry * Math.sin(angle)
+      });
+    }
+    return positions;
+  }
+
+  updateAllText() {
+    applyI18n();
+    this.renderPhase();
+    this.renderPot();
+    if (this.players.length > 0) {
+      this.renderControls();
+    }
+  }
+
+  renderControls() {
+    const controls = this.els.controls;
+    const human = this.players[0];
+    if (!human) { controls.classList.add('hidden'); return; }
+
+    // Show your hand
+    const handDisplay = this.els.yourHandDisplay;
+    if (human.holeCards.length > 0 && !human.folded) {
+      handDisplay.innerHTML = `
+        <span class="your-hand-label">${t('ui.yourHand')}</span>
+        ${human.holeCards.map(c => cardHTML(c, false, true)).join('')}
+      `;
+    } else {
+      handDisplay.innerHTML = '';
+    }
+
+    // Show/hide controls based on whether it's human's turn
+    const isHumanTurn = this.currentPlayerIdx === 0
+      && !human.folded
+      && !human.allIn
+      && human.chips > 0
+      && this.phase !== 'IDLE'
+      && this.phase !== 'GAME_OVER'
+      && this.phase !== 'SHOWDOWN';
+
+    if (isHumanTurn) {
+      controls.classList.remove('hidden');
+      const toCall = this.currentBet - human.roundBet;
+
+      this.els.btnFold.style.display = toCall > 0 ? '' : 'none';
+      this.els.btnCheck.style.display = toCall === 0 ? '' : 'none';
+      this.els.btnCall.style.display = toCall > 0 ? '' : 'none';
+      this.els.btnFoldCallRow.style.display = toCall > 0 ? '' : 'none';
+        const callSpan = this.els.btnCall.querySelector('span[data-i18n]');
+      const callAmtSpan = this.els.btnCall.querySelector('.call-amount');
+      if (toCall >= human.chips) {
+        if (callSpan) callSpan.textContent = t('ui.allInBadge');
+        if (callAmtSpan) callAmtSpan.textContent = '';
+      } else {
+        if (callSpan) callSpan.textContent = t('btn.call');
+        if (callAmtSpan) callAmtSpan.textContent = ' $' + toCall;
+      }
+
+      // Raise slider — value represents TOTAL bet amount
+      const canRaise = !human.hasActedThisRound || this.canReRaise || toCall === 0;
+      if (canRaise) {
+        const minRaise = Math.ceil((this.currentBet + Math.max(BB_AMOUNT, this.lastRaiseAmount)) / 10) * 10;
+        const maxRaise = Math.floor((human.roundBet + human.chips) / 10) * 10;
+        const slider = this.els.raiseSlider;
+        if (minRaise > maxRaise) {
+          slider.style.display = 'none';
+          this.els.raiseAmount.textContent = '';
+          this.els.btnRaise.style.display = 'none';
+        } else {
+          slider.style.display = '';
+          slider.min = minRaise;
+          slider.max = maxRaise;
+          slider.value = Math.round(Math.max(minRaise, Math.min(human.roundBet + BB_AMOUNT * 2, maxRaise)) / 10) * 10;
+          const raiseSize = parseInt(slider.value) - this.currentBet;
+          this.els.raiseAmount.textContent = `+$${raiseSize} → $${slider.value}`;
+          this.els.btnRaise.style.display = '';
+        }
+        this.els.btnAllin.style.display = human.chips > 0 ? '' : 'none';
+      } else {
+        this.els.raiseSlider.style.display = 'none';
+        this.els.raiseAmount.textContent = '';
+        this.els.btnRaise.style.display = 'none';
+        this.els.btnAllin.style.display = 'none';
+      }
+    } else {
+      controls.classList.add('hidden');
+    }
+  }
+}
+
+// ── Card HTML Helper ──
+function cardHTML(card, faceDown, mini) {
+  if (faceDown === undefined) faceDown = false;
+  if (mini === undefined) mini = false;
+  const sizeClass = mini ? 'mini' : '';
+  if (faceDown) return `<div class="card face-down ${sizeClass}"></div>`;
+  const colorClass = cardIsRed(card) ? 'red' : 'black';
+  return `<div class="card ${sizeClass} ${colorClass}">
+    <span class="card-rank">${card.name}</span>
+    <span class="card-suit">${SUIT_SYMBOLS[card.suit]}</span>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+// App Initialization
+// ═══════════════════════════════════════════
+
+let game;
+
+function startGame() {
+  const slider = document.getElementById('player-count-slider');
+  const nameInput = document.getElementById('player-name-input');
+  const count = parseInt(slider.value);
+  const name = nameInput.value.trim() || 'You';
+  STARTING_CHIPS = parseInt(document.getElementById('chips-select').value);
+
+  document.getElementById('setup-overlay').classList.add('hidden');
+  document.getElementById('result-banner').classList.add('hidden');
+  document.getElementById('log-entries').innerHTML = '';
+
+  game = new PokerGame();
+  game.initPlayers(count, name);
+
+  // Reset next-hand button
+  const nextBtn = document.getElementById('btn-next-hand');
+  nextBtn.setAttribute('data-i18n', 'btn.nextHand');
+  nextBtn.textContent = t('btn.nextHand');
+
+  // Start first hand after short delay
+  game.addLog(t('log.gameStart', count, STARTING_CHIPS));
+  setTimeout(() => game.playHand(), 400);
+}
+
+// Load saved language
+try {
+  const savedLang = localStorage.getItem('poker-lang');
+  if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+    setLang(savedLang);
+  }
+} catch(e) {}
+
+// Language toggle
+document.getElementById('lang-toggle').addEventListener('click', () => {
+  setLang(currentLang === 'zh' ? 'en' : 'zh');
+});
+
+// Setup event listeners
+document.getElementById('player-count-slider').addEventListener('input', (e) => {
+  document.getElementById('player-count-display').textContent = e.target.value;
+});
+
+document.getElementById('start-btn').addEventListener('click', startGame);
+
+document.getElementById('player-name-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') startGame();
+});
+
+// ── Result banner drag ──
+(function() {
+  const banner = document.getElementById('result-banner');
+  const handle = document.getElementById('result-drag-handle');
+  let dragging = false, startX, startY, startLeft, startTop;
+
+  function onStart(e) {
+    if (e.target !== handle && !handle.contains(e.target)) return;
+    dragging = true;
+    const rect = banner.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop = rect.top;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    startX = clientX;
+    startY = clientY;
+    banner.style.transform = 'none';
+    banner.style.top = startTop + 'px';
+    banner.style.left = startLeft + 'px';
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if (!dragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    banner.style.top = (startTop + clientY - startY) + 'px';
+    banner.style.left = (startLeft + clientX - startX) + 'px';
+  }
+
+  function onEnd() { dragging = false; }
+
+  handle.addEventListener('mousedown', onStart);
+  handle.addEventListener('touchstart', onStart, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onEnd);
+  window.addEventListener('touchend', onEnd);
+})();
+
+// Initial render (empty table)
+document.addEventListener('DOMContentLoaded', () => {
+  // Placeholder game for initial render
+  game = new PokerGame();
+  game.players = [];
+  game.render();
+
+  // ── Resize handler: re-render seats when window size changes ──
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (game && game.players.length > 0) {
+        game.render();
+      }
+    }, 150);
+  });
+
+  // Also observe the table area for size changes (CSS-driven)
+  if (window.ResizeObserver) {
+    const tableEl = document.getElementById('table-area');
+    const observer = new ResizeObserver(() => {
+      if (game && game.players.length > 0) {
+        game.render();
+      }
+    });
+    observer.observe(tableEl);
+  }
+
+  // ── Mobile log toggle ──
+  const logToggleMobile = document.getElementById('log-toggle-mobile');
+  const gameLog = document.getElementById('game-log');
+  if (logToggleMobile && gameLog) {
+    logToggleMobile.addEventListener('click', () => {
+      const collapsed = gameLog.classList.toggle('hidden');
+      logToggleMobile.querySelector('.ico').textContent =
+        collapsed ? 'article' : 'expand_less';
+    });
+  }
+
+  // On mobile, collapse log by default
+  const mq = window.matchMedia('(max-width: 800px)');
+  function handleMobileLayout(e) {
+    if (e.matches) {
+      gameLog.classList.add('hidden');
+      logToggleMobile.style.display = 'flex';
+    } else {
+      gameLog.classList.remove('hidden');
+      logToggleMobile.style.display = 'none';
+    }
+  }
+  mq.addEventListener('change', handleMobileLayout);
+  if (mq.matches) {
+    gameLog.classList.add('hidden');
+    logToggleMobile.style.display = 'flex';
+  }
+});
+
+// ═══════════════════════════════════════════
+// 3D Starfield Background (continuous ~30fps animation)
+// ═══════════════════════════════════════════
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let lastTime = 0;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', () => {
+    resize();
+    createStars();
+    drawOnce(performance.now());
+  });
+  resize();
+
+  // Star layers: { depth, speed, count, size, opacity }
+  const layers = [
+    { depth: 0, count: 120, speed: 0.03, minSize: 0.3, maxSize: 1.0, opacity: 0.6, twinkle: true },
+    { depth: 1, count: 80,  speed: 0.06, minSize: 0.5, maxSize: 1.5, opacity: 0.75, twinkle: true },
+    { depth: 2, count: 40,  speed: 0.12, minSize: 0.8, maxSize: 2.2, opacity: 0.9, twinkle: false },
+  ];
+
+  function createStars() {
+    stars = [];
+    // Scale star density & size with viewport area so large desktop screens
+    // get a visible starfield; small screens keep the original look.
+    const area = canvas.width * canvas.height;
+    const densityScale = Math.min(3.5, Math.pow(area / 250000, 0.5));
+    const sizeScale = Math.min(2.5, Math.pow(area / 250000, 0.3));
+    for (const layer of layers) {
+      const count = Math.round(layer.count * Math.max(1, densityScale));
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: (layer.minSize + Math.random() * (layer.maxSize - layer.minSize)) * sizeScale,
+          depth: layer.depth,
+          speed: layer.speed,
+          opacity: layer.opacity * (0.5 + Math.random() * 0.5),
+          twinkle: layer.twinkle,
+          twinklePhase: Math.random() * Math.PI * 2,
+          twinkleSpeed: 0.01 + Math.random() * 0.03,
+          hue: Math.random() < 0.15 ? 220 + Math.random() * 30 : Math.random() < 0.08 ? 40 + Math.random() * 15 : 0,
+          saturation: Math.random() < 0.15 ? 30 : 0,
+        });
+      }
+    }
+  }
+  createStars();
+
+  function getBlackHoleCenter() {
+    const tableEl = document.getElementById('table-area');
+    if (!tableEl) return { cx: canvas.width * 0.5, cy: canvas.height * 0.5, r: 180 };
+    const rect = tableEl.getBoundingClientRect();
+    return {
+      cx: rect.left + rect.width / 2,
+      cy: rect.top + rect.height / 2,
+      r: Math.min(rect.width, rect.height) / 2
+    };
+  }
+
+  // Cache to avoid getBoundingClientRect() (forced reflow) every draw
+  let cachedBH = null;
+  function getBH() {
+    if (!cachedBH) cachedBH = getBlackHoleCenter();
+    return cachedBH;
+  }
+  // Recalculate on resize or after significant layout change
+  window.addEventListener('resize', function() { cachedBH = null; });
+  function drawOnce(time) {
+    // Advance star positions based on elapsed time (clamp to avoid big jumps)
+    const dt = lastTime ? Math.min(time - lastTime, 200) : 16;
+    lastTime = time;
+
+    // Move stars (parallax scrolling)
+    for (const s of stars) {
+      s.y += s.speed * (dt / 16);
+      if (s.y > canvas.height + 5) {
+        s.y = -5;
+        s.x = Math.random() * canvas.width;
+      }
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bh = getBH();
+
+    // Gravitational lensing halo
+    const haloGrad = ctx.createRadialGradient(bh.cx, bh.cy, bh.r * 0.88, bh.cx, bh.cy, bh.r * 1.35);
+    haloGrad.addColorStop(0, 'transparent');
+    haloGrad.addColorStop(0.25, 'rgba(120, 160, 230, 0.03)');
+    haloGrad.addColorStop(0.45, 'rgba(140, 190, 255, 0.08)');
+    haloGrad.addColorStop(0.60, 'rgba(120, 160, 230, 0.04)');
+    haloGrad.addColorStop(0.80, 'rgba(60, 100, 180, 0.015)');
+    haloGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = haloGrad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Einstein ring
+    const erGrad = ctx.createRadialGradient(
+      bh.cx - bh.r * 0.015, bh.cy - bh.r * 0.015, bh.r * 0.96,
+      bh.cx, bh.cy, bh.r * 1.03
+    );
+    erGrad.addColorStop(0, 'transparent');
+    erGrad.addColorStop(0.38, 'rgba(180, 215, 255, 0.08)');
+    erGrad.addColorStop(0.48, 'rgba(210, 235, 255, 0.22)');
+    erGrad.addColorStop(0.52, 'rgba(190, 225, 255, 0.18)');
+    erGrad.addColorStop(0.62, 'rgba(140, 190, 240, 0.06)');
+    erGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = erGrad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Nebula blobs
+    const nebulaColors = [
+      { x: canvas.width * 0.15, y: canvas.height * 0.2, r: 280, color: 'rgba(99, 102, 241, 0.025)' },
+      { x: canvas.width * 0.85, y: canvas.height * 0.65, r: 240, color: 'rgba(139, 92, 246, 0.02)' },
+      { x: canvas.width * 0.3, y: canvas.height * 0.85, r: 300, color: 'rgba(251, 191, 36, 0.012)' },
+    ];
+    for (const n of nebulaColors) {
+      const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+      grad.addColorStop(0, n.color);
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Stars with gravitational lensing
+    for (const s of stars) {
+      const dx = s.x - bh.cx;
+      const dy = s.y - bh.cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      let sx = s.x, sy = s.y;
+      const photonSphere = bh.r * 0.88;
+      if (dist < bh.r * 2.2 && dist > photonSphere) {
+        const impact = (dist - photonSphere) / bh.r;
+        const deflection = 1 + (0.25 / Math.max(impact * impact, 0.005));
+        const factor = Math.min(deflection, 2.0);
+        sx = bh.cx + dx * factor;
+        sy = bh.cy + dy * factor;
+      }
+
+      let alpha = s.opacity;
+      if (s.twinkle) {
+        alpha *= 0.6 + 0.4 * Math.sin(s.twinklePhase + time * s.twinkleSpeed * 0.001);
+      }
+      if (dist < bh.r * 0.78) {
+        alpha = 0;
+      } else if (dist < bh.r * 0.88) {
+        alpha *= Math.max(0, (dist - bh.r * 0.74) / (bh.r * 0.14));
+      }
+
+      const hsl = s.hue > 0
+        ? `hsla(${s.hue}, ${s.saturation}%, 90%, ${alpha})`
+        : `rgba(255, 255, 255, ${alpha})`;
+
+      ctx.fillStyle = hsl;
+      ctx.beginPath();
+      ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (s.r > 1.2 && dist > bh.r * 0.80) {
+        const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.r * 3);
+        glow.addColorStop(0, hsl);
+        glow.addColorStop(1, 'transparent');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(sx, sy, s.r * 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  // Expose globally so game logic can trigger redraws
+  let lastDrawTime = 0;
+  function scheduleDraw(t) {
+    if (t - lastDrawTime > 33) {
+      lastDrawTime = t;
+      drawOnce(t);
+    }
+  }
+
+  // Low-frequency heartbeat (~1Hz): keeps stars gently drifting during idle
+  // without a continuous 30fps rAF loop. Events below force immediate redraws.
+  setInterval(function() {
+    scheduleDraw(performance.now());
+  }, 1000);
+
+  // Event-driven redraws for responsive interaction
+  ['click', 'touchstart', 'scroll', 'mousemove'].forEach(function(evt) {
+    document.addEventListener(evt, function() { lastDrawTime = 0; scheduleDraw(performance.now()); }, { passive: true });
+  });
+
+  // Initial draw
+  drawOnce(performance.now());
+})();
+</script>
+
+</body>
+</html>
